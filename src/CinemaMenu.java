@@ -20,33 +20,33 @@ public class CinemaMenu {
     }
   }
 
-  enum FreeSpaceMenu {
+  enum EnumFreeSpaceMenu {
     //пункты меню Свободные места
     RETURN_TO_THE_MAIN_MENU("Введите 0 чтоб вернуться в главное меню"),
     CHANGE_DATE("Введите 1 чтоб изменить дату");
-    private final String messageFreeSpaceMenu;
+    private final String messageEnumFreeSpaceMenu;
 
-    FreeSpaceMenu(String messageFreeSpaceMenu) {
-      this.messageFreeSpaceMenu = messageFreeSpaceMenu;
+    EnumFreeSpaceMenu(String messageEnumFreeSpaceMenu) {
+      this.messageEnumFreeSpaceMenu = messageEnumFreeSpaceMenu;
     }
 
     public String getMessageFreeSpaceMenu() {
-      return messageFreeSpaceMenu;
+      return messageEnumFreeSpaceMenu;
     }
   }
 
-  enum BuyingTicketsMenu {
+  enum EnumBuyingTicketsMenu {
     CANCELLATION("Введите 0 если хотите ОТМЕНИТЬ ПОКУПКУ"),
     CHANGE_SELECTION("Введите 1 чтоб ИЗМЕНИТЬ ВЫБОР"),
     TO_CONFIRM("Введите 2 чтоб ПОДТВЕРДИТЬ ПОКУПКУ");
-    private final String messageBuyingTicketsMenu;
+    private final String messageEnumBuyingTicketsMenu;
 
-    BuyingTicketsMenu(String messageBuyingTicketsMenu) {
-      this.messageBuyingTicketsMenu = messageBuyingTicketsMenu;
+    EnumBuyingTicketsMenu(String messageEnumBuyingTicketsMenu) {
+      this.messageEnumBuyingTicketsMenu = messageEnumBuyingTicketsMenu;
     }
 
     public String getBuyingTicketsMenu() {
-      return messageBuyingTicketsMenu;
+      return messageEnumBuyingTicketsMenu;
     }
   }
 
@@ -71,15 +71,15 @@ public class CinemaMenu {
   }
 
   public static void FreeSpaceMenu() {
-    System.out.println(FreeSpaceMenu.CHANGE_DATE.getMessageFreeSpaceMenu());
-    System.out.println(FreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageFreeSpaceMenu());
+    System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageFreeSpaceMenu());
+    System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageFreeSpaceMenu());
     separator();
   }
 
   public static void BuyingTicketsMenu() {
-    System.out.println(BuyingTicketsMenu.CHANGE_SELECTION.getBuyingTicketsMenu());
-    System.out.println(BuyingTicketsMenu.TO_CONFIRM.getBuyingTicketsMenu());
-    System.out.println(BuyingTicketsMenu.CANCELLATION.getBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getBuyingTicketsMenu());
     separator();
   }
 }
