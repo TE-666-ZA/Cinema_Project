@@ -7,16 +7,16 @@ public class CinemaMenu {
     TIMETABLES("Расписание"),
     FREE_SPACE("Свободные места"),
     BUYING_TICKETS("Покупка билетов"),
-    TIСKETS_EXCHANGE_OR_RETURN("Обмен/Возврат билетов"),
+    TICKETS_EXCHANGE_OR_RETURN("Обмен/Возврат билетов"),
     ADMINISTRATOR("Администратор");
-    private final String message;
+    private final String messageEnumMainMenu;
 
-    EnumMainMenu(String message) {
-      this.message = message;
+    EnumMainMenu(String messageEnumMainMenu) {
+      this.messageEnumMainMenu = messageEnumMainMenu;
     }
 
-    public String getMessage() {
-      return message;
+    public String getMessageEnumMainMenu() {
+      return messageEnumMainMenu;
     }
   }
 
@@ -30,7 +30,7 @@ public class CinemaMenu {
       this.messageEnumFreeSpaceMenu = messageEnumFreeSpaceMenu;
     }
 
-    public String getMessageFreeSpaceMenu() {
+    public String getMessageEnumFreeSpaceMenu() {
       return messageEnumFreeSpaceMenu;
     }
   }
@@ -45,7 +45,7 @@ public class CinemaMenu {
       this.messageEnumBuyingTicketsMenu = messageEnumBuyingTicketsMenu;
     }
 
-    public String getBuyingTicketsMenu() {
+    public String getMessageEnumBuyingTicketsMenu() {
       return messageEnumBuyingTicketsMenu;
     }
   }
@@ -61,7 +61,7 @@ public class CinemaMenu {
       this.messageEnumTicketsExchangeOrReturnMenu = messageEnumTicketsExchangeOrReturnMenu;
     }
 
-    public String getEnumTicketsExchangeOrReturnMenu() {
+    public String getMessageEnumTicketsExchangeOrReturnMenu() {
       return messageEnumTicketsExchangeOrReturnMenu;
     }
 
@@ -74,39 +74,43 @@ public class CinemaMenu {
 
   public static void mainMenu() {
     System.out.println(
-        EnumMainMenu.TIMETABLES.ordinal() + "." + EnumMainMenu.TIMETABLES.getMessage());
+        EnumMainMenu.TIMETABLES.ordinal() + "." + EnumMainMenu.TIMETABLES.getMessageEnumMainMenu());
     System.out.println(
-        EnumMainMenu.FREE_SPACE.ordinal() + "." + EnumMainMenu.FREE_SPACE.getMessage());
+        EnumMainMenu.FREE_SPACE.ordinal() + "." + EnumMainMenu.FREE_SPACE.getMessageEnumMainMenu());
     System.out.println(
-        EnumMainMenu.BUYING_TICKETS.ordinal() + "." + EnumMainMenu.BUYING_TICKETS.getMessage());
-    System.out.println(EnumMainMenu.TIСKETS_EXCHANGE_OR_RETURN.ordinal() + "."
-        + EnumMainMenu.TIСKETS_EXCHANGE_OR_RETURN.getMessage());
+        EnumMainMenu.BUYING_TICKETS.ordinal() + "."
+            + EnumMainMenu.BUYING_TICKETS.getMessageEnumMainMenu());
+    System.out.println(EnumMainMenu.TICKETS_EXCHANGE_OR_RETURN.ordinal() + "."
+        + EnumMainMenu.TICKETS_EXCHANGE_OR_RETURN.getMessageEnumMainMenu());
     System.out.println(
-        EnumMainMenu.ADMINISTRATOR.ordinal() + "." + EnumMainMenu.ADMINISTRATOR.getMessage());
-    System.out.println(EnumMainMenu.EXIT.ordinal() + "." + EnumMainMenu.EXIT.getMessage());
+        EnumMainMenu.ADMINISTRATOR.ordinal() + "."
+            + EnumMainMenu.ADMINISTRATOR.getMessageEnumMainMenu());
+    System.out.println(
+        EnumMainMenu.EXIT.ordinal() + "." + EnumMainMenu.EXIT.getMessageEnumMainMenu());
     separator();
   }
 
   public static void FreeSpaceMenu() {
-    System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageFreeSpaceMenu());
-    System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageFreeSpaceMenu());
+    System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
+    System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageEnumFreeSpaceMenu());
     separator();
   }
 
   public static void BuyingTicketsMenu() {
-    System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getBuyingTicketsMenu());
-    System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getBuyingTicketsMenu());
-    System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getMessageEnumBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getMessageEnumBuyingTicketsMenu());
     separator();
   }
 
   public static void TicketsExchangeOrReturnMenu() {
     System.out.println(
-        EnumTicketsExchangeOrReturnMenu.TICKETS_EXCHANGE.messageEnumTicketsExchangeOrReturnMenu);
+        EnumTicketsExchangeOrReturnMenu.TICKETS_EXCHANGE.getMessageEnumTicketsExchangeOrReturnMenu());
     System.out.println(
-        EnumTicketsExchangeOrReturnMenu.TO_RETURN_TICKETS.messageEnumTicketsExchangeOrReturnMenu);
+        EnumTicketsExchangeOrReturnMenu.TO_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
     System.out.println(
-        EnumTicketsExchangeOrReturnMenu.CANCELLATION_RETURN_TICKETS.messageEnumTicketsExchangeOrReturnMenu);
+        EnumTicketsExchangeOrReturnMenu.CANCELLATION_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
     separator();
+    
   }
 }
