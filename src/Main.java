@@ -4,5 +4,6 @@ public class Main {
     System.out.println("\u001B[32m" + "Добро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
     CinemaMenu.mainMenu();
     CinemaMenu.FreeSpaceMenu();
+    CinemaMenu.BuyingTicketsMenu();
   }
 }

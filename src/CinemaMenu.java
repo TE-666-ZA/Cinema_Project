@@ -1,4 +1,5 @@
 public class CinemaMenu {
+  //меню и проверки меню тут
 
   enum EnumMainMenu {
     //пункты первого меню mainMenu
@@ -34,8 +35,21 @@ public class CinemaMenu {
     }
   }
 
+  enum BuyingTicketsMenu {
+    CANCELLATION("Введите 0 если хотите ОТМЕНИТЬ ПОКУПКУ"),
+    CHANGE_SELECTION("Введите 1 чтоб ИЗМЕНИТЬ ВЫБОР"),
+    TO_CONFIRM("Введите 2 чтоб ПОДТВЕРДИТЬ ПОКУПКУ");
+    private final String messageBuyingTicketsMenu;
 
-  //меню и проверки меню тут
+    BuyingTicketsMenu(String messageBuyingTicketsMenu) {
+      this.messageBuyingTicketsMenu = messageBuyingTicketsMenu;
+    }
+
+    public String getBuyingTicketsMenu() {
+      return messageBuyingTicketsMenu;
+    }
+  }
+
   // Метод для вывода разделительной строки между меню
   public static void separator() {
     System.out.println("----------------------------------------------------");
@@ -43,7 +57,9 @@ public class CinemaMenu {
 
   public static void mainMenu() {
     System.out.println(
-        EnumMainMenu.TIMETABLES.ordinal() + "." + EnumMainMenu.FREE_SPACE.getMessage());
+        EnumMainMenu.TIMETABLES.ordinal() + "." + EnumMainMenu.TIMETABLES.getMessage());
+    System.out.println(
+        EnumMainMenu.FREE_SPACE.ordinal() + "." + EnumMainMenu.FREE_SPACE.getMessage());
     System.out.println(
         EnumMainMenu.BUYING_TICKETS.ordinal() + "." + EnumMainMenu.BUYING_TICKETS.getMessage());
     System.out.println(EnumMainMenu.TIСKETS_EXCHANGE_OR_RETURN.ordinal() + "."
@@ -55,10 +71,15 @@ public class CinemaMenu {
   }
 
   public static void FreeSpaceMenu() {
-    System.out.println(FreeSpaceMenu.CHANGE_DATE.ordinal() + "."
-        + FreeSpaceMenu.CHANGE_DATE.getMessageFreeSpaceMenu());
-    System.out.println(FreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.ordinal() + "."
-        + FreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageFreeSpaceMenu());
+    System.out.println(FreeSpaceMenu.CHANGE_DATE.getMessageFreeSpaceMenu());
+    System.out.println(FreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageFreeSpaceMenu());
+    separator();
+  }
+
+  public static void BuyingTicketsMenu() {
+    System.out.println(BuyingTicketsMenu.CHANGE_SELECTION.getBuyingTicketsMenu());
+    System.out.println(BuyingTicketsMenu.TO_CONFIRM.getBuyingTicketsMenu());
+    System.out.println(BuyingTicketsMenu.CANCELLATION.getBuyingTicketsMenu());
     separator();
   }
 }
