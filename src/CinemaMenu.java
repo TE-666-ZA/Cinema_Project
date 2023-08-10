@@ -6,7 +6,7 @@ public class CinemaMenu {
     TIMETABLES("Расписание"),
     FREE_SPACE("Свободные места"),
     BUYING_TICKETS("Покупка билетов"),
-    TIKETS_EXCHANGE_OR_RETURN("Обмен/Возврат билетов"),
+    TIСKETS_EXCHANGE_OR_RETURN("Обмен/Возврат билетов"),
     ADMINISTRATOR("Администратор");
     private final String message;
 
@@ -46,8 +46,8 @@ public class CinemaMenu {
         EnumMainMenu.TIMETABLES.ordinal() + "." + EnumMainMenu.FREE_SPACE.getMessage());
     System.out.println(
         EnumMainMenu.BUYING_TICKETS.ordinal() + "." + EnumMainMenu.BUYING_TICKETS.getMessage());
-    System.out.println(EnumMainMenu.TIKETS_EXCHANGE_OR_RETURN.ordinal() + "."
-        + EnumMainMenu.TIKETS_EXCHANGE_OR_RETURN.getMessage());
+    System.out.println(EnumMainMenu.TIСKETS_EXCHANGE_OR_RETURN.ordinal() + "."
+        + EnumMainMenu.TIСKETS_EXCHANGE_OR_RETURN.getMessage());
     System.out.println(
         EnumMainMenu.ADMINISTRATOR.ordinal() + "." + EnumMainMenu.ADMINISTRATOR.getMessage());
     System.out.println(EnumMainMenu.EXIT.ordinal() + "." + EnumMainMenu.EXIT.getMessage());
