@@ -67,6 +67,23 @@ public class CinemaMenu {
 
   }
 
+  enum EnumAdministratorMenu {
+    EXIT_MAIN_MENU("Введите 0 для ВОЗВРАТА В ПРЕДЫДУЩЕЕ МЕНЮ"),
+    STATISTICS_PER_SESSOIN("Введите 1 чтоб отобразить СТАТИСТИКУ ЗА СЕАНС"),
+    STATISTCS_FOR_DAY("Введите 2 чтоб выбрать СТАТИСТИКУ ЗА ДЕНЬ"),
+    CHOICE_BONUS("Введите 3 чтоб изменить БОНУСЫ");
+    private final String messageEnumAdministratorMenu;
+
+    EnumAdministratorMenu(String messageEnumAdministratorMenu) {
+      this.messageEnumAdministratorMenu = messageEnumAdministratorMenu;
+    }
+
+    public String getMessageEnumAdministratorMenu() {
+      return messageEnumAdministratorMenu;
+    }
+
+  }
+
   // Метод для вывода разделительной строки между меню
   public static void separator() {
     System.out.println("----------------------------------------------------");
@@ -111,6 +128,15 @@ public class CinemaMenu {
     System.out.println(
         EnumTicketsExchangeOrReturnMenu.CANCELLATION_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
     separator();
-    
+
+  }
+
+  public static void AdministratorMenu() {
+    System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
+    System.out.println(
+        EnumAdministratorMenu.STATISTICS_PER_SESSOIN.getMessageEnumAdministratorMenu());
+    System.out.println(EnumAdministratorMenu.STATISTCS_FOR_DAY.getMessageEnumAdministratorMenu());
+    System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
+    separator();
   }
 }

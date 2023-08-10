@@ -6,5 +6,6 @@ public class Main {
     CinemaMenu.FreeSpaceMenu();
     CinemaMenu.BuyingTicketsMenu();
     CinemaMenu.TicketsExchangeOrReturnMenu();
+    CinemaMenu.AdministratorMenu();
   }
 }
