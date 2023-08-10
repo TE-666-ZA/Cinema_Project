@@ -5,5 +5,6 @@ public class Main {
     CinemaMenu.mainMenu();
     CinemaMenu.FreeSpaceMenu();
     CinemaMenu.BuyingTicketsMenu();
+    CinemaMenu.TicketsExchangeOrReturnMenu();
   }
 }
