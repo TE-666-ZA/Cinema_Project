@@ -73,8 +73,9 @@
 5. 1 2 3 4 Х Х 7 8 9 10#
 *ласты и клей*
 
-cinemaHallDay1Session1   cinemaHallDay1Session2   cinemaHallDay1Session3
+hallDay1Session1   hallDay1Session2   hallDay1Session3
 
-cinemaHallDay2Session1   cinemaHallDay2Session2   cinemaHallDay2Session3
+hallDay2Session1   hallDay2Session2   hallDay2Session3
 
-cinemaHallDay3Session1   cinemaHallDay3Session2   cinemaHallDay3Session3
+hallDay3Session1   hallDay3Session2   hallDay3Session3
+

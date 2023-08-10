@@ -1,6 +1,11 @@
 public class CinemaMenu {
 
   //меню и проверки меню тут
+  // Метод для вывода разделительной строки между меню
+  public static void separator() {
+    System.out.println("----------------------------------------------------");
+  }
+
   public static void mainMenu() {
 
     System.out.println(Separators.TIMETABLES.ordinal() + "." + Separators.TIMETABLES.getMessage());
@@ -12,7 +17,7 @@ public class CinemaMenu {
     System.out.println(
         Separators.ADMINISTRATOR.ordinal() + "." + Separators.ADMINISTRATOR.getMessage());
     System.out.println(Separators.EXIT.ordinal() + "." + Separators.EXIT.getMessage());
-//    // separator();
+    separator();
 
   }
 }

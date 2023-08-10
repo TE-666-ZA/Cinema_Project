@@ -16,4 +16,5 @@ public enum Separators {
   public String getMessage() {
     return message;
   }
+
 }
