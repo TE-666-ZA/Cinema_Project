@@ -36,10 +36,10 @@ public class CinemaMenu {
       try {
         command = scanner.nextInt();
         if (!isCommandEnumMainMenu(command)) {
-          System.out.println("Некорректный номер команды: " + command);
+          System.out.println("Некорректный пункт меню: " + command);
         }
       } catch (InputMismatchException e) {
-        System.out.println("Некорректный ввод, введите номер команды: ");
+        System.out.println("Некорректный ввод, введите номер меню: ");
       } finally {
         scanner.nextLine();
       }
@@ -67,10 +67,10 @@ public class CinemaMenu {
       try {
         command = scanner.nextInt();
         if (!isCommandEnumFreeSpaceMenu(command)) {
-          System.out.println("Некорректный номер команды: " + command);
+          System.out.println("Некорректный пункт меню: " + command);
         }
       } catch (InputMismatchException e) {
-        System.out.println("Некорректный ввод, введите номер команды: ");
+        System.out.println("Некорректный ввод, введите номер меню: ");
       } finally {
         scanner.nextLine();
       }
@@ -101,10 +101,10 @@ public class CinemaMenu {
       try {
         command = scanner.nextInt();
         if (!isCommandEnumBuyingTicketsMenu(command)) {
-          System.out.println("Некорректный номер команды: " + command);
+          System.out.println("Некорректный пункт меню: " + command);
         }
       } catch (InputMismatchException e) {
-        System.out.println("Некорректный ввод, введите номер команды: ");
+        System.out.println("Некорректный ввод, введите номер меню: ");
       } finally {
         scanner.nextLine();
       }
@@ -121,10 +121,10 @@ public class CinemaMenu {
       try {
         command = scanner.nextInt();
         if (!isCommandEnumBuyingTicketsMenu(command)) {
-          System.out.println("Некорректный номер команды: " + command);
+          System.out.println("Некорректный пункт меню: " + command);
         }
       } catch (InputMismatchException e) {
-        System.out.println("Некорректный ввод, введите номер команды: ");
+        System.out.println("Некорректный ввод, введите номер меню: ");
       } finally {
         scanner.nextLine();
       }
@@ -133,7 +133,7 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-//методы вывода и проверки меню АДМИНИСТРАТОР
+  //методы вывода и проверки меню АДМИНИСТРАТОР
   protected static boolean isCommandEnumAdministratorMenu(int command) {
     switch (command) {
       case 0:
@@ -154,10 +154,10 @@ public class CinemaMenu {
       try {
         command = scanner.nextInt();
         if (!isCommandEnumAdministratorMenu(command)) {
-          System.out.println("Некорректный номер команды: " + command);
+          System.out.println("Некорректный пункт меню: " + command);
         }
       } catch (InputMismatchException e) {
-        System.out.println("Некорректный ввод, введите номер команды: ");
+        System.out.println("Некорректный ввод, введите номер меню: ");
       } finally {
         scanner.nextLine();
       }
@@ -165,9 +165,11 @@ public class CinemaMenu {
     return command;
   }
 
+  //________________________________________________________________________________________
+  //методы вывода МЕНЮ и ПОДМЕНЮ
   public static void freeSpaceMenu() {
-    System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
     System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageEnumFreeSpaceMenu());
+    System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
     separator();
   }
 
@@ -194,10 +196,109 @@ public class CinemaMenu {
         EnumAdministratorMenu.STATISTICS_PER_SESSOIN.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.STATISTCS_FOR_DAY.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
-    separator();
     System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
+    separator();
   }
 
+  //________________________________________________________________________________________
+  //метод вывода 9 КАРТ ЗА 3 ДНЯ
+  public static void printHallMapsForAllDays() {
+    System.out.println("             КАРТА СЕАНСА 1");
+    System.out.println("             КАРТА СЕАНСА 2");
+    System.out.println("             КАРТА СЕАНСА 3");
+
+  }
+
+  //________________________________________________________________________________________
+  //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
+  public static void printHallMapsPerDay() {
+    System.out.println("             КАРТА СЕАНСА 1");
+    System.out.println("             КАРТА СЕАНСА 2");
+    System.out.println("             КАРТА СЕАНСА 3");
+
+  }
+
+  //________________________________________________________________________________________
+  //метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
+  public static void printHallMapPerSession() {
+    System.out.println("1.  1 2 3 4 5 6 7 8 9");
+    System.out.println("2.  1 2 3 4 5 6 7 8 9");
+    System.out.println("3.  1 2 3 4 5 6 7 8 9");
+
+  }
+
+  //________________________________________________________________________________________
+  //метод ввода даты
+  public static void inputDate() {
+    System.out.println("Осуществите ввод даты ->");
+  }
+
+  //________________________________________________________________________________________
+  //метод ввода даты и сеанса
+  public static void inputDateTime() {
+    System.out.println("Осуществите ввод даты ->");
+    System.out.println("Осуществите ввод времени сеанса ->");
+  }
+
+  //________________________________________________________________________________________
+  //метод ввода Ряд/Колличество/Места
+  public static void inputRowQuantityPlace() {
+    System.out.println("Осуществите ввод выбраного ряда ->");
+    // Вывод карты ряда на экран
+    System.out.println("Введите колличество необходимых мест ->");
+    System.out.println("Мы радуем приятным бонусом за покупку 4х и более мест");
+    System.out.println("Введите номера выбранных мест ->");
+  }
+
+  //________________________________________________________________________________________
+  //метод подтверждения покупки в меню ПОКУПКА БИЛЕТОВ
+  public static void confirmPurchase() {
+    System.out.println("Подтвердите покупку вводом ФАМИЛИИ ->");
+  }
+
+  //________________________________________________________________________________________
+  //метод для меню ОБМЕН/ВАЗВРАТ БИЛЕТОВ, когда по фамиии выводим кол-во билетов/день/сеанс
+  public static void inputLastName() {
+    System.out.println("Введите ФАМИЛИЮ ->");
+  }
+
+  //________________________________________________________________________________________
+  //метод СДАТЬ БИЛЕТЫ
+  public static void toReturnTickets() {
+    System.out.println(" ->");
+
+    System.out.println(" ФИО ___билетов на ____ _____");
+    System.out.println(" Возврат _____ евро");
+    System.out.println(" Спасибо, что воспоьзовались нашим сервисом!");
+  }
+
+  //________________________________________________________________________________________
+  //метод ввода пароля Администратора
+  public static void inputPass() {
+    System.out.println("Введите пароль ->");
+  }
+
+  //________________________________________________________________________________________
+  //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
+  public static void printStatisticsForDay() {
+    inputDate();
+    System.out.println("Введите пароль ->");
+  }
+
+  //________________________________________________________________________________________
+  //метод вывода СТАТИСТИКИ ЗА СЕАНС
+  public static void printStatisticsForSession() {
+    inputDateTime();
+    System.out.println("Введите пароль ->");
+  }
+
+  //________________________________________________________________________________________
+  //метод ИЗМЕНЕНИЯ БОНУСА
+  public static void changeBonus() {
+    System.out.println("Введите НОВЫЙ БОНУС ->");
+  }
+
+  //классы Enam - пункты меню
   protected enum EnumMainMenu {
     //пункты первого меню mainMenu
     EXIT("Выход"),
