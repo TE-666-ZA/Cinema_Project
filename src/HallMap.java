@@ -17,7 +17,6 @@ public class HallMap {
   private FileEditor reader;
   private FileEditor writer; // предположим, через него класс файл эдитор будет записывать в мапы
 
-
   // тут создаём 9 мап, их можно забрать в FileEditor
   public HallMap() throws IOException {
     this.session1 = new HashMap<>();
@@ -64,8 +63,8 @@ public class HallMap {
   }
 
   // метод для того, чтобы выбрать купленное место
-  public void chooseSeat(String sessionKey, int row, int seatNumber) {
-
+  public void chooseSeat(int sessionKey, int row, int seatNumber) {
+    Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
   }
 
   // метод для того, чтобы вернуть купленное место
@@ -76,5 +75,30 @@ public class HallMap {
   // метод для демонстрации карты мест
   public void showSessionMap(String sessionName) {
 
+  }
+
+  private Map<Integer, Character[]> getSessionMap(int sessionKey) {
+    switch (sessionKey) {
+      case 1:
+        return session1;
+      case 2:
+        return session2;
+      case 3:
+        return session3;
+      case 4:
+        return session4;
+      case 5:
+        return session5;
+      case 6:
+        return session6;
+      case 7:
+        return session7;
+      case 8:
+        return session8;
+      case 9:
+        return session9;
+      default:
+        return null;
+    }
   }
 }
