@@ -1,8 +1,8 @@
 import java.io.*;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 public class FileEditor {
     private enum EnumSeparators {
@@ -44,7 +44,7 @@ public class FileEditor {
     private int columCount;
     private int targetCount;
     private int mapKey;
-    private char[] mapValue;
+    private Character[] mapValue;
     private boolean insideSection;
     private FileReader infoFull;
     private SimpleDateFormat dateFormat;
@@ -65,7 +65,7 @@ public class FileEditor {
         this.columCount = 0;
     }
 
-    public void read(int currentCount) throws IOException, NullPointerException {
+    private void read(int currentCount) throws IOException, NullPointerException {
         this.content = new StringBuilder();
         while ((currentindex = reader.read()) != -1) {
             if (insideSection) {
@@ -86,7 +86,7 @@ public class FileEditor {
         }
     }
 
-    public Date getDate() throws IOException, ParseException {
+    public Date reeadDate() throws IOException, ParseException {
         this.beginIndex = EnumSeparators.START_DATE.getSeparator();
         this.endIndex = EnumSeparators.STOP_DATE.getSeparator();
         read(dateCount);
@@ -94,7 +94,7 @@ public class FileEditor {
 
         return date;
     }
-    public int getKey() throws IOException, NumberFormatException {
+    private int readKey() throws IOException, NumberFormatException {
         this.beginIndex = EnumSeparators.START_KEY.getSeparator();
         this.endIndex = EnumSeparators.STOP_KEY.getSeparator();
         read(keyCount);
@@ -104,15 +104,25 @@ public class FileEditor {
         return mapKey;
     }
 
-    public char[] getMapValue() throws IOException {
+    private Character[] readMapValue() throws IOException {
         this.beginIndex = EnumSeparators.START_VALUE.getSeparator();
         this.endIndex = EnumSeparators.STOP_VALUE.getSeparator();
         read(valueCount);
-        mapValue = content.toString().toCharArray();
+        this.temp = content.toString();
+        for(int i = 0; i < temp.length();i++){
+            mapValue[i] = temp.charAt(i);
+        }
 
         return mapValue;
     }
 
+    public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException {
+        readKey();
+        readMapValue();
+        thisMap.put(mapKey,mapValue);
+
+        return thisMap;
+    }
 
 
 }
