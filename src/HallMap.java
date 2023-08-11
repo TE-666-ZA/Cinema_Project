@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // класс, в котором будет храниться вся изначальная и обновлённая инфа о местах
-public class HallMap{
+public class HallMap {
 
   private Map<Integer, Character[]> session1;
   private Map<Integer, Character[]> session2;
@@ -15,6 +15,7 @@ public class HallMap{
   private Map<Integer, Character[]> session8;
   private Map<Integer, Character[]> session9;
   private FileEditor reader;
+  private FileEditor writer; // предположим, через него класс файл эдитор будет записывать в мапы
 
 
   // тут создаём 9 мап, их можно забрать в FileEditor
@@ -28,13 +29,29 @@ public class HallMap{
     this.session7 = new HashMap<>();
     this.session8 = new HashMap<>();
     this.session9 = new HashMap<>();
+    this.writer = new FileEditor();
+    writeAllSeats();
     this.reader = new FileEditor();
-    initializeAllSeatMaps();
+    readAllSeats();
   }
 
-  // теперь вызываем метод для заполнения каждой мапы значениями, я его предварительно обозвала fillMap
+  // вызываем метод для чтения каждой мапы
   // делаем это в методе:
-  private void initializeAllSeatMaps() throws IOException {
+  private void writeAllSeats() throws IOException {
+    this.writer.readMap(session1);
+    this.writer.readMap(session2);
+    this.writer.readMap(session3);
+    this.writer.readMap(session4);
+    this.writer.readMap(session5);
+    this.writer.readMap(session6);
+    this.writer.readMap(session7);
+    this.writer.readMap(session8);
+    this.writer.readMap(session9);
+  }
+
+  // теперь вызываем метод для чтения каждой мапы
+  // делаем это в методе:
+  private void readAllSeats() throws IOException {
     this.reader.readMap(session1);
     this.reader.readMap(session2);
     this.reader.readMap(session3);
@@ -58,23 +75,6 @@ public class HallMap{
 
   // метод для демонстрации карты мест
   public void showSessionMap(String sessionName) {
-    Character[] sessionMap = hallSessions.get(sessionName);
-    if (sessionMap == null) {
-      System.out.println("Сеанс не найден");
-      return;
-    }
 
-    int seatsPerRow = 12; // количество мест в ряду, втч нумерация ряда
-
-    int index = 0;
-    for (int seat = 0; seat < sessionMap.length; seat++) {
-      System.out.print(sessionMap[seat] + " ");
-      index++;
-
-      // переносим строчку после вывода определенного количества мест
-      if (index % seatsPerRow == 0) {
-        System.out.println();
-      }
-    }
   }
 }
