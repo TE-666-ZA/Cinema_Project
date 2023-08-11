@@ -65,6 +65,20 @@ public class HallMap {
   // метод для того, чтобы выбрать купленное место
   public void chooseSeat(int sessionKey, int row, int seatNumber) {
     Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
+    if (sessionMap == null) {
+      System.out.println("Такого сеанса нет");
+    }
+    Character[] rowArray = sessionMap.get(row);
+    if (rowArray == null || seatNumber < 1
+        || seatNumber >= rowArray.length) {
+      System.out.println("Что-то пошло не так при выборе ряда/места");
+    }
+    if (rowArray[seatNumber] == 'X') {
+      System.out.println("Это место уже занято");
+    } else {
+      rowArray[seatNumber] = 'X';
+      System.out.println("Вы купили место №" + seatNumber + ", ряд " + row);
+    }
   }
 
   // метод для того, чтобы вернуть купленное место
