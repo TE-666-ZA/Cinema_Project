@@ -3,7 +3,6 @@
 import java.util.Scanner;
 
 public class Main {
-
   //
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
@@ -25,10 +24,8 @@ public class Main {
         case TIMETABLES:
           System.out.println("Расписание таратат");
           break;
-
         case FREE_SPACE:
           break;
-
         case BUYING_TICKETS:
           break;
         case TICKETS_EXCHANGE_OR_RETURN:
@@ -40,7 +37,5 @@ public class Main {
           break;
       }
     }
-
-
   }
 }

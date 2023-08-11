@@ -25,9 +25,7 @@ public class CinemaMenu {
         return false;
     }
   }
-
   protected static int readCommandMainMenuCommand(Scanner scanner) {
-
     int command = INCORRECT;
     while (!isCommandEnumMainMenu(command)) {
       EnumMainMenu.printMainMenu();
@@ -106,7 +104,6 @@ public class CinemaMenu {
       return messageEnumMainMenu;
     }
   }
-
 
   enum EnumFreeSpaceMenu {
     //пункты меню Свободные места
