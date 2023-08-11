@@ -22,12 +22,14 @@ public class Main {
           break;
         // 2
         case FREE_SPACE: // Карта Свободных мест,
+          System.out.println("2 свободные места таратат");
           boolean runFreeSpaseMenu = true;
           while (runFreeSpaseMenu) {
             System.out.println("Выберите дату - >");
             //ввод даты
             //сюда вставить функцию ввода даты
-            int commandFreeSpaseMenu = CinemaMenu.readCommandMainMenu(scanner);
+
+            int commandFreeSpaseMenu = CinemaMenu.readCommandFreeSpaceMenu(scanner);
             CinemaMenu.EnumFreeSpaceMenu selectedFreeSpaseMenu = CinemaMenu.EnumFreeSpaceMenu.values()[commandFreeSpaseMenu];
             switch (selectedFreeSpaseMenu) {
               case CHANGE_DATE: // изменить дату
@@ -44,6 +46,8 @@ public class Main {
         //3
 
         case BUYING_TICKETS: //  Покупка билетов
+          System.out.println("3 Покупка билетов таратат");
+
           System.out.println("Выберите дату - >");
           // ввод
           System.out.println("Выберите выберите время сеанса - >");
@@ -59,7 +63,7 @@ public class Main {
           //Вывод нового меню
           boolean runBuyingTicketsMenu = true;
           while (runBuyingTicketsMenu) {
-            int commandBuyingTicketsMenu = CinemaMenu.readCommandMainMenu(scanner);
+            int commandBuyingTicketsMenu = CinemaMenu.readCommandBuyingTicketsMenu(scanner);
             CinemaMenu.EnumBuyingTicketsMenu selectedBuyingTicketsMenu = CinemaMenu.EnumBuyingTicketsMenu.values()[commandBuyingTicketsMenu];
             switch (selectedBuyingTicketsMenu) {
               case CHANGE_SELECTION: // изменить выбор мест
@@ -79,12 +83,14 @@ public class Main {
           break;
         //4
         case TICKETS_EXCHANGE_OR_RETURN: // 4 Обмен/Возврат билетов
+          System.out.println("4 Обмен/Возврат билетов таратат");
           System.out.println("Ввелите фамилию покупателя ->");
           // ввод фио
           // вывод из файла  ПЕТРОВ 2 билета  Завтра 12.00 Русалочка
           boolean runTicketsExchangeOrReturnMenu = true;
           while (runTicketsExchangeOrReturnMenu) {
-            int commandTicketsExchangeOrReturnMenu = CinemaMenu.readCommandMainMenu(scanner);
+            int commandTicketsExchangeOrReturnMenu = CinemaMenu.readCommandTicketsExchangeOrReturnMenu(
+                scanner);
             CinemaMenu.EnumTicketsExchangeOrReturnMenu selectedTicketsExchangeOrReturnMenu = CinemaMenu.EnumTicketsExchangeOrReturnMenu.values()[commandTicketsExchangeOrReturnMenu];
             switch (selectedTicketsExchangeOrReturnMenu) {
               case TICKETS_EXCHANGE: // обмен билетов
@@ -115,11 +121,12 @@ public class Main {
           break;
         // 5
         case ADMINISTRATOR: // Меню Администратора
+          System.out.println("5 Меню Администратора таратат");
           System.out.println(" Введите пароль -> ");
           //пользовательский ввод
           boolean runAdministratorMenu = true;
           while (runAdministratorMenu) {
-            int commandAdministratorMenu = CinemaMenu.readCommandMainMenu(scanner);
+            int commandAdministratorMenu = CinemaMenu.readCommandAdministratorMenu(scanner);
             CinemaMenu.EnumAdministratorMenu selectedAdministratorMenu = CinemaMenu.EnumAdministratorMenu.values()[commandAdministratorMenu];
             switch (selectedAdministratorMenu) {
               case STATISTICS_PER_SESSOIN: // Статистика за СЕАНС

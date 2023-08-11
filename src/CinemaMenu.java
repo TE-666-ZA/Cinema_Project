@@ -11,7 +11,9 @@ public class CinemaMenu {
     System.out.println("----------------------------------------------------");
   }
 
-  // чтото тут не так...
+  //________________________________________________________________________________________
+  //методы вывода и проверки ГЛАВНОГО МЕНЮ
+
   protected static boolean isCommandEnumMainMenu(int command) {
     switch (command) {
       case 0:
@@ -20,39 +22,6 @@ public class CinemaMenu {
       case 3:
       case 4:
       case 5:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  protected static boolean isCommandEnumFreeSpaceMenu(int command) {
-    switch (command) {
-      case 0:
-      case 1:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  protected static boolean isCommandEnumBuyingTicketsMenu(int command) {
-    switch (command) {
-      case 0:
-      case 1:
-      case 2:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  protected static boolean isCommandEnumAdministratorMenu(int command) {
-    switch (command) {
-      case 0:
-      case 1:
-      case 2:
-      case 3:
         return true;
       default:
         return false;
@@ -78,20 +47,138 @@ public class CinemaMenu {
     return command;
   }
 
-  public static void FreeSpaceMenu() {
+  //________________________________________________________________________________________
+  //методы вывода и проверки меню СВОБОДНЫЕ МЕСТА
+  protected static boolean isCommandEnumFreeSpaceMenu(int command) {
+    switch (command) {
+      case 0:
+      case 1:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  protected static int readCommandFreeSpaceMenu(Scanner scanner) {
+    int command = INCORRECT;
+    while (!isCommandEnumFreeSpaceMenu(command)) {
+      freeSpaceMenu();
+      System.out.print("Введите номер действия: ");
+      try {
+        command = scanner.nextInt();
+        if (!isCommandEnumFreeSpaceMenu(command)) {
+          System.out.println("Некорректный номер команды: " + command);
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Некорректный ввод, введите номер команды: ");
+      } finally {
+        scanner.nextLine();
+      }
+    }
+    return command;
+  }
+
+  //________________________________________________________________________________________
+  //методы вывода и проверки меню пунктов
+  // 3.ПОКУПКА БИЛЕТОВ
+  // 4.ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+  protected static boolean isCommandEnumBuyingTicketsMenu(int command) {
+    switch (command) {
+      case 0:
+      case 1:
+      case 2:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  protected static int readCommandBuyingTicketsMenu(Scanner scanner) {
+    int command = INCORRECT;
+    while (!isCommandEnumBuyingTicketsMenu(command)) {
+      buyingTicketsMenu();
+      System.out.print("Введите номер действия: ");
+      try {
+        command = scanner.nextInt();
+        if (!isCommandEnumBuyingTicketsMenu(command)) {
+          System.out.println("Некорректный номер команды: " + command);
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Некорректный ввод, введите номер команды: ");
+      } finally {
+        scanner.nextLine();
+      }
+    }
+    return command;
+  }
+
+  // 4.ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+  protected static int readCommandTicketsExchangeOrReturnMenu(Scanner scanner) {
+    int command = INCORRECT;
+    while (!isCommandEnumBuyingTicketsMenu(command)) {
+      ticketsExchangeOrReturnMenu();
+      System.out.print("Введите номер действия: ");
+      try {
+        command = scanner.nextInt();
+        if (!isCommandEnumBuyingTicketsMenu(command)) {
+          System.out.println("Некорректный номер команды: " + command);
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Некорректный ввод, введите номер команды: ");
+      } finally {
+        scanner.nextLine();
+      }
+    }
+    return command;
+  }
+
+  //________________________________________________________________________________________
+//методы вывода и проверки меню АДМИНИСТРАТОР
+  protected static boolean isCommandEnumAdministratorMenu(int command) {
+    switch (command) {
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  protected static int readCommandAdministratorMenu(Scanner scanner) {
+    int command = INCORRECT;
+    while (!isCommandEnumAdministratorMenu(command)) {
+      administratorMenu();
+      System.out.print("Введите номер действия: ");
+      try {
+        command = scanner.nextInt();
+        if (!isCommandEnumAdministratorMenu(command)) {
+          System.out.println("Некорректный номер команды: " + command);
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Некорректный ввод, введите номер команды: ");
+      } finally {
+        scanner.nextLine();
+      }
+    }
+    return command;
+  }
+
+  public static void freeSpaceMenu() {
     System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
     System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageEnumFreeSpaceMenu());
     separator();
   }
 
-  public static void BuyingTicketsMenu() {
+  public static void buyingTicketsMenu() {
     System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
     System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getMessageEnumBuyingTicketsMenu());
     System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getMessageEnumBuyingTicketsMenu());
     separator();
   }
 
-  public static void TicketsExchangeOrReturnMenu() {
+  public static void ticketsExchangeOrReturnMenu() {
     System.out.println(
         EnumTicketsExchangeOrReturnMenu.TICKETS_EXCHANGE.getMessageEnumTicketsExchangeOrReturnMenu());
     System.out.println(
@@ -102,13 +189,13 @@ public class CinemaMenu {
 
   }
 
-  public static void AdministratorMenu() {
-    System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
+  public static void administratorMenu() {
     System.out.println(
         EnumAdministratorMenu.STATISTICS_PER_SESSOIN.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.STATISTCS_FOR_DAY.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
     separator();
+    System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
   }
 
   protected enum EnumMainMenu {
@@ -125,16 +212,16 @@ public class CinemaMenu {
       this.messageEnumMainMenu = messageEnumMainMenu;
     }
 
-    public String getMessageEnumMainMenu() {
-      return messageEnumMainMenu;
-    }
-
     public static void printMainMenu() {
       for (EnumMainMenu command : values()) {
         if (!command.messageEnumMainMenu.isEmpty()) { // message пустое для всех служебных значений
           System.out.println(command.ordinal() + ". " + command.getMessageEnumMainMenu());
         }
       }
+    }
+
+    public String getMessageEnumMainMenu() {
+      return messageEnumMainMenu;
     }
   }
 
