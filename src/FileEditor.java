@@ -1,5 +1,6 @@
 import java.io.*;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -11,9 +12,10 @@ public class FileEditor {
         STOP_TIME(']'),
         START_KEY('<'),
         STOP_KEY('>'),
-        NEXT_VALUE('{'),
-        STOP_VALUE('#'),
+        START_VALUE('{'),
+        STOP_VALUE('}'),
         START_BONUS('*'),
+        STOP_BONUS('#'),
         NEXT_COLUM('-');
 
         private final char messageEnumSeparators;
@@ -42,11 +44,12 @@ public class FileEditor {
     private int columCount;
     private int targetCount;
     private int mapKey;
-    private String[] mapValue;
+    private char[] mapValue;
     private boolean insideSection;
     private FileReader infoFull;
     private SimpleDateFormat dateFormat;
     private Date date;
+    private String temp;
 
 
     FileEditor() throws IOException {
@@ -54,7 +57,6 @@ public class FileEditor {
         this.reader = new BufferedReader(infoFull);
         this.insideSection = false;
         this.dateFormat = new SimpleDateFormat("dd-MM-yy");
-        this.content = new StringBuilder();
         this.dateCount = 0;
         this.timeCount = 0;
         this.keyCount = 0;
@@ -64,17 +66,17 @@ public class FileEditor {
     }
 
     public void read(int currentCount) throws IOException, NullPointerException {
+        this.content = new StringBuilder();
         while ((currentindex = reader.read()) != -1) {
             if (insideSection) {
                 currentSymbo = (char) currentindex;
-                content.append(currentSymbo);
-
                 if (currentSymbo == endIndex) {
                     insideSection = false;
                     break;
                 }
+                content.append(currentSymbo);
             }
-            if (targetCount == currentCount) {
+            if (targetCount == currentCount && !insideSection) {
                 currentSymbo = (char) currentindex;
                 if (currentSymbo == beginIndex) {
                     currentCount++;
@@ -89,14 +91,28 @@ public class FileEditor {
         this.endIndex = EnumSeparators.STOP_DATE.getSeparator();
         read(dateCount);
         this.date = dateFormat.parse(content.toString());
+
         return date;
     }
-    public int readKey() throws IOException {
+    public int getKey() throws IOException, NumberFormatException {
         this.beginIndex = EnumSeparators.START_KEY.getSeparator();
         this.endIndex = EnumSeparators.STOP_KEY.getSeparator();
         read(keyCount);
-        mapKey = Integer.parseInt(content.toString());
+        this.temp = content.toString();
+        this.mapKey = Integer.parseInt(temp);
+
         return mapKey;
     }
+
+    public char[] getMapValue() throws IOException {
+        this.beginIndex = EnumSeparators.START_VALUE.getSeparator();
+        this.endIndex = EnumSeparators.STOP_VALUE.getSeparator();
+        read(valueCount);
+        mapValue = content.toString().toCharArray();
+
+        return mapValue;
+    }
+
+
 
 }
