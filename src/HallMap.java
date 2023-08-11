@@ -1,8 +1,9 @@
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 // класс, в котором будет храниться вся изначальная и обновлённая инфа о местах
-public class HallMap {
+public class HallMap{
 
   private Map<Integer, Character[]> session1;
   private Map<Integer, Character[]> session2;
@@ -13,9 +14,11 @@ public class HallMap {
   private Map<Integer, Character[]> session7;
   private Map<Integer, Character[]> session8;
   private Map<Integer, Character[]> session9;
+  private FileEditor reader;
+
 
   // тут создаём 9 мап, их можно забрать в FileEditor
-  public HallMap() {
+  public HallMap() throws IOException {
     this.session1 = new HashMap<>();
     this.session2 = new HashMap<>();
     this.session3 = new HashMap<>();
@@ -25,21 +28,22 @@ public class HallMap {
     this.session7 = new HashMap<>();
     this.session8 = new HashMap<>();
     this.session9 = new HashMap<>();
+    this.reader = new FileEditor();
     initializeAllSeatMaps();
   }
 
   // теперь вызываем метод для заполнения каждой мапы значениями, я его предварительно обозвала fillMap
   // делаем это в методе:
-  private void initializeAllSeatMaps() {
-    FileEditor.fillMap(session1);
-    FileEditor.fillMap(session2);
-    FileEditor.fillMap(session3);
-    FileEditor.fillMap(session4);
-    FileEditor.fillMap(session5);
-    FileEditor.fillMap(session6);
-    FileEditor.fillMap(session7);
-    FileEditor.fillMap(session8);
-    FileEditor.fillMap(session9);
+  private void initializeAllSeatMaps() throws IOException {
+    this.reader.readMap(session1);
+    this.reader.readMap(session2);
+    this.reader.readMap(session3);
+    this.reader.readMap(session4);
+    this.reader.readMap(session5);
+    this.reader.readMap(session6);
+    this.reader.readMap(session7);
+    this.reader.readMap(session8);
+    this.reader.readMap(session9);
   }
 
   // метод для того, чтобы выбрать купленное место
