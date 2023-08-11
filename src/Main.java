@@ -18,7 +18,7 @@ public class Main {
     while (run) {
       // Выводим главного меню
       System.out.println("\u001B[32m" + "Добро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
-      command = CinemaMenu.readCommandMainMenuCommand(scanner);
+      command = CinemaMenu.readCommandMainMenu(scanner);
       CinemaMenu.EnumMainMenu selectedMenu = CinemaMenu.EnumMainMenu.values()[command];
       switch (selectedMenu) {
         case TIMETABLES:

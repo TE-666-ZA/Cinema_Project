@@ -25,7 +25,41 @@ public class CinemaMenu {
         return false;
     }
   }
-  protected static int readCommandMainMenuCommand(Scanner scanner) {
+
+  protected static boolean isCommandEnumFreeSpaceMenu(int command) {
+    switch (command) {
+      case 0:
+      case 1:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  protected static boolean isCommandEnumBuyingTicketsMenu(int command) {
+    switch (command) {
+      case 0:
+      case 1:
+      case 2:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  protected static boolean isCommandEnumAdministratorMenu(int command) {
+    switch (command) {
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  protected static int readCommandMainMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumMainMenu(command)) {
       EnumMainMenu.printMainMenu();
@@ -91,17 +125,16 @@ public class CinemaMenu {
       this.messageEnumMainMenu = messageEnumMainMenu;
     }
 
+    public String getMessageEnumMainMenu() {
+      return messageEnumMainMenu;
+    }
+
     public static void printMainMenu() {
       for (EnumMainMenu command : values()) {
         if (!command.messageEnumMainMenu.isEmpty()) { // message пустое для всех служебных значений
           System.out.println(command.ordinal() + ". " + command.getMessageEnumMainMenu());
         }
       }
-
-    }
-
-    public String getMessageEnumMainMenu() {
-      return messageEnumMainMenu;
     }
   }
 
