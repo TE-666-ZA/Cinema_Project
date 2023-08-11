@@ -11,7 +11,7 @@ public class CinemaMenu {
     System.out.println("----------------------------------------------------");
   }
 
-  //
+  // чтото тут не так...
   protected static boolean isCommandEnumMainMenu(int command) {
     switch (command) {
       case 0:

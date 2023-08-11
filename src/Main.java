@@ -23,6 +23,7 @@ public class Main {
       CinemaMenu.EnumMainMenu selectedMenu = CinemaMenu.EnumMainMenu.values()[command];
       switch (selectedMenu) {
         case TIMETABLES:
+          System.out.println("Расписание таратат");
           break;
 
         case FREE_SPACE:
