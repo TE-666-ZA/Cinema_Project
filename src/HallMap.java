@@ -62,8 +62,8 @@ public class HallMap {
     this.reader.readMap(session9);
   }
 
-  // метод для того, чтобы выбрать купленное место
-  public void chooseSeat(int sessionKey, int row, int seatNumber) {
+  // метод для того, чтобы купить/вернуть купленное место
+  public void manageSeat(int sessionKey, int row, int seatNumber, boolean choose) {
     Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
     if (sessionMap == null) {
       System.out.println("Такого сеанса нет");
@@ -73,17 +73,24 @@ public class HallMap {
         || seatNumber >= rowArray.length) {
       System.out.println("Что-то пошло не так при выборе ряда/места");
     }
-    if (rowArray[seatNumber] == 'X') {
-      System.out.println("Это место уже занято");
+    choose = true;
+    boolean returnSeat = false;
+    if (choose) {
+      if (rowArray[seatNumber] == 'X') {
+        System.out.println("Это место уже занято");
+      } else {
+        rowArray[seatNumber] = 'X';
+        System.out.println("Вы выбрали место №" + seatNumber + ", ряд " + row);
+      }
     } else {
-      rowArray[seatNumber] = 'X';
-      System.out.println("Вы купили место №" + seatNumber + ", ряд " + row);
+      if (rowArray[seatNumber] == 'X') {
+        rowArray[seatNumber] = (char) ('0'
+            + seatNumber); // тут преобразуем номер в символ и прибавляем его к 0, так будет корректно
+        System.out.println("Вы успешно вернули билет за место №" + seatNumber);
+      } else {
+        System.out.println("Место №" + seatNumber + " уже свободно");
+      }
     }
-  }
-
-  // метод для того, чтобы вернуть купленное место
-  public void returnSeat(String sessionKey, int row, int seatNumber) {
-
   }
 
   // метод для демонстрации карты мест
