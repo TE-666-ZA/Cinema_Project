@@ -11,29 +11,30 @@ public class Main {
     int command;
     while (run) {
       // Вывод главного меню
-      System.out.println("\u001B[32m" + "Добро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
+      CinemaMenu.separator(); // вывод разделительной линии
+      System.out.println(
+          "\u001B[32m" + "\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
       command = CinemaMenu.readCommandMainMenu(scanner);
       CinemaMenu.EnumMainMenu selectedMenu = CinemaMenu.EnumMainMenu.values()[command];
       switch (selectedMenu) {
         //1
         case TIMETABLES:// РАСПИСАНИЕ
-          System.out.println("Сегодня  трататататтатататта");
-          System.out.println("Завтра таратататататтататата");
-          System.out.println("День вслед за затра трататата");
-          // тут вставить вывод на экран
+          CinemaMenu.printTimetables(); //метод вывода РАСПИСАНИЯ
           break;
         // 2
         case FREE_SPACE: // КАРТА СВОБОДНЫХ МЕСТ
+          CinemaMenu.separator(); // вывод разделительной линии
+          System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
+          //просим ввести дату и выводим три зала
+          CinemaMenu.printHallMapsPerDay(); // метод ВЫВОДА 3 КАРТ ЗА ДЕНЬ
           boolean runFreeSpaseMenu = true;
           while (runFreeSpaseMenu) {
-            CinemaMenu.inputDateTime(); //метод ввода ДАТЫ
-            //вывод трех карт для выбранной даты
-            CinemaMenu.printHallMapsForAllDays(); // метод ВЫВОДА 9 КАРТ ЗА ВСЕ ДНИ
             int commandFreeSpaseMenu = CinemaMenu.readCommandFreeSpaceMenu(scanner);
             CinemaMenu.EnumFreeSpaceMenu selectedFreeSpaseMenu = CinemaMenu.EnumFreeSpaceMenu.values()[commandFreeSpaseMenu];
             switch (selectedFreeSpaseMenu) {
               case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
-                CinemaMenu.inputDateTime(); //метод ввода ДАТЫ и СЕАНСА
+                System.out.println(
+                    "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
                 CinemaMenu.printHallMapsPerDay(); // метод ВЫВОДА ТРЕХ КАРТ ЗА ДЕНЬ
                 break;
               case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
@@ -44,28 +45,31 @@ public class Main {
           break;
         //3
         case BUYING_TICKETS: //  ПОКУПКА БИЛЕТОВ
-          CinemaMenu.inputDateTime(); //метод ввода ДАТЫ и СЕАНСА
-          CinemaMenu.printHallMapPerSession();// метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
-          CinemaMenu.inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
 
-          //Вывод карты зала с подсвечеными местами выбранными
-
-          System.out.println("Сумма покупки ...");
+          CinemaMenu.separator(); // вывод разделительной линии
+          System.out.println("\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ" + "\u001B[0m");
+          CinemaMenu.buyTickets(); //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
           //Вывод нового меню
           boolean runBuyingTicketsMenu = true;
           while (runBuyingTicketsMenu) {
             int commandBuyingTicketsMenu = CinemaMenu.readCommandBuyingTicketsMenu(scanner);
             CinemaMenu.EnumBuyingTicketsMenu selectedBuyingTicketsMenu = CinemaMenu.EnumBuyingTicketsMenu.values()[commandBuyingTicketsMenu];
             switch (selectedBuyingTicketsMenu) {
-              case CHANGE_SELECTION: // 3.1 ИЗМЕНИТЬ ВЫБОР
+              case TO_CONFIRM: // 3.1 ПОДТВЕРЖДЕНИЕ ПОКУПКИ
+                System.out.println(
+                    "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ПОДТВЕРЖДЕНИЕ ПОКУПКИ :"
+                        + "\u001B[0m");
+                CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
+                //ввод фамилии
+                runBuyingTicketsMenu = false;
+                break;
+              case CHANGE_SELECTION: // 3.2 ИЗМЕНИТЬ ВЫБОР
+                System.out.println(
+                    "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ИЗМЕНИТЬ ВЫБОР :" + "\u001B[0m");
                 CinemaMenu.inputDateTime(); //метод ввода ДАТЫ и СЕАНСА
                 // заново запрашиваем ряд/количество мест/места
                 CinemaMenu.inputRowQuantityPlace();// метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
                 CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
-                break;
-              case TO_CONFIRM: // 3.2 ПОДТВЕРЖДЕНИЕ ПОКУПКИ
-                CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
-                //ввод фамилии
                 break;
               case CANCELLATION: // 3.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
                 runBuyingTicketsMenu = false;
@@ -75,6 +79,8 @@ public class Main {
           break;
         //4
         case TICKETS_EXCHANGE_OR_RETURN: // 4 ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+          CinemaMenu.separator(); // вывод разделительной линии
+          System.out.println("\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ:" + "\u001B[0m");
           CinemaMenu.inputLastName();  //
           // ввод фио
           // вывод из файла  ПЕТРОВ 2 билета  Завтра 12.00 Русалочка
@@ -85,6 +91,10 @@ public class Main {
             CinemaMenu.EnumTicketsExchangeOrReturnMenu selectedTicketsExchangeOrReturnMenu = CinemaMenu.EnumTicketsExchangeOrReturnMenu.values()[commandTicketsExchangeOrReturnMenu];
             switch (selectedTicketsExchangeOrReturnMenu) {
               case TICKETS_EXCHANGE: // 4.1 ОБМЕН БИЛЕТОВ
+                System.out.println(
+                    "\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ -> ОБМЕН БИЛЕТОВ :"
+                        + "\u001B[0m");
+                CinemaMenu.separator(); // вывод разделительной линии
                 // вывод РАСПИСАНИЯ
                 CinemaMenu.inputDateTime();  //метод ввода ДАТЫ и СЕАНСА
                 // вывод карты мест для конкретного сеанса
@@ -100,6 +110,9 @@ public class Main {
                 runTicketsExchangeOrReturnMenu = false;
                 break;
               case TO_RETURN_TICKETS: //4.2 СДАТЬ БИЛЕТЫ
+                System.out.println(
+                    "\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ -> СДАТЬ БИЛЕТЫ :"
+                        + "\u001B[0m");
                 CinemaMenu.toReturnTickets(); // метод СДАТЬ БИЛЕТЫ С ВЫВОДОМ ИНФОРМАЦИИ НА КАКОЙ СЕАНС И ФИО
                 runTicketsExchangeOrReturnMenu = false;
                 break;
@@ -111,19 +124,28 @@ public class Main {
           break;
         // 5
         case ADMINISTRATOR: // МЕНЮ АДМИНИСТРАТОРА
+          CinemaMenu.separator(); // вывод разделительной линии
+          System.out.println("\u001B[32m" + "\t\t\t\t5. АДМИНИСТРАТОР:" + "\u001B[0m");
           CinemaMenu.inputPass(); // Метод ввода пароля Администратора
           boolean runAdministratorMenu = true;
           while (runAdministratorMenu) {
             int commandAdministratorMenu = CinemaMenu.readCommandAdministratorMenu(scanner);
             CinemaMenu.EnumAdministratorMenu selectedAdministratorMenu = CinemaMenu.EnumAdministratorMenu.values()[commandAdministratorMenu];
             switch (selectedAdministratorMenu) {
-              case STATISTICS_PER_SESSOIN: // 5.1 СТАТИСТИКА ЗА СЕАНС
+              case STATISTICS_PER_SESSION: // 5.1 СТАТИСТИКА ЗА СЕАНС
+                System.out.println(
+                    "\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> СТАТИСТИКА ЗА СЕАНС :"
+                        + "\u001B[0m");
                 CinemaMenu.printStatisticsForSession(); //метод вывода СТАТИСТИКИ ЗА СЕАНС
                 break;
-              case STATISTCS_FOR_DAY: // 5.2 СТАТИСТИКА ЗА ДЕНЬ
+              case STATISTICS_FOR_DAY: // 5.2 СТАТИСТИКА ЗА ДЕНЬ
+                System.out.println("\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> СТАТИСТИКА ЗА ДЕНЬ :"
+                    + "\u001B[0m");
                 CinemaMenu.printStatisticsForDay(); //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
                 break;
               case CHOICE_BONUS: // 5.3 ИЗМЕНИТЬ БОНУС
+                System.out.println(
+                    "\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> ИЗМЕНИТЬ БОНУС :" + "\u001B[0m");
                 CinemaMenu.changeBonus(); //метод ИЗМЕНЕНИЯ БОНУСА
                 break;
               case EXIT_MAIN_MENU: // Выход в предыдущее меню
@@ -133,6 +155,11 @@ public class Main {
           }
           break;
         case EXIT:
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\tБЛАГОДАРИМ, ЧТО ВОСПОЛЬЗОВАЛИСЬ НАШИМ СЕРВИСОМ! "
+                  + "\u001B[0m");
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\t\t\t\t\t\t\t\t\tДО НОВЫХ ВСТРЕЧ! " + "\u001B[0m");
           run = false;
           break;
       }

@@ -8,7 +8,7 @@ public class CinemaMenu {
 
   // Метод для вывода разделительной строки между меню
   public static void separator() {
-    System.out.println("----------------------------------------------------");
+    System.out.println("--------------------------------------------------------------");
   }
 
   //________________________________________________________________________________________
@@ -32,7 +32,7 @@ public class CinemaMenu {
     int command = INCORRECT;
     while (!isCommandEnumMainMenu(command)) {
       EnumMainMenu.printMainMenu();
-      System.out.print("Введите номер действия: ");
+      System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
         if (!isCommandEnumMainMenu(command)) {
@@ -63,7 +63,7 @@ public class CinemaMenu {
     int command = INCORRECT;
     while (!isCommandEnumFreeSpaceMenu(command)) {
       freeSpaceMenu();
-      System.out.print("Введите номер действия: ");
+      System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
         if (!isCommandEnumFreeSpaceMenu(command)) {
@@ -97,7 +97,7 @@ public class CinemaMenu {
     int command = INCORRECT;
     while (!isCommandEnumBuyingTicketsMenu(command)) {
       buyingTicketsMenu();
-      System.out.print("Введите номер действия: ");
+      System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
         if (!isCommandEnumBuyingTicketsMenu(command)) {
@@ -117,7 +117,7 @@ public class CinemaMenu {
     int command = INCORRECT;
     while (!isCommandEnumBuyingTicketsMenu(command)) {
       ticketsExchangeOrReturnMenu();
-      System.out.print("Введите номер действия: ");
+      System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
         if (!isCommandEnumBuyingTicketsMenu(command)) {
@@ -150,7 +150,7 @@ public class CinemaMenu {
     int command = INCORRECT;
     while (!isCommandEnumAdministratorMenu(command)) {
       administratorMenu();
-      System.out.print("Введите номер действия: ");
+      System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
         if (!isCommandEnumAdministratorMenu(command)) {
@@ -174,8 +174,8 @@ public class CinemaMenu {
   }
 
   public static void buyingTicketsMenu() {
-    System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
     System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getMessageEnumBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
     System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getMessageEnumBuyingTicketsMenu());
     separator();
   }
@@ -193,16 +193,28 @@ public class CinemaMenu {
 
   public static void administratorMenu() {
     System.out.println(
-        EnumAdministratorMenu.STATISTICS_PER_SESSOIN.getMessageEnumAdministratorMenu());
-    System.out.println(EnumAdministratorMenu.STATISTCS_FOR_DAY.getMessageEnumAdministratorMenu());
+        EnumAdministratorMenu.STATISTICS_PER_SESSION.getMessageEnumAdministratorMenu());
+    System.out.println(EnumAdministratorMenu.STATISTICS_FOR_DAY.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
     separator();
   }
 
   //________________________________________________________________________________________
+  //метод вывода РАСПИСАНИЯ
+  public static void printTimetables() {
+    CinemaMenu.separator(); // вывод разделительной линии
+    System.out.println("\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ" + "\u001B[0m");
+    System.out.println("Сегодня  трататататтатататта");
+    System.out.println("Завтра таратататататтататата");
+    System.out.println("День вслед за затра трататата");
+
+  }
+
+  //________________________________________________________________________________________
   //метод вывода 9 КАРТ ЗА 3 ДНЯ
   public static void printHallMapsForAllDays() {
+    inputDateTime(); //метод ввода ДАТЫ
     System.out.println("             КАРТА СЕАНСА 1");
     System.out.println("             КАРТА СЕАНСА 2");
     System.out.println("             КАРТА СЕАНСА 3");
@@ -212,6 +224,7 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
   public static void printHallMapsPerDay() {
+    inputDate();  //метод ввода ДАТЫ
     System.out.println("             КАРТА СЕАНСА 1");
     System.out.println("             КАРТА СЕАНСА 2");
     System.out.println("             КАРТА СЕАНСА 3");
@@ -219,8 +232,19 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
+  //метод вывода КАРТЫ С МЕСТАМИ КОТОРЫЕ ВЫБРАЛ КЛИЕНТ С ПОДСВЕТКОЙ МЕСТ
+  public static void printMapWithYourLocation() {
+
+    System.out.println("     КАРТА СЕАНСА ");
+    System.out.println("     1.  1 2 3 4 Х Х 7 8 9");
+    System.out.println("     1.  Х Х 3 4 5 6 7 8 9");
+
+  }
+
+  //________________________________________________________________________________________
   //метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
   public static void printHallMapPerSession() {
+    inputDateTime(); //метод ввода ДАТЫ и СЕАНСА
     System.out.println("1.  1 2 3 4 5 6 7 8 9");
     System.out.println("2.  1 2 3 4 5 6 7 8 9");
     System.out.println("3.  1 2 3 4 5 6 7 8 9");
@@ -230,7 +254,7 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод ввода даты
   public static void inputDate() {
-    System.out.println("Осуществите ввод даты ->");
+    System.out.println("Введите дату ->");
   }
 
   //________________________________________________________________________________________
@@ -251,6 +275,15 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
+  //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
+  public static void buyTickets() {
+    printHallMapPerSession();// метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
+    inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+    printMapWithYourLocation(); //метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС С ПОДСВЕТКОЙ МЕСТ
+    System.out.println("Сумма покупки ...");
+  }
+
+  //________________________________________________________________________________________
   //метод подтверждения покупки в меню ПОКУПКА БИЛЕТОВ
   public static void confirmPurchase() {
     System.out.println("Подтвердите покупку вводом ФАМИЛИИ ->");
@@ -265,11 +298,9 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод СДАТЬ БИЛЕТЫ
   public static void toReturnTickets() {
-    System.out.println(" ->");
-
     System.out.println(" ФИО ___билетов на ____ _____");
     System.out.println(" Возврат _____ евро");
-    System.out.println(" Спасибо, что воспоьзовались нашим сервисом!");
+    System.out.println(" Спасибо, что воспользовались нашим сервисом!");
   }
 
   //________________________________________________________________________________________
@@ -298,7 +329,7 @@ public class CinemaMenu {
     System.out.println("Введите НОВЫЙ БОНУС ->");
   }
 
-  //классы Enam - пункты меню
+  //классы Enum - пункты меню
   protected enum EnumMainMenu {
     //пункты первого меню mainMenu
     EXIT("Выход"),
@@ -343,8 +374,8 @@ public class CinemaMenu {
 
   enum EnumBuyingTicketsMenu {
     CANCELLATION("Введите 0 чтобы ОТМЕНИТЬ ПОКУПКУ"),
-    CHANGE_SELECTION("Введите 1 чтоб ИЗМЕНИТЬ ВЫБОР"),
-    TO_CONFIRM("Введите 2 чтоб ПОДТВЕРДИТЬ ПОКУПКУ");
+    TO_CONFIRM("Введите 1 чтоб ПОДТВЕРДИТЬ ПОКУПКУ"),
+    CHANGE_SELECTION("Введите 2 чтоб ИЗМЕНИТЬ ВЫБОР");
     private final String messageEnumBuyingTicketsMenu;
 
     EnumBuyingTicketsMenu(String messageEnumBuyingTicketsMenu) {
@@ -375,8 +406,8 @@ public class CinemaMenu {
 
   enum EnumAdministratorMenu {
     EXIT_MAIN_MENU("Введите 0 для ВОЗВРАТА В ПРЕДЫДУЩЕЕ МЕНЮ"),
-    STATISTICS_PER_SESSOIN("Введите 1 чтоб отобразить СТАТИСТИКУ ЗА СЕАНС"),
-    STATISTCS_FOR_DAY("Введите 2 чтоб выбрать СТАТИСТИКУ ЗА ДЕНЬ"),
+    STATISTICS_PER_SESSION("Введите 1 чтоб отобразить СТАТИСТИКУ ЗА СЕАНС"),
+    STATISTICS_FOR_DAY("Введите 2 чтоб выбрать СТАТИСТИКУ ЗА ДЕНЬ"),
     CHOICE_BONUS("Введите 3 чтоб изменить БОНУСЫ");
     private final String messageEnumAdministratorMenu;
 
