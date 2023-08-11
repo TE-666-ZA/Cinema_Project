@@ -8,30 +8,25 @@ public class HallMap {
 
   public HallMap() {
     this.hallSessions = new HashMap<>(); // добавляем новую мапу
-    initializeSeatMaps();
+    initializeAllSeatMaps();
   }
 
-  // метод для создания сеанса с местами и рядами
-  private void initializeSeatMaps() {
-    Character[] session1 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    Character[] session2 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    Character[] session3 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    Character[] session4 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    Character[] session5 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    Character[] session6 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    Character[] session7 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    Character[] session8 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    Character[] session9 = {'.', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+  // метод для инициализации всех сеансов
+  private void initializeAllSeatMaps() {
+    putSeatMap(1, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+    putSeatMap(2, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+    putSeatMap(3, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+    putSeatMap(4, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+    putSeatMap(5, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+    putSeatMap(6, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+    putSeatMap(7, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+    putSeatMap(8, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+    putSeatMap(9, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+  }
 
-    hallSessions.put(1, session1);
-    hallSessions.put(2, session2);
-    hallSessions.put(3, session3);
-    hallSessions.put(4, session4);
-    hallSessions.put(5, session5);
-    hallSessions.put(6, session6);
-    hallSessions.put(7, session7);
-    hallSessions.put(8, session8);
-    hallSessions.put(9, session9);
+  // метод для инициализации сеанса с местами и рядами
+  private void putSeatMap(int sessionKey, Character[] session) {
+    hallSessions.put(sessionKey, session);
   }
 
   // метод для того, чтобы выбрать купленное место
