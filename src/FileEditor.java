@@ -1,51 +1,84 @@
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.io.*;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class FileEditor {
-// чтение/запись из файла
-public enum ReaderSeparators {
-    STARTDATE("("),
-    ENDDATE(")"),
-    STARTTIME("["),
-    ENDTIME("]"),
-    KEY("|"),
-    VALUE("#"),
-    BONUS("*"),
-    NEXTCOLUM("-----------------------------------");
+    private enum EnumSeparators {
+        START_DATE('('),
+        STOP_DATE(')'),
+        START_TIME('['),
+        STOP_TIME(']'),
+        START_KEY('<'),
+        STOP_KEY('>'),
+        NEXT_VALUE('{'),
+        STOP_VALUE('#'),
+        START_BONUS('*'),
+        NEXT_COLUM('-');
 
+        private final char messageEnumSeparators;
 
-    ReaderSeparators(String s) {
+        EnumSeparators(char messageEnumSeparators) {
+            this.messageEnumSeparators = messageEnumSeparators;
+        }
+
+        public char getSeparator() {
+            return messageEnumSeparators;
+        }
     }
-}
-    private Scanner fileReader;
+    // чтение/запись из файла
 
-    private File InfoFull;
+    private BufferedReader reader;
+    private char beginIndex;
+    private char endIndex;
+    private int lastIndex;
+    private char indexManager;
+    private int currentSymbol;
+    private int targetline;
+    private int currentLine;
+    StringBuilder content;
+    boolean insideSection;
+    private FileReader infoFull;
+    private SimpleDateFormat dateFormat;
+    private Date date;
 
-    ReaderSeparators[] separators = ReaderSeparators.values();
 
-
-    FileEditor(){
-        this.fileReader = new Scanner(System.in);
-        this.InfoFull = new File("InfoFull.txt");
+    FileEditor() throws IOException {
+        this.endIndex = EnumSeparators.STOP_DATE.STOP_DATE.getSeparator();
+        this.infoFull = new FileReader("res/InfoFull.txt");
+        this.reader = new BufferedReader(infoFull);
+        this.targetline = 0;
+        this.insideSection = false;
+        this.dateFormat = new SimpleDateFormat("dd-MM-yy");
+        this.content = new StringBuilder();
     }
 
-    public static HashMap<String,Integer[]> readInfo(Scanner scanner) throws IOException {
-        int checker = 0;
-        String value;
-        String key;
-        String reader;
-        LocalDate date;
-        while (scanner.hasNext()) {
-                reader = scanner.next();
-                // nado privyazat datu i vremya !!
+    public Date date() throws IOException, ParseException, NullPointerException {
+        beginIndex = EnumSeparators.START_DATE.getSeparator();
+        endIndex = EnumSeparators.STOP_DATE.getSeparator();
 
-                    key = reader.substring(separators.);
-                    System.out.println(reader + " [Debug]");
-                   // value = reader.substring();
+        while ((currentSymbol = reader.read()) != -1) {
+            if(insideSection){
+                indexManager = (char) currentSymbol;
+                content.append(indexManager);
+            }
+            if(currentSymbol == endIndex){
+               this.date = dateFormat.parse(content.toString());
+               return getDate();
+            }
+                if(targetline == currentLine){
+                    indexManager = (char)currentSymbol;
+                    if(indexManager == beginIndex){
+                        targetline++;
+                        insideSection = true;
+                    }
+                }
         }
         return null;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }
