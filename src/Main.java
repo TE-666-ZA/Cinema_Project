@@ -42,6 +42,7 @@ public class Main {
           }
           break;
         //3
+
         case BUYING_TICKETS: //  Покупка билетов
           System.out.println("Выберите дату - >");
           // ввод
