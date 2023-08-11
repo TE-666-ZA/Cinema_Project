@@ -1,7 +1,6 @@
 import java.io.*;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class FileEditor {
@@ -30,55 +29,74 @@ public class FileEditor {
     // чтение/запись из файла
 
     private BufferedReader reader;
+    private int currentindex;
+    private char currentSymbo;
+    private StringBuilder content;
     private char beginIndex;
     private char endIndex;
-    private int lastIndex;
-    private char indexManager;
-    private int currentSymbol;
-    private int targetline;
-    private int currentLine;
-    StringBuilder content;
-    boolean insideSection;
+    private int dateCount;
+    private int timeCount;
+    private int keyCount;
+    private int valueCount;
+    private int bonusCount;
+    private int columCount;
+    private int targetCount;
+    private int mapKey;
+    private String[] mapValue;
+    private boolean insideSection;
     private FileReader infoFull;
     private SimpleDateFormat dateFormat;
     private Date date;
 
 
     FileEditor() throws IOException {
-        this.endIndex = EnumSeparators.STOP_DATE.STOP_DATE.getSeparator();
         this.infoFull = new FileReader("res/InfoFull.txt");
         this.reader = new BufferedReader(infoFull);
-        this.targetline = 0;
         this.insideSection = false;
         this.dateFormat = new SimpleDateFormat("dd-MM-yy");
         this.content = new StringBuilder();
+        this.dateCount = 0;
+        this.timeCount = 0;
+        this.keyCount = 0;
+        this.valueCount = 0;
+        this.bonusCount = 0;
+        this.columCount = 0;
     }
 
-    public Date date() throws IOException, ParseException, NullPointerException {
-        beginIndex = EnumSeparators.START_DATE.getSeparator();
-        endIndex = EnumSeparators.STOP_DATE.getSeparator();
+    public void read(int currentCount) throws IOException, NullPointerException {
+        while ((currentindex = reader.read()) != -1) {
+            if (insideSection) {
+                currentSymbo = (char) currentindex;
+                content.append(currentSymbo);
 
-        while ((currentSymbol = reader.read()) != -1) {
-            if(insideSection){
-                indexManager = (char) currentSymbol;
-                content.append(indexManager);
-            }
-            if(currentSymbol == endIndex){
-               this.date = dateFormat.parse(content.toString());
-               return getDate();
-            }
-                if(targetline == currentLine){
-                    indexManager = (char)currentSymbol;
-                    if(indexManager == beginIndex){
-                        targetline++;
-                        insideSection = true;
-                    }
+                if (currentSymbo == endIndex) {
+                    insideSection = false;
+                    break;
                 }
+            }
+            if (targetCount == currentCount) {
+                currentSymbo = (char) currentindex;
+                if (currentSymbo == beginIndex) {
+                    currentCount++;
+                    insideSection = true;
+                }
+            }
         }
-        return null;
     }
 
-    public Date getDate() {
+    public Date getDate() throws IOException, ParseException {
+        this.beginIndex = EnumSeparators.START_DATE.getSeparator();
+        this.endIndex = EnumSeparators.STOP_DATE.getSeparator();
+        read(dateCount);
+        this.date = dateFormat.parse(content.toString());
         return date;
     }
+    public int readKey() throws IOException {
+        this.beginIndex = EnumSeparators.START_KEY.getSeparator();
+        this.endIndex = EnumSeparators.STOP_KEY.getSeparator();
+        read(keyCount);
+        mapKey = Integer.parseInt(content.toString());
+        return mapKey;
+    }
+
 }
