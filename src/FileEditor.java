@@ -74,7 +74,9 @@ public class FileEditor {
                     insideSection = false;
                     break;
                 }
-                content.append(currentSymbo);
+                if (currentSymbo != ' ') {
+                    content.append(currentSymbo);
+                }
             }
             if (targetCount == currentCount && !insideSection) {
                 currentSymbo = (char) currentindex;
@@ -94,6 +96,7 @@ public class FileEditor {
 
         return date;
     }
+
     private int readKey() throws IOException, NumberFormatException {
         this.beginIndex = EnumSeparators.START_KEY.getSeparator();
         this.endIndex = EnumSeparators.STOP_KEY.getSeparator();
@@ -109,8 +112,10 @@ public class FileEditor {
         this.endIndex = EnumSeparators.STOP_VALUE.getSeparator();
         read(valueCount);
         this.temp = content.toString();
-        for(int i = 0; i < temp.length();i++){
-            mapValue[i] = temp.charAt(i);
+        char[] tempCharArray = temp.toCharArray();
+        this.mapValue = new Character[tempCharArray.length];
+        for (int i = 0; i < tempCharArray.length; i++) {
+            this.mapValue[i] = tempCharArray[i];
         }
 
         return mapValue;
@@ -119,7 +124,7 @@ public class FileEditor {
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException {
         readKey();
         readMapValue();
-        thisMap.put(mapKey,mapValue);
+        thisMap.put(mapKey, mapValue);
 
         return thisMap;
     }
