@@ -1,7 +1,85 @@
-public class CinemaMenu {
-  //меню и проверки меню тут
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
-  enum EnumMainMenu {
+public class CinemaMenu {
+
+  //меню и проверки меню тут
+  protected static final int INCORRECT = -1;
+
+  // Метод для вывода разделительной строки между меню
+  public static void separator() {
+    System.out.println("----------------------------------------------------");
+  }
+
+  //
+  protected static boolean isCommandEnumMainMenu(int command) {
+    switch (command) {
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  protected static int readCommandMainMenuCommand(Scanner scanner) {
+
+    int command = INCORRECT;
+    while (!isCommandEnumMainMenu(command)) {
+      EnumMainMenu.printMainMenu();
+      System.out.print("Введите номер действия: ");
+      try {
+        command = scanner.nextInt();
+        if (!isCommandEnumMainMenu(command)) {
+          System.out.println("Некорректный номер команды: " + command);
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Некорректный ввод, введите номер команды: ");
+      } finally {
+        scanner.nextLine();
+      }
+    }
+    return command;
+  }
+
+  public static void FreeSpaceMenu() {
+    System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
+    System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageEnumFreeSpaceMenu());
+    separator();
+  }
+
+  public static void BuyingTicketsMenu() {
+    System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getMessageEnumBuyingTicketsMenu());
+    System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getMessageEnumBuyingTicketsMenu());
+    separator();
+  }
+
+  public static void TicketsExchangeOrReturnMenu() {
+    System.out.println(
+        EnumTicketsExchangeOrReturnMenu.TICKETS_EXCHANGE.getMessageEnumTicketsExchangeOrReturnMenu());
+    System.out.println(
+        EnumTicketsExchangeOrReturnMenu.TO_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
+    System.out.println(
+        EnumTicketsExchangeOrReturnMenu.CANCELLATION_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
+    separator();
+
+  }
+
+  public static void AdministratorMenu() {
+    System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
+    System.out.println(
+        EnumAdministratorMenu.STATISTICS_PER_SESSOIN.getMessageEnumAdministratorMenu());
+    System.out.println(EnumAdministratorMenu.STATISTCS_FOR_DAY.getMessageEnumAdministratorMenu());
+    System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
+    separator();
+  }
+
+  protected enum EnumMainMenu {
     //пункты первого меню mainMenu
     EXIT("Выход"),
     TIMETABLES("Расписание"),
@@ -15,10 +93,20 @@ public class CinemaMenu {
       this.messageEnumMainMenu = messageEnumMainMenu;
     }
 
+    public static void printMainMenu() {
+      for (EnumMainMenu command : values()) {
+        if (!command.messageEnumMainMenu.isEmpty()) { // message пустое для всех служебных значений
+          System.out.println(command.ordinal() + ". " + command.getMessageEnumMainMenu());
+        }
+      }
+
+    }
+
     public String getMessageEnumMainMenu() {
       return messageEnumMainMenu;
     }
   }
+
 
   enum EnumFreeSpaceMenu {
     //пункты меню Свободные места
@@ -82,61 +170,5 @@ public class CinemaMenu {
       return messageEnumAdministratorMenu;
     }
 
-  }
-
-  // Метод для вывода разделительной строки между меню
-  public static void separator() {
-    System.out.println("----------------------------------------------------");
-  }
-
-  public static void mainMenu() {
-    System.out.println(
-        EnumMainMenu.TIMETABLES.ordinal() + "." + EnumMainMenu.TIMETABLES.getMessageEnumMainMenu());
-    System.out.println(
-        EnumMainMenu.FREE_SPACE.ordinal() + "." + EnumMainMenu.FREE_SPACE.getMessageEnumMainMenu());
-    System.out.println(
-        EnumMainMenu.BUYING_TICKETS.ordinal() + "."
-            + EnumMainMenu.BUYING_TICKETS.getMessageEnumMainMenu());
-    System.out.println(EnumMainMenu.TICKETS_EXCHANGE_OR_RETURN.ordinal() + "."
-        + EnumMainMenu.TICKETS_EXCHANGE_OR_RETURN.getMessageEnumMainMenu());
-    System.out.println(
-        EnumMainMenu.ADMINISTRATOR.ordinal() + "."
-            + EnumMainMenu.ADMINISTRATOR.getMessageEnumMainMenu());
-    System.out.println(
-        EnumMainMenu.EXIT.ordinal() + "." + EnumMainMenu.EXIT.getMessageEnumMainMenu());
-    separator();
-  }
-
-  public static void FreeSpaceMenu() {
-    System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
-    System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageEnumFreeSpaceMenu());
-    separator();
-  }
-
-  public static void BuyingTicketsMenu() {
-    System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
-    System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getMessageEnumBuyingTicketsMenu());
-    System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getMessageEnumBuyingTicketsMenu());
-    separator();
-  }
-
-  public static void TicketsExchangeOrReturnMenu() {
-    System.out.println(
-        EnumTicketsExchangeOrReturnMenu.TICKETS_EXCHANGE.getMessageEnumTicketsExchangeOrReturnMenu());
-    System.out.println(
-        EnumTicketsExchangeOrReturnMenu.TO_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
-    System.out.println(
-        EnumTicketsExchangeOrReturnMenu.CANCELLATION_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
-    separator();
-
-  }
-
-  public static void AdministratorMenu() {
-    System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
-    System.out.println(
-        EnumAdministratorMenu.STATISTICS_PER_SESSOIN.getMessageEnumAdministratorMenu());
-    System.out.println(EnumAdministratorMenu.STATISTCS_FOR_DAY.getMessageEnumAdministratorMenu());
-    System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
-    separator();
   }
 }

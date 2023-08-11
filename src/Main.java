@@ -1,11 +1,45 @@
+//import CinemaMenu.EnumMainMenu;
+
+import java.util.Scanner;
+
 public class Main {
 
+  //
   public static void main(String[] args) {
-    System.out.println("\u001B[32m" + "Добро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
-    CinemaMenu.mainMenu();
+    Scanner scanner = new Scanner(System.in);
+
+    boolean run = true;
+    int command;
+
     CinemaMenu.FreeSpaceMenu();
     CinemaMenu.BuyingTicketsMenu();
     CinemaMenu.TicketsExchangeOrReturnMenu();
     CinemaMenu.AdministratorMenu();
+
+    while (run) {
+      // Выводим главного меню
+      System.out.println("\u001B[32m" + "Добро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
+      command = CinemaMenu.readCommandMainMenuCommand(scanner);
+      CinemaMenu.EnumMainMenu selectedMenu = CinemaMenu.EnumMainMenu.values()[command];
+      switch (selectedMenu) {
+        case TIMETABLES:
+          break;
+
+        case FREE_SPACE:
+          break;
+
+        case BUYING_TICKETS:
+          break;
+        case TICKETS_EXCHANGE_OR_RETURN:
+          break;
+        case ADMINISTRATOR:
+          break;
+        case EXIT:
+          run = false;
+          break;
+      }
+    }
+
+
   }
 }
