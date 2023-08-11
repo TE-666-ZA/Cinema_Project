@@ -1,32 +1,45 @@
 import java.util.HashMap;
 import java.util.Map;
 
+// класс, в котором будет храниться вся изначальная и обновлённая инфа о местах
 public class HallMap {
 
-  // создаём класс, в котором будет храниться вся изначальная и обновлённая инфа о местах
-  private Map<Integer, Character[]> hallSessions;
+  private Map<Integer, Character[]> session1;
+  private Map<Integer, Character[]> session2;
+  private Map<Integer, Character[]> session3;
+  private Map<Integer, Character[]> session4;
+  private Map<Integer, Character[]> session5;
+  private Map<Integer, Character[]> session6;
+  private Map<Integer, Character[]> session7;
+  private Map<Integer, Character[]> session8;
+  private Map<Integer, Character[]> session9;
 
+  // тут создаём 9 мап, их можно забрать в FileEditor
   public HallMap() {
-    this.hallSessions = new HashMap<>(); // добавляем новую мапу
+    this.session1 = new HashMap<>();
+    this.session2 = new HashMap<>();
+    this.session3 = new HashMap<>();
+    this.session4 = new HashMap<>();
+    this.session5 = new HashMap<>();
+    this.session6 = new HashMap<>();
+    this.session7 = new HashMap<>();
+    this.session8 = new HashMap<>();
+    this.session9 = new HashMap<>();
     initializeAllSeatMaps();
   }
 
-  // метод для инициализации всех сеансов
+  // теперь вызываем метод для заполнения каждой мапы значениями, я его предварительно обозвала fillMap
+  // делаем это в методе:
   private void initializeAllSeatMaps() {
-    putSeatMap(1, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-    putSeatMap(2, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-    putSeatMap(3, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-    putSeatMap(4, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-    putSeatMap(5, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-    putSeatMap(6, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-    putSeatMap(7, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-    putSeatMap(8, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-    putSeatMap(9, new Character[]{' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-  }
-
-  // метод для инициализации сеанса с местами и рядами
-  private void putSeatMap(int sessionKey, Character[] session) {
-    hallSessions.put(sessionKey, session);
+    FileEditor.fillMap(session1);
+    FileEditor.fillMap(session2);
+    FileEditor.fillMap(session3);
+    FileEditor.fillMap(session4);
+    FileEditor.fillMap(session5);
+    FileEditor.fillMap(session6);
+    FileEditor.fillMap(session7);
+    FileEditor.fillMap(session8);
+    FileEditor.fillMap(session9);
   }
 
   // метод для того, чтобы выбрать купленное место
