@@ -5,7 +5,7 @@ import java.util.Map;
 // класс, в котором будет храниться вся изначальная и обновлённая инфа о местах
 public class HallMap {
 
-  private Map<Integer, Character[]> session1;
+  private Map<Integer, Character[]> session1; // 3 сеанса за 3 дня
   private Map<Integer, Character[]> session2;
   private Map<Integer, Character[]> session3;
   private Map<Integer, Character[]> session4;
@@ -14,7 +14,7 @@ public class HallMap {
   private Map<Integer, Character[]> session7;
   private Map<Integer, Character[]> session8;
   private Map<Integer, Character[]> session9;
-  private FileEditor reader;
+  private FileEditor reader; // для чтения из мап
   private FileEditor writer; // предположим, через него класс файл эдитор будет записывать в мапы
 
   // тут создаём 9 мап, их можно забрать в FileEditor
@@ -63,7 +63,7 @@ public class HallMap {
   }
 
   // метод для того, чтобы купить/вернуть купленное место
-  public void manageSeat(int sessionKey, int row, int seatNumber, boolean choose) {
+  public void manageSeat(int sessionKey, int row, int seatNumber, boolean chooseSeat) {
     Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
     if (sessionMap == null) {
       System.out.println("Такого сеанса нет");
@@ -71,11 +71,11 @@ public class HallMap {
     Character[] rowArray = sessionMap.get(row);
     if (rowArray == null || seatNumber < 1
         || seatNumber >= rowArray.length) {
-      System.out.println("Что-то пошло не так при выборе ряда/места");
+      System.out.println("Что-то пошло не так при выборе ряда или места");
     }
-    choose = true;
+    chooseSeat = true;
     boolean returnSeat = false;
-    if (choose) {
+    if (chooseSeat) {
       if (rowArray[seatNumber] == 'X') {
         System.out.println("Это место уже занято");
       } else {
@@ -94,8 +94,26 @@ public class HallMap {
   }
 
   // метод для демонстрации карты мест
-  public void showSessionMap(String sessionName) {
-
+  public void showSessionMap(int sessionKey) {
+    Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
+    if (sessionMap == null) {
+      System.out.println("Такого сеанса нет");
+    }
+    int seatsInRow = 11; // номер ряда + 10 мест
+    for (Map.Entry<Integer, Character[]> entry : sessionMap.entrySet()) {
+      Integer rowNumber = entry.getKey();
+      Character[] rowArray = entry.getValue();
+      System.out.printf("Ряд %d: ", rowNumber);
+      for (int seat = 0; seat < rowArray.length; ++seat) {
+        System.out.println(
+            rowArray[seat] + " "); // тут, допустим, разделим номера мест в ряду пробелами
+        if (seat > 0 && seat % seatsInRow
+            == 0) { // тут вторая проверка нужна для определения конца строки; условие бует верным только когда последний номер места разделится на кол-во сидений в ряду без остатка
+          System.out.println();
+        }
+      }
+      System.out.println();
+    }
   }
 
   private Map<Integer, Character[]> getSessionMap(int sessionKey) {
