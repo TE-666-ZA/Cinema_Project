@@ -1,5 +1,11 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.zip.DataFormatException;
 
 public class CinemaMenu {
 
@@ -223,8 +229,8 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
-  public static void printHallMapsPerDay() {
-    inputDate();  //метод ввода ДАТЫ
+  public static void printHallMapsPerDay(Scanner scanner) throws DataFormatException {
+    String date = inputDate1(scanner);  //метод ввода ДАТЫ
     System.out.println("             КАРТА СЕАНСА 1");
     System.out.println("             КАРТА СЕАНСА 2");
     System.out.println("             КАРТА СЕАНСА 3");
@@ -254,15 +260,47 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод ввода даты
   public static void inputDate() {
+  }
+
+  public static String inputDate1(Scanner scanner) throws DataFormatException {
+    DateTimeFormatter inputDateFormate = DateTimeFormatter.ofPattern(
+        "dd-MM-yy"); // ввод даты в формате "dd-MM-yy"
+    DateTimeFormatter outputDateFormate = DateTimeFormatter.ofPattern(
+        "dd-MM-yyyy"); // будет осуществлен в формате "dd-MM-yyyy"
     System.out.println("Введите дату ->");
+    String dateString = scanner.nextLine();  // ввод пользователем Даты в формате "dd-MM-yy"
+    LocalDate date = LocalDate.parse(dateString,
+        inputDateFormate); // Введеную строку переводим в формат времени
+    String outputDate = date.format(
+        outputDateFormate); // форматируем дату под необходимый вывод и возвращаем в стринг
+    System.out.println(outputDate);
+    return outputDate;
+    // проверку на неверный ввод
+    // и проверку на считывание с файла
   }
 
   //________________________________________________________________________________________
   //метод ввода даты и сеанса
   public static void inputDateTime() {
-    System.out.println("Осуществите ввод даты ->");
     System.out.println("Осуществите ввод времени сеанса ->");
   }
+
+  public static Map<String, String> inputDateTime1(Scanner scanner) throws DataFormatException {
+    String date = inputDate1(scanner); // вызов метода ввода ДАТЫ
+    DateTimeFormatter inputTimeFormate = DateTimeFormatter.ofPattern(
+        "HH:mm"); // ввод времени в формате "HH:mm"
+    DateTimeFormatter outputTimeFormate = DateTimeFormatter.ofPattern(
+        "HH.mm"); // вывод времени будет осуществлен в формате "HH.mm"
+    System.out.println("Введите времени сеанса ->");
+    String timeString = scanner.nextLine(); // ввод пользователем Времени в формате "HH:mm"
+    LocalTime time = LocalTime.parse(timeString, inputTimeFormate);
+    String outputTime = time.format(outputTimeFormate);
+    Map<String, String> mapDAteTime = new HashMap<>();
+    mapDAteTime.put(date, outputTime);
+    System.out.println(date + "     " + outputTime);
+    return mapDAteTime;
+  }
+  // проверку на корректный ввод и проверку на считывание с файла
 
   //________________________________________________________________________________________
   //метод ввода Ряд/Колличество/Места
@@ -305,22 +343,29 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод ввода пароля Администратора
-  public static void inputPass() {
+  public static boolean inputPass(Scanner scanner) {
+    String pass = "Admin945";  // сохраненный пароль для Администратора
     System.out.println("Введите пароль ->");
+    String passUser = scanner.nextLine(); // ввод пароля с консоли
+    if (pass.equals(passUser)) {          // сравниваем введенный и созраненные пароли
+      System.out.println("Пароль верный!");
+      return true;
+    } else {
+      System.out.println("Пароль неверный.");
+      return false;
+    }
   }
 
   //________________________________________________________________________________________
   //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
   public static void printStatisticsForDay() {
     inputDate();
-    System.out.println("Введите пароль ->");
   }
 
   //________________________________________________________________________________________
   //метод вывода СТАТИСТИКИ ЗА СЕАНС
   public static void printStatisticsForSession() {
     inputDateTime();
-    System.out.println("Введите пароль ->");
   }
 
   //________________________________________________________________________________________

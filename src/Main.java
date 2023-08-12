@@ -1,6 +1,7 @@
 //import CinemaMenu.EnumMainMenu;
 
 import java.util.Scanner;
+import java.util.zip.DataFormatException;
 
 public class Main {
 
@@ -26,7 +27,11 @@ public class Main {
           CinemaMenu.separator(); // вывод разделительной линии
           System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
           //просим ввести дату и выводим три зала
-          CinemaMenu.printHallMapsPerDay(); // метод ВЫВОДА 3 КАРТ ЗА ДЕНЬ
+//          try {
+//            CinemaMenu.printHallMapsPerDay(scanner); // метод ВЫВОДА ТРЕХ КАРТ ЗА ДЕНЬ
+//          } catch (DataFormatException e) {
+//            throw new RuntimeException(e);
+//          }
           boolean runFreeSpaseMenu = true;
           while (runFreeSpaseMenu) {
             int commandFreeSpaseMenu = CinemaMenu.readCommandFreeSpaceMenu(scanner);
@@ -35,7 +40,12 @@ public class Main {
               case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
                 System.out.println(
                     "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
-                CinemaMenu.printHallMapsPerDay(); // метод ВЫВОДА ТРЕХ КАРТ ЗА ДЕНЬ
+//                try {
+//                  CinemaMenu.printHallMapsPerDay(scanner); // метод ВЫВОДА ТРЕХ КАРТ ЗА ДЕНЬ
+//                } catch (DataFormatException e) {
+//                  throw new RuntimeException(e);
+//                }
+
                 break;
               case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
                 runFreeSpaseMenu = false;
@@ -45,7 +55,6 @@ public class Main {
           break;
         //3
         case BUYING_TICKETS: //  ПОКУПКА БИЛЕТОВ
-
           CinemaMenu.separator(); // вывод разделительной линии
           System.out.println("\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ" + "\u001B[0m");
           CinemaMenu.buyTickets(); //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
@@ -126,7 +135,10 @@ public class Main {
         case ADMINISTRATOR: // МЕНЮ АДМИНИСТРАТОРА
           CinemaMenu.separator(); // вывод разделительной линии
           System.out.println("\u001B[32m" + "\t\t\t\t5. АДМИНИСТРАТОР:" + "\u001B[0m");
-          CinemaMenu.inputPass(); // Метод ввода пароля Администратора
+          boolean password = CinemaMenu.inputPass(scanner); // Метод ввода пароля Администратора
+          if (!password) {
+            break;
+          }  // если пароль не совпадает, возвразаемся в главное меню
           boolean runAdministratorMenu = true;
           while (runAdministratorMenu) {
             int commandAdministratorMenu = CinemaMenu.readCommandAdministratorMenu(scanner);
@@ -154,6 +166,8 @@ public class Main {
             }
           }
           break;
+
+        //0
         case EXIT:
           System.out.println(
               "\u001B[32m" + "\t\t\t\tБЛАГОДАРИМ, ЧТО ВОСПОЛЬЗОВАЛИСЬ НАШИМ СЕРВИСОМ! "
