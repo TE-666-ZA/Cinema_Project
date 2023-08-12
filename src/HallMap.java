@@ -108,12 +108,17 @@ public class HallMap {
         System.out.println(
             rowArray[seat] + " "); // тут, допустим, разделим номера мест в ряду пробелами
         if (seat > 0 && seat % seatsInRow
-            == 0) { // тут вторая проверка нужна для определения конца строки; условие бует верным только когда последний номер места разделится на кол-во сидений в ряду без остатка
+            == 0) { // тут вторая проверка нужна для определения конца строки; условие будет верным только когда последний номер места разделится на кол-во сидений в ряду без остатка
           System.out.println();
         }
       }
       System.out.println();
     }
+  }
+
+  public boolean compareFilmNames(String name1, String name2) {
+    ComparatorForFilms comparator = new ComparatorForFilms();
+    return comparator.compare(name1, name2) == 0;
   }
 
   private Map<Integer, Character[]> getSessionMap(int sessionKey) {
