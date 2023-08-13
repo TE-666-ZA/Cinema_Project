@@ -3,19 +3,17 @@ import java.util.Comparator;
 public class ComparatorForSeats implements Comparator<Character[]> {
 
   @Override
-  public int compare(Character[] o1, Character[] o2) {
-    int comparison = Character.compare(o1[0], o2[0]);
-    if (comparison != 0) {
-      return comparison;
-    } else {
-      for (int i = 1; i <= 9; ++i) {
-        int number1 = Integer.parseInt(o1[i].toString());
-        int number2 = Integer.parseInt(o2[i].toString());
-        if (number1 != number2) {
-          return Integer.compare(number1, number2);
-        }
-      }
-      return 0;
+  public int compare(Character[] seats1, Character[] seats2) {
+    if (seats1.length != seats2.length) {
+      System.out.println("Количество мест в ряду должно быть одинаковым");
     }
+    for (int i = 0; i < seats1.length; ++i) {
+      char seat1 = seats1[i];
+      char seat2 = seats2[i];
+      if (seat1 != seat2) {
+        return seat1 - seat2; // вернём результат сравнения, если места не совпали
+      }
+    }
+    return 0; // вернём, если места совпали
   }
 }

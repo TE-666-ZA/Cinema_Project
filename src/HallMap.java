@@ -1,65 +1,52 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-// класс, в котором будет храниться вся изначальная и обновлённая инфа о местах
 public class HallMap {
 
-  private Map<Integer, Character[]> session1; // 3 сеанса за 3 дня
-  private Map<Integer, Character[]> session2;
-  private Map<Integer, Character[]> session3;
-  private Map<Integer, Character[]> session4;
-  private Map<Integer, Character[]> session5;
-  private Map<Integer, Character[]> session6;
-  private Map<Integer, Character[]> session7;
-  private Map<Integer, Character[]> session8;
-  private Map<Integer, Character[]> session9;
-  private FileEditor reader; // для чтения из мап
-  private FileEditor writer; // предположим, через него класс файл эдитор будет записывать в мапы
+  private List<Map<Integer, Character[]>> sessions;
+  private FileEditor reader; // для чтения данных
+  private FileEditor writer; // предположим, через него класс файл эдитор будет записывать данные
 
-  // тут создаём 9 мап, их можно забрать в FileEditor
+  // тут создаём лист с местами, его можно забрать в FileEditor
   public HallMap() throws IOException {
-    this.session1 = new HashMap<>();
-    this.session2 = new HashMap<>();
-    this.session3 = new HashMap<>();
-    this.session4 = new HashMap<>();
-    this.session5 = new HashMap<>();
-    this.session6 = new HashMap<>();
-    this.session7 = new HashMap<>();
-    this.session8 = new HashMap<>();
-    this.session9 = new HashMap<>();
-    this.writer = new FileEditor();
-    writeAllSeats();
+    sessions = new ArrayList<>();
     this.reader = new FileEditor();
     readAllSeats();
+    for (int i = 0; i < 9; i++) {
+      sessions.set(i, reader.readMap(new HashMap<>()));
+    }
+    this.writer = new FileEditor();
   }
 
-  // вызываем метод для чтения каждой мапы
+  // вызываем метод для записи данных
   // делаем это в методе:
   private void writeAllSeats() throws IOException {
-    this.writer.readMap(session1);
-    this.writer.readMap(session2);
-    this.writer.readMap(session3);
-    this.writer.readMap(session4);
-    this.writer.readMap(session5);
-    this.writer.readMap(session6);
-    this.writer.readMap(session7);
-    this.writer.readMap(session8);
-    this.writer.readMap(session9);
+    for (var sessionMap : sessions) {
+      // строчку 31 комменчу, т. к. не знаю, как это будет названо в FileEditor
+      // writer.writeMap(sessionMap);
+    }
   }
 
-  // теперь вызываем метод для чтения каждой мапы
-  // делаем это в методе:
+  // при выходе из проги нужен метод, в который записывается вся инфа о местах
+  // сначала заполняем мапу, потом всё остальное
+  public void saveSeatsToFile() throws IOException {
+    writeAllSeats();
+    // строчку 37 комменчу, т. к. не знаю, как это будет названо в FileEditor
+    // writer.close();
+  }
+
+  /**
+   * теперь вызываем метод для чтения каждой мапы делаем это в методе:
+   *
+   * @throws IOException
+   */
   private void readAllSeats() throws IOException {
-    this.reader.readMap(session1);
-    this.reader.readMap(session2);
-    this.reader.readMap(session3);
-    this.reader.readMap(session4);
-    this.reader.readMap(session5);
-    this.reader.readMap(session6);
-    this.reader.readMap(session7);
-    this.reader.readMap(session8);
-    this.reader.readMap(session9);
+    for (var obj : sessions) {
+      writer.readMap(obj);
+    }
   }
 
   // метод для того, чтобы купить/вернуть купленное место
@@ -67,29 +54,26 @@ public class HallMap {
     Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
     if (sessionMap == null) {
       System.out.println("Такого сеанса нет");
+      return;
     }
     Character[] rowArray = sessionMap.get(row);
     if (rowArray == null || seatNumber < 1
         || seatNumber >= rowArray.length) {
       System.out.println("Что-то пошло не так при выборе ряда или места");
+      return;
     }
-    chooseSeat = true;
-    boolean returnSeat = false;
-    if (chooseSeat) {
-      if (rowArray[seatNumber] == 'X') {
-        System.out.println("Это место уже занято");
-      } else {
-        rowArray[seatNumber] = 'X';
-        System.out.println("Вы выбрали место №" + seatNumber + ", ряд " + row);
-      }
+
+    if (rowArray[seatNumber] == 'X' && chooseSeat) {
+      System.out.println("Это место уже занято");
+    } else if (rowArray[seatNumber] != 'X' && chooseSeat) {
+      rowArray[seatNumber] = 'X';
+      System.out.println("Вы выбрали место №" + seatNumber + ", ряд " + row);
+    } else if (rowArray[seatNumber] == 'X' && !chooseSeat) {
+      // тут преобразуем номер в символ и прибавляем его к 0, так будет корректно
+      rowArray[seatNumber] = Integer.toString(seatNumber).charAt(0);
+      System.out.println("Вы успешно вернули билет за место №" + seatNumber);
     } else {
-      if (rowArray[seatNumber] == 'X') {
-        rowArray[seatNumber] = (char) ('0'
-            + seatNumber); // тут преобразуем номер в символ и прибавляем его к 0, так будет корректно
-        System.out.println("Вы успешно вернули билет за место №" + seatNumber);
-      } else {
-        System.out.println("Место №" + seatNumber + " уже свободно");
-      }
+      System.out.println("Место №" + seatNumber + " уже свободно");
     }
   }
 
@@ -98,17 +82,18 @@ public class HallMap {
     Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
     if (sessionMap == null) {
       System.out.println("Такого сеанса нет");
+      return;
     }
     int seatsInRow = 11; // номер ряда + 10 мест
-    for (Map.Entry<Integer, Character[]> entry : sessionMap.entrySet()) {
-      Integer rowNumber = entry.getKey();
-      Character[] rowArray = entry.getValue();
+    for (var rowNumber : sessionMap.keySet()) {
+      Character[] rowArray = sessionMap.get(rowNumber);
       System.out.printf("Ряд %d: ", rowNumber);
       for (int seat = 0; seat < rowArray.length; ++seat) {
-        System.out.println(
-            rowArray[seat] + " "); // тут, допустим, разделим номера мест в ряду пробелами
-        if (seat > 0 && seat % seatsInRow
-            == 0) { // тут вторая проверка нужна для определения конца строки; условие будет верным только когда последний номер места разделится на кол-во сидений в ряду без остатка
+        // тут, допустим, разделим номера мест в ряду пробелами
+        System.out.println(rowArray[seat] + " ");
+        // тут вторая проверка нужна для определения конца строки; условие будет верным только когда
+        // последний номер места разделится на кол-во сидений в ряду без остатка
+        if (seat > 0 && seat % seatsInRow == 0) {
           System.out.println();
         }
       }
@@ -116,33 +101,7 @@ public class HallMap {
     }
   }
 
-  public boolean compareFilmNames(String name1, String name2) {
-    ComparatorForFilms comparator = new ComparatorForFilms();
-    return comparator.compare(name1, name2) == 0;
-  }
-
   private Map<Integer, Character[]> getSessionMap(int sessionKey) {
-    switch (sessionKey) {
-      case 1:
-        return session1;
-      case 2:
-        return session2;
-      case 3:
-        return session3;
-      case 4:
-        return session4;
-      case 5:
-        return session5;
-      case 6:
-        return session6;
-      case 7:
-        return session7;
-      case 8:
-        return session8;
-      case 9:
-        return session9;
-      default:
-        return null;
-    }
+    return sessions.get(sessionKey - 1);
   }
 }
