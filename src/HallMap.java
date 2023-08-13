@@ -7,26 +7,21 @@ import java.util.Map;
 public class HallMap {
 
   private List<Map<Integer, Character[]>> sessions;
-  private FileEditor reader; // для чтения данных
-  private FileEditor writer; // предположим, через него класс файл эдитор будет записывать данные
+  private FileEditor fileEditor; // для чтения и записи данных
 
   // тут создаём лист с местами, его можно забрать в FileEditor
   public HallMap() throws IOException {
     sessions = new ArrayList<>(9);
-    this.reader = new FileEditor();
+    this.fileEditor = new FileEditor();
     readAllSeats();
-    for (int i = 0; i < 9; i++) {
-      sessions.add(i, reader.readMap(new HashMap<>()));
-    }
-    this.writer = new FileEditor();
   }
 
   // вызываем метод для записи данных
   // делаем это в методе:
   private void writeAllSeats() throws IOException {
-    for (var sessionMap : sessions) {
-      // строчку 31 комменчу, т. к. не знаю, как это будет названо в FileEditor
-      // writer.writeMap(sessionMap);
+    for (int i = 0; i < 9; i++) {
+      // TODO: раскомментить по готовности метода writeMap в FileEditor
+      // sessions.add(i, fileEditor.writeMap(sessions.get(i)));
     }
   }
 
@@ -34,8 +29,6 @@ public class HallMap {
   // сначала заполняем мапу, потом всё остальное
   public void saveSeatsToFile() throws IOException {
     writeAllSeats();
-    // строчку 37 комменчу, т. к. не знаю, как это будет названо в FileEditor
-    // writer.close();
   }
 
   /**
@@ -44,8 +37,8 @@ public class HallMap {
    * @throws IOException
    */
   private void readAllSeats() throws IOException {
-    for (var obj : sessions) {
-      writer.readMap(obj);
+    for (int i = 0; i < 9; i++) {
+      sessions.add(i, fileEditor.readMap(new HashMap<>()));
     }
   }
 
