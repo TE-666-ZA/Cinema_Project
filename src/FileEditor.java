@@ -1,7 +1,7 @@
 import java.io.*;
 import java.text.ParseException;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class FileEditor {
@@ -16,7 +16,7 @@ public class FileEditor {
         STOP_VALUE('}'),
         START_BONUS('*'),
         STOP_BONUS('#'),
-        NEXT_COLUM('-');
+        COLUM_Symbol('%');
 
         private final char messageEnumSeparators;
 
@@ -28,12 +28,8 @@ public class FileEditor {
             return messageEnumSeparators;
         }
     }
-    // чтение/запись из файла
-
     private BufferedReader reader;
-    private int currentindex;
-    private char currentSymbo;
-    private StringBuilder content;
+    private FileReader infoFull;
     private char beginIndex;
     private char endIndex;
     private int dateCount;
@@ -41,90 +37,90 @@ public class FileEditor {
     private int keyCount;
     private int valueCount;
     private int bonusCount;
-    private int columCount;
-    private int targetCount;
-    private int mapKey;
-    private Character[] mapValue;
-    private boolean insideSection;
-    private FileReader infoFull;
-    private SimpleDateFormat dateFormat;
-    private Date date;
-    private String temp;
+    private DateTimeFormatter dateFormat;
+
+
+
 
 
     FileEditor() throws IOException {
         this.infoFull = new FileReader("res/InfoFull.txt");
-        this.reader = new BufferedReader(infoFull);
-        this.insideSection = false;
-        this.dateFormat = new SimpleDateFormat("dd-MM-yy");
-        this.dateCount = 0;
-        this.timeCount = 0;
-        this.keyCount = 0;
-        this.valueCount = 0;
-        this.bonusCount = 0;
-        this.columCount = 0;
+        reader = new BufferedReader(infoFull);
+        this.dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        this.dateCount = 1;
+        this.timeCount = 1;
+        this.keyCount = 1;
+        this.valueCount = 1;
+        this.bonusCount = 1;
+
     }
 
-    private void read(int currentCount) throws IOException, NullPointerException {
-        this.content = new StringBuilder();
+    private String read(int targetCount, BufferedReader reader) throws IOException, NullPointerException {
+        int currentCount = 0;
+        int currentindex;
+        char currentSymbol;
+        boolean insideSection = false;
+        boolean appendSection = false;
+        StringBuilder content = new StringBuilder();
         while ((currentindex = reader.read()) != -1) {
+            currentSymbol = (char) currentindex;
             if (insideSection) {
-                currentSymbo = (char) currentindex;
-                if (currentSymbo == endIndex) {
-                    insideSection = false;
-                    break;
+                if (currentSymbol == this.endIndex) {
+                    return content.toString();
                 }
-                if (currentSymbo != ' ') {
-                    content.append(currentSymbo);
+                if (appendSection && this.endIndex != EnumSeparators.STOP_VALUE.getSeparator()) {
+                    content.append(currentSymbol);
+                } else if (currentSymbol != ' ' ) {
+                    content.append(currentSymbol);
+                }
+                if (currentSymbol == this.beginIndex) {
+                    appendSection = true;
                 }
             }
-            if (targetCount == currentCount && !insideSection) {
-                currentSymbo = (char) currentindex;
-                if (currentSymbo == beginIndex) {
-                    currentCount++;
+            if (!insideSection) {
+                currentCount++;
+                if (currentCount == targetCount) {
                     insideSection = true;
                 }
             }
         }
+        return content.toString();
     }
 
-    public Date reeadDate() throws IOException, ParseException {
+
+    public LocalDate reeadDate() throws IOException{
         this.beginIndex = EnumSeparators.START_DATE.getSeparator();
         this.endIndex = EnumSeparators.STOP_DATE.getSeparator();
-        read(dateCount);
-        this.date = dateFormat.parse(content.toString());
+        LocalDate date = LocalDate.parse(read(this.dateCount, reader), this.dateFormat);
 
         return date;
     }
 
-    private int readKey() throws IOException, NumberFormatException {
+    public int readKey() throws IOException, NumberFormatException {
+
         this.beginIndex = EnumSeparators.START_KEY.getSeparator();
         this.endIndex = EnumSeparators.STOP_KEY.getSeparator();
-        read(keyCount);
-        this.temp = content.toString();
-        this.mapKey = Integer.parseInt(temp);
+        int mapKey = Integer.parseInt(read(this.keyCount, reader));
+
 
         return mapKey;
     }
 
-    private Character[] readMapValue() throws IOException {
+    public Character[] readMapValue() throws IOException {
         this.beginIndex = EnumSeparators.START_VALUE.getSeparator();
         this.endIndex = EnumSeparators.STOP_VALUE.getSeparator();
-        read(valueCount);
-        this.temp = content.toString();
-        char[] tempCharArray = temp.toCharArray();
-        this.mapValue = new Character[tempCharArray.length];
-        for (int i = 0; i < tempCharArray.length; i++) {
-            this.mapValue[i] = tempCharArray[i];
+        char[] temp = read(valueCount, reader).toCharArray();
+        Character[] mapValue = new Character[temp.length];
+        for (int i = 0; i < temp.length; i++) {
+            mapValue[i] = temp[i];
         }
+
 
         return mapValue;
     }
 
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException {
-        readKey();
-        readMapValue();
-        thisMap.put(mapKey, mapValue);
+      thisMap.put(readKey(),readMapValue());
 
         return thisMap;
     }
