@@ -12,11 +12,11 @@ public class HallMap {
 
   // тут создаём лист с местами, его можно забрать в FileEditor
   public HallMap() throws IOException {
-    sessions = new ArrayList<>();
+    sessions = new ArrayList<>(9);
     this.reader = new FileEditor();
     readAllSeats();
     for (int i = 0; i < 9; i++) {
-      sessions.set(i, reader.readMap(new HashMap<>()));
+      sessions.add(i, reader.readMap(new HashMap<>()));
     }
     this.writer = new FileEditor();
   }
