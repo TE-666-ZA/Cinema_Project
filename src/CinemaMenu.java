@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.Struct;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -210,9 +211,11 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод вывода РАСПИСАНИЯ
-  public static void printTimetables() {
+  public static void printTimetables() throws IOException {
     CinemaMenu.printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ" + "\u001B[0m");
+    Session session = new Session();
+    session.showSchedule();
     System.out.println("Сегодня  трататататтатататта");
     System.out.println("Завтра таратататататтататата");
     System.out.println("День вслед за затра трататата");

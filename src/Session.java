@@ -102,7 +102,6 @@ public class Session {
 
   public void showSchedule() {
     System.out.println("Расписание сеансов: ");
-
     for (int i = 0; i < dates.length; i++) {
       System.out.println("ДЕНЬ " + (i + 1));
       for (int j = 0; j < times.length; j++) {
