@@ -2,8 +2,12 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Session {
+
+  private Session hallMap;
 
   static enum EnumInfoFullIndexes {
 
@@ -109,6 +113,20 @@ public class Session {
       }
       System.out.println();
     }
+  }
+
+  private Map<Integer, Character[]> getSessionMap(int sessionKey) {
+    return hallMap.getSessionMap(sessionKey);
+  }
+
+  public Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date) {
+    Map<Integer, Map<Integer, Character[]>> hallMaps = new HashMap<>();
+    for (int i = 0; i < dates.length; i++) {
+      if (dates[i].equals(date)) {
+        hallMaps.put(i + 1, getSessionMap(i + 1)); // Получаем карту мест для данного сеанса
+      }
+    }
+    return hallMaps;
   }
 
   public void readTitle(String prefix, String splitter) throws IOException {
