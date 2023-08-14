@@ -1,13 +1,16 @@
 //import CinemaMenu.EnumMainMenu;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.zip.DataFormatException;
 
 public class Main {
 
   //
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException, DataFormatException {
+    Session session = new Session();
     Scanner scanner = new Scanner(System.in);
+
     boolean run = true;
     int command;
     while (run) {
@@ -24,34 +27,7 @@ public class Main {
           break;
         // 2
         case FREE_SPACE: // КАРТА СВОБОДНЫХ МЕСТ
-          CinemaMenu.printSeparator(); // вывод разделительной линии
-          System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
-          //просим ввести дату и выводим три зала
-//          try {
-//            CinemaMenu.printHallMapsPerDay(scanner); // метод ВЫВОДА ТРЕХ КАРТ ЗА ДЕНЬ
-//          } catch (DataFormatException e) {
-//            throw new RuntimeException(e);
-//          }
-          boolean runFreeSpaseMenu = true;
-          while (runFreeSpaseMenu) {
-            int commandFreeSpaseMenu = CinemaMenu.readCommandFreeSpaceMenu(scanner);
-            CinemaMenu.EnumFreeSpaceMenu selectedFreeSpaseMenu = CinemaMenu.EnumFreeSpaceMenu.values()[commandFreeSpaseMenu];
-            switch (selectedFreeSpaseMenu) {
-              case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
-                System.out.println(
-                    "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
-//                try {
-//                  CinemaMenu.printHallMapsPerDay(scanner); // метод ВЫВОДА ТРЕХ КАРТ ЗА ДЕНЬ
-//                } catch (DataFormatException e) {
-//                  throw new RuntimeException(e);
-//                }
-
-                break;
-              case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
-                runFreeSpaseMenu = false;
-                break;
-            }
-          }
+          CinemaMenu.freeSpace(scanner, session);
           break;
         //3
         case BUYING_TICKETS: //  ПОКУПКА БИЛЕТОВ
@@ -75,7 +51,7 @@ public class Main {
               case CHANGE_SELECTION: // 3.2 ИЗМЕНИТЬ ВЫБОР
                 System.out.println(
                     "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ИЗМЕНИТЬ ВЫБОР :" + "\u001B[0m");
-                CinemaMenu.inputDateTime(); //метод ввода ДАТЫ и СЕАНСА
+                CinemaMenu.inputDateTime(scanner); //метод ввода ДАТЫ и СЕАНСА
                 // заново запрашиваем ряд/количество мест/места
                 CinemaMenu.inputRowQuantityPlace();// метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
                 CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
@@ -105,7 +81,7 @@ public class Main {
                         + "\u001B[0m");
                 CinemaMenu.printSeparator(); // вывод разделительной линии
                 // вывод РАСПИСАНИЯ
-                CinemaMenu.inputDateTime();  //метод ввода ДАТЫ и СЕАНСА
+                CinemaMenu.inputDateTime(scanner);  //метод ввода ДАТЫ и СЕАНСА
                 // вывод карты мест для конкретного сеанса
 
                 CinemaMenu.inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ

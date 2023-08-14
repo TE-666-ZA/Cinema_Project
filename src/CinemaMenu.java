@@ -1,6 +1,8 @@
+import java.sql.Struct;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
@@ -262,44 +264,81 @@ public class CinemaMenu {
   public static void inputDate() {
   }
 
+  /**
+   * Метод пункта меню 2.СВОБОДНЫЕ МЕСТА содержит подменю 2.1 ИЗМЕНИТЬ ДАТУ содержит подменю
+   * 2.2ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+   *
+   * @param scanner
+   * @param session
+   * @throws DataFormatException
+   */
+  public static void freeSpace(Scanner scanner, Session session) throws DataFormatException {
+    CinemaMenu.printSeparator(); // вывод разделительной линии
+    System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
+    //ввели дату и проверяем на совпадение с датами в тексте
+    boolean run = true;
+    while (run) {
+      if (!session.isDateCorrect(inputDate(scanner))) {
+        System.out.println("Несовпадение дат! ");
+      } else {
+        run = false;
+        break;
+      }
 
-  public static String inputDate1(Scanner scanner) throws DataFormatException {
+      boolean runFreeSpaseMenu = true;
+      while (runFreeSpaseMenu) {
+        int commandFreeSpaseMenu = CinemaMenu.readCommandFreeSpaceMenu(scanner);
+        CinemaMenu.EnumFreeSpaceMenu selectedFreeSpaseMenu = CinemaMenu.EnumFreeSpaceMenu.values()[commandFreeSpaseMenu];
+        switch (selectedFreeSpaseMenu) {
+          case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
+            System.out.println(
+                "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
+            break;
+          case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+            runFreeSpaseMenu = false;
+            break;
+        }
+      }
+      break;
+    }
+    //
+  }
+
+  public static LocalDate inputDate(Scanner scanner) {
     DateTimeFormatter inputDateFormate = DateTimeFormatter.ofPattern(
         "dd-MM-yy"); // ввод даты в формате "dd-MM-yy"
-    DateTimeFormatter outputDateFormate = DateTimeFormatter.ofPattern(
-        "dd-MM-yyyy"); // будет осуществлен в формате "dd-MM-yyyy"
     System.out.println("Введите дату ->");
-    String dateString = scanner.nextLine();  // ввод пользователем Даты в формате "dd-MM-yy"
-    LocalDate date = LocalDate.parse(dateString,
-        inputDateFormate); // Введеную строку переводим в формат времени
-    String outputDate = date.format(
-        outputDateFormate); // форматируем дату под необходимый вывод и возвращаем в стринг
-    System.out.println(outputDate);
-    return outputDate;
-    // проверку на неверный ввод
-    // и проверку на считывание с файла
+    String dateString;
+    LocalDate date;
+    while (true) {
+      try {
+        dateString = scanner.nextLine();  // ввод пользователем Даты в формате "dd-MM-yy"
+        // Введеную строку переводим в формат времени
+        date = LocalDate.parse(dateString, inputDateFormate);
+        break;
+      } catch (DateTimeParseException e) {
+        System.out.println("Неверный формат ввода даты: " + e.getMessage());
+      }
+    }
+    return date;
   }
 
   //________________________________________________________________________________________
   //метод ввода даты и сеанса
-  public static void inputDateTime() {
-    System.out.println("Осуществите ввод времени сеанса ->");
-  }
-
-  public static Map<String, String> inputDateTime1(Scanner scanner) throws DataFormatException {
-    String date = inputDate1(scanner); // вызов метода ввода ДАТЫ
-    DateTimeFormatter inputTimeFormate = DateTimeFormatter.ofPattern(
-        "HH:mm"); // ввод времени в формате "HH:mm"
-    DateTimeFormatter outputTimeFormate = DateTimeFormatter.ofPattern(
-        "HH.mm"); // вывод времени будет осуществлен в формате "HH.mm"
-    System.out.println("Введите времени сеанса ->");
-    String timeString = scanner.nextLine(); // ввод пользователем Времени в формате "HH:mm"
-    LocalTime time = LocalTime.parse(timeString, inputTimeFormate);
-    String outputTime = time.format(outputTimeFormate);
-    Map<String, String> mapDAteTime = new HashMap<>();
-    mapDAteTime.put(date, outputTime);
-    System.out.println(date + "     " + outputTime);
-    return mapDAteTime;
+  public static void inputDateTime(Scanner scanner) throws DataFormatException {
+//    LocalDate date = inputDate(scanner); // вызов метода ввода ДАТЫ
+//    DateTimeFormatter inputTimeFormate = DateTimeFormatter.ofPattern(
+//        "HH:mm"); // ввод времени в формате "HH:mm"
+//    DateTimeFormatter outputTimeFormate = DateTimeFormatter.ofPattern(
+//        "HH.mm"); // вывод времени будет осуществлен в формате "HH.mm"
+//    System.out.println("Введите времени сеанса ->");
+//    String timeString = scanner.nextLine(); // ввод пользователем Времени в формате "HH:mm"
+//    LocalTime time = LocalTime.parse(timeString, inputTimeFormate);
+//    String outputTime = time.format(outputTimeFormate);
+//    Map<String, String> mapDAteTime = new HashMap<>();
+//    mapDAteTime.put(date, outputTime);
+//    System.out.println(date + "     " + outputTime);
+//    return mapDAteTime;
   }
   // проверку на корректный ввод и проверку на считывание с файла
 
@@ -335,6 +374,7 @@ public class CinemaMenu {
   //метод для меню ОБМЕН/ВАЗВРАТ БИЛЕТОВ, когда по фамиии выводим кол-во билетов/день/сеанс
   public static void inputLastName() {
     System.out.println("Введите ФАМИЛИЮ ->");
+    // фамилия колва билетов   ряд/место дата/время фильм
   }
 
   //________________________________________________________________________________________
@@ -369,7 +409,7 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод вывода СТАТИСТИКИ ЗА СЕАНС
   public static void printStatisticsForSession() {
-    inputDateTime();
+    // inputDateTime();
   }
 
   //________________________________________________________________________________________
