@@ -211,22 +211,40 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод вывода 9 КАРТ ЗА 3 ДНЯ
-  public static void printHallMapsForAllDays() {
+  public static void printHallMapsForAllDays(Session session) throws IOException {
+    LocalDate[] dates = session.getDates();
+    LocalTime[] times = session.getTimes();
+    String[] titles = session.getTitle();
 
-    System.out.println("             КАРТА СЕАНСА 1");
-    System.out.println("             КАРТА СЕАНСА 2");
-    System.out.println("             КАРТА СЕАНСА 3");
+    for (LocalDate date : dates) {
+      System.out.println("\u001B[34m" + "             КАРТА СЕАНСА " + date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "\u001B[0m");
+      for (int sessionKey = 1; sessionKey <= 3; sessionKey++) {
+        HallMap hallMap = new HallMap();
+        Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
 
+        if (sessionMap != null) {
+          System.out.println(times[sessionKey - 1] + " " + titles[sessionKey - 1]);
+          HallMap.showSessionMap(sessionMap);
+        } else {
+          System.out.println("Сеанс " + sessionKey + " не найден");
+        }
+      }
+      System.out.println();
+    }
   }
 
   //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
-  public static void printHallMapsPerDay() throws IOException {
+  public static void printHallMapsPerDay(Session session) throws IOException {
+    LocalTime[] times = session.getTimes();
+    String[] titles = session.getTitle();
+
     for (int sessionKey = 1; sessionKey <= 3; sessionKey++) {
       HallMap hallMap = new HallMap();
       Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
+
       if (sessionMap != null) {
-        System.out.println("СЕАНС " + sessionKey + ":");
+        System.out.println(times[sessionKey - 1] + " " + titles[sessionKey - 1]);
         HallMap.showSessionMap(sessionMap);
       } else {
         System.out.println("Сеанс " + sessionKey + " не найден");
@@ -271,7 +289,7 @@ public class CinemaMenu {
     //ввели дату и проверяем на совпадение с датами в тексте//
     LocalDate date = checkDate(scanner, session);
     //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
-    printHallMapsPerDay();
+    printHallMapsPerDay(session);
 
     boolean runFreeSpaseMenu = true;
     while (runFreeSpaseMenu) {
@@ -283,7 +301,7 @@ public class CinemaMenu {
               "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
           date = checkDate(scanner, session);
           //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
-          printHallMapsPerDay();
+          printHallMapsPerDay(session);
           break;
         case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
           runFreeSpaseMenu = false;

@@ -28,6 +28,7 @@ public class Main {
           System.out.println(
               "\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ:" + "\u001B[0m");
           session.showSchedule();
+          CinemaMenu.printHallMapsForAllDays(session);
           break;
         // 2
 
