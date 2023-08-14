@@ -271,20 +271,23 @@ public class CinemaMenu {
    * @throws DataFormatException
    */
   public static void freeSpace(Scanner scanner, Session session) throws DataFormatException {
-//    CinemaMenu.printSeparator(); // вывод разделительной линии
-//    System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
-//    //ввели дату и проверяем на совпадение с датами в тексте//
-//    LocalDate date;
-//    boolean run = true;
-//    while (run) {
-//    date=inputDate(scanner);
-//
-//      if (!session.isDateCorrect(date)) {
-//        System.out.println("Несовпадение дат! ");
-//      } else {
-//        run = false;
-//        break;
-//      }
+    CinemaMenu.printSeparator(); // вывод разделительной линии
+    System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
+    //ввели дату и проверяем на совпадение с датами в тексте//
+    LocalDate date = null;
+    boolean run = true;
+    while (run) {
+      date = inputDate(scanner);
+
+      if (!session.isDateCorrect(date)) {
+        System.out.println("Несовпадение дат! ");
+      } else {
+        run = false;
+        break;
+      }
+    }
+    //TODO удалить этот проверочный вывод
+    System.out.println(date);
     //TODO: ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
     //  printHallMapsPerDay(date,session);
 
