@@ -222,7 +222,7 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод вывода 9 КАРТ ЗА 3 ДНЯ
   public static void printHallMapsForAllDays() {
-    inputDateTime(); //метод ввода ДАТЫ
+    //inputDateTime(); //метод ввода ДАТЫ
     System.out.println("             КАРТА СЕАНСА 1");
     System.out.println("             КАРТА СЕАНСА 2");
     System.out.println("             КАРТА СЕАНСА 3");
@@ -232,7 +232,7 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
   public static void printHallMapsPerDay(Scanner scanner) throws DataFormatException {
-    String date = inputDate1(scanner);  //метод ввода ДАТЫ
+    //String date = inputDate1(scanner);  //метод ввода ДАТЫ
     System.out.println("             КАРТА СЕАНСА 1");
     System.out.println("             КАРТА СЕАНСА 2");
     System.out.println("             КАРТА СЕАНСА 3");
@@ -252,7 +252,7 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
   public static void printHallMapPerSession() {
-    inputDateTime(); //метод ввода ДАТЫ и СЕАНСА
+    //inputDateTime(); //метод ввода ДАТЫ и СЕАНСА
     System.out.println("1.  1 2 3 4 5 6 7 8 9");
     System.out.println("2.  1 2 3 4 5 6 7 8 9");
     System.out.println("3.  1 2 3 4 5 6 7 8 9");

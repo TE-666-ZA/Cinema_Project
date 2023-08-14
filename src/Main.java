@@ -31,6 +31,7 @@ public class Main {
           break;
         //3
         case BUYING_TICKETS: //  ПОКУПКА БИЛЕТОВ
+
           CinemaMenu.printSeparator(); // вывод разделительной линии
           System.out.println("\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ" + "\u001B[0m");
           CinemaMenu.buyTickets(); //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
