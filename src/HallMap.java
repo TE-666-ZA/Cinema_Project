@@ -21,8 +21,7 @@ public class HallMap {
   // делаем это в методе:
   private void writeAllSeats() throws IOException {
     for (int i = 0; i < 9; i++) {
-      // TODO: раскомментить по готовности метода writeMap в FileEditor
-      // sessions.add(i, fileEditor.writeMap(sessions.get(i)));
+      fileEditor.writeMap(sessions.get(i));
     }
   }
 
@@ -51,10 +50,9 @@ public class HallMap {
       return;
     }
     Character[] rowArray = sessionMap.get(row);
-    if (rowArray == null || seatNumber < 1
-        || seatNumber >= rowArray.length) {
+    if (rowArray == null || seatNumber < 1 || seatNumber >= rowArray.length) {
       System.out.println("Что-то пошло не так при выборе ряда или места");
-      return;
+        return;
     }
 
     if (rowArray[seatNumber] == 'X' && chooseSeat) {
