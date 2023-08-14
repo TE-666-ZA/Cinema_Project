@@ -4,125 +4,143 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Session {
-    static enum EnumInfoFullIndexes {
 
-        DATE_INDEX("/"),
-        TIME_INDEX("["),
-        TITLE_INDEX("&"),
-        BONUS_INDEX("*"),
-        SPLITTER("/n");
+  static enum EnumInfoFullIndexes {
 
-        public final String messageEnumInfoFullIndexes;
+    DATE_INDEX("/"),
+    TIME_INDEX("["),
+    TITLE_INDEX("&"),
+    BONUS_INDEX("*"),
+    SPLITTER("/n");
 
-        private EnumInfoFullIndexes(String messageEnumInfoFullIndexes) {
-            this.messageEnumInfoFullIndexes = messageEnumInfoFullIndexes;
-        }
+    public final String messageEnumInfoFullIndexes;
 
-        public String getMessageEnumInfoFullIndexes() {
-            return this.messageEnumInfoFullIndexes;
-        }
+    private EnumInfoFullIndexes(String messageEnumInfoFullIndexes) {
+      this.messageEnumInfoFullIndexes = messageEnumInfoFullIndexes;
     }
 
-    private FileEditor fileEditor;
-    private DateTimeFormatter timeFormatter;
-    private DateTimeFormatter dateFormatter;
-    private LocalDate[] dates;
-    private LocalTime[] times;
-    private String[] title;
-    private String[] bonus;
+    public String getMessageEnumInfoFullIndexes() {
+      return this.messageEnumInfoFullIndexes;
+    }
+  }
 
-    Session() throws IOException {
-        this.fileEditor = new FileEditor();
-        this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        readDate(EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes(), EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-        readTime(EnumInfoFullIndexes.TIME_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-        readTitle(EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-        readBonus(EnumInfoFullIndexes.BONUS_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
+  private FileEditor fileEditor;
+  private DateTimeFormatter timeFormatter;
+  private DateTimeFormatter dateFormatter;
+  private LocalDate[] dates;
+  private LocalTime[] times;
+  private String[] title;
+  private String[] bonus;
+
+  Session() throws IOException {
+    this.fileEditor = new FileEditor();
+    this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    readDate(EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes(),
+        EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
+    readTime(EnumInfoFullIndexes.TIME_INDEX.getMessageEnumInfoFullIndexes(),
+        EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
+    readTitle(EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes(),
+        EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
+    readBonus(EnumInfoFullIndexes.BONUS_INDEX.getMessageEnumInfoFullIndexes(),
+        EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
 //        writeDate(dates,EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes());
 //        writeTime(times,EnumInfoFullIndexes.TIME_INDEX.getMessageEnumInfoFullIndexes());
 //        writeTitle(title ,EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes());
 //        writeBonus(bonus,EnumInfoFullIndexes.BONUS_INDEX.getMessageEnumInfoFullIndexes());
-    }
+  }
 
-    public void readDate(String prefix, String splitter) throws IOException {
-        String[] temp = fileEditor.readData(prefix,splitter).split(splitter);
-        this.dates = new LocalDate[temp.length];
-        for (int i = 0; i < temp.length; i++) {
-            dates[i] = LocalDate.parse(temp[i], dateFormatter);
-        }
+  public void readDate(String prefix, String splitter) throws IOException {
+    String[] temp = fileEditor.readData(prefix, splitter).split(splitter);
+    this.dates = new LocalDate[temp.length];
+    for (int i = 0; i < temp.length; i++) {
+      dates[i] = LocalDate.parse(temp[i], dateFormatter);
     }
-    public void writeDate(LocalDate[] dates ,String prefix) throws IOException {
-        String[] data = new String[dates.length];
-        for(int i = 0; i < dates.length; i++){
-            data[i] = dates[i].format(dateFormatter);
-        }
-        fileEditor.write(data,prefix);
-    }
+  }
 
-    public void readTime(String prefix, String splitter) throws IOException {
-        String[] temp = fileEditor.readData(prefix,splitter).split(splitter);
-        this.times = new LocalTime[temp.length];
-        for(int i = 0; i < temp.length; i++){
-            times[i] = LocalTime.parse(temp[i], timeFormatter);
-        }
+  public void writeDate(LocalDate[] dates, String prefix) throws IOException {
+    String[] data = new String[dates.length];
+    for (int i = 0; i < dates.length; i++) {
+      data[i] = dates[i].format(dateFormatter);
     }
+    fileEditor.write(data, prefix);
+  }
 
-    public void writeTime(LocalTime[] times ,String prefix) throws IOException {
-        String[] data = new String[times.length];
-        for(int i = 0; i < times.length; i++){
-            data[i] = times[i].format(timeFormatter);
-        }
-        fileEditor.write(data,prefix);
+  public void readTime(String prefix, String splitter) throws IOException {
+    String[] temp = fileEditor.readData(prefix, splitter).split(splitter);
+    this.times = new LocalTime[temp.length];
+    for (int i = 0; i < temp.length; i++) {
+      times[i] = LocalTime.parse(temp[i], timeFormatter);
     }
+  }
 
-    public boolean isDateCorrect(LocalDate date) {
-        for (LocalDate d : dates) {
-            if (d.equals(date)) {
-                return true;
-            }
-        }
-        return false;
+  public void writeTime(LocalTime[] times, String prefix) throws IOException {
+    String[] data = new String[times.length];
+    for (int i = 0; i < times.length; i++) {
+      data[i] = times[i].format(timeFormatter);
     }
+    fileEditor.write(data, prefix);
+  }
 
-    public boolean isTimeCorrect(LocalTime time) {
-        for (LocalTime t : times) {
-            if (t.equals(time)) {
-                return true;
-            }
-        }
-        return false;
+  public boolean isDateCorrect(LocalDate date) {
+    for (LocalDate d : dates) {
+      if (d.equals(date)) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    public void readTitle(String prefix, String splitter) throws IOException {
-        this.title = fileEditor.readData(prefix,splitter).split(splitter);
+  public boolean isTimeCorrect(LocalTime time) {
+    for (LocalTime t : times) {
+      if (t.equals(time)) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    public void writeTitle(String[] data, String prefix) throws IOException {
-        fileEditor.write(data,prefix);
-    }
+  public void showSchedule() {
+    System.out.println("Расписание сеансов: ");
 
-    public void readBonus(String prefix, String splitter) throws IOException {
-        this.bonus = fileEditor.readData(prefix,splitter).split(splitter);
+    for (int i = 0; i < dates.length; i++) {
+      System.out.println("ДЕНЬ " + (i + 1));
+      for (int j = 0; j < times.length; j++) {
+        System.out.println(times[j].format(timeFormatter) + " " + title[j] + " (" + bonus[j] + ")");
+      }
+      System.out.println();
     }
+  }
 
-    public void writeBonus(String[] data, String prefix) throws IOException {
-        fileEditor.write(data,prefix);
-    }
+  public void readTitle(String prefix, String splitter) throws IOException {
+    this.title = fileEditor.readData(prefix, splitter).split(splitter);
+  }
 
-    public LocalDate[] getDates() {
-        return dates;
-    }
+  public void writeTitle(String[] data, String prefix) throws IOException {
+    fileEditor.write(data, prefix);
+  }
 
-    public LocalTime[] getTimes() {
-        return times;
-    }
+  public void readBonus(String prefix, String splitter) throws IOException {
+    this.bonus = fileEditor.readData(prefix, splitter).split(splitter);
+  }
 
-    public String[] getTitle() {
-        return title;
-    }
+  public void writeBonus(String[] data, String prefix) throws IOException {
+    fileEditor.write(data, prefix);
+  }
 
-    public String[] getBonus() {
-        return bonus;
-    }
+  public LocalDate[] getDates() {
+    return dates;
+  }
+
+  public LocalTime[] getTimes() {
+    return times;
+  }
+
+  public String[] getTitle() {
+    return title;
+  }
+
+  public String[] getBonus() {
+    return bonus;
+  }
 }
