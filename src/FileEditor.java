@@ -7,6 +7,7 @@ public class FileEditor {
     private final int KEY = 0;
     private final int VALUE = 1;
     private final String READ_MAP_PREFIX = "|";
+    private final int REMOVE_FIRST_INDEX = 1;
 
 
     private BufferedReader reader;
@@ -28,16 +29,9 @@ public class FileEditor {
         return input;
     }
 
-
-    public LocalDate reeadDate() throws IOException {
-
-        return null;
-    }
-
-
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException {
         String[] temp = read(READ_MAP_PREFIX).split(">");
-        temp[KEY] = temp[KEY].substring(1);
+        temp[KEY] = temp[KEY].substring(REMOVE_FIRST_INDEX);
         int key = Integer.parseInt(temp[KEY]);
         char[] charArray = temp[VALUE].toCharArray();
         Character[] value = new Character[charArray.length];
@@ -50,8 +44,10 @@ public class FileEditor {
     }
 
     public String readData(String prefix) throws IOException {
-        return read(prefix);
+        return read(prefix).substring(REMOVE_FIRST_INDEX);
     }
 
-
+    public void close() throws IOException {
+        reader.close();
+    }
 }
