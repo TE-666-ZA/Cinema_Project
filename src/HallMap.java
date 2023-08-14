@@ -18,7 +18,7 @@ public class HallMap {
   }
 
   // вызываем метод для записи данных
-  // делаем это в методе:
+  // делаем это в следующе методе:
   private void writeAllSeats() throws IOException {
     for (int i = 0; i < 9; i++) {
       fileEditor.writeMap(sessions.get(i));
