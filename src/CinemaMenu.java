@@ -13,7 +13,7 @@ public class CinemaMenu {
   protected static final int INCORRECT = -1;
 
   // Метод для вывода разделительной строки между меню
-  public static void separator() {
+  public static void printSeparator() {
     System.out.println("--------------------------------------------------------------");
   }
 
@@ -68,7 +68,7 @@ public class CinemaMenu {
   protected static int readCommandFreeSpaceMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumFreeSpaceMenu(command)) {
-      freeSpaceMenu();
+      printFreeSpaceMenu();
       System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
@@ -102,7 +102,7 @@ public class CinemaMenu {
   protected static int readCommandBuyingTicketsMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumBuyingTicketsMenu(command)) {
-      buyingTicketsMenu();
+      printBuyingTicketsMenu();
       System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
@@ -122,7 +122,7 @@ public class CinemaMenu {
   protected static int readCommandTicketsExchangeOrReturnMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumBuyingTicketsMenu(command)) {
-      ticketsExchangeOrReturnMenu();
+      printTicketsExchangeOrReturnMenu();
       System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
@@ -155,7 +155,7 @@ public class CinemaMenu {
   protected static int readCommandAdministratorMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumAdministratorMenu(command)) {
-      administratorMenu();
+      printAdministratorMenu();
       System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
@@ -173,43 +173,43 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //методы вывода МЕНЮ и ПОДМЕНЮ
-  public static void freeSpaceMenu() {
+  public static void printFreeSpaceMenu() {
     System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageEnumFreeSpaceMenu());
     System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
-    separator();
+    printSeparator();
   }
 
-  public static void buyingTicketsMenu() {
+  public static void printBuyingTicketsMenu() {
     System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getMessageEnumBuyingTicketsMenu());
     System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
     System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getMessageEnumBuyingTicketsMenu());
-    separator();
+    printSeparator();
   }
 
-  public static void ticketsExchangeOrReturnMenu() {
+  public static void printTicketsExchangeOrReturnMenu() {
     System.out.println(
         EnumTicketsExchangeOrReturnMenu.TICKETS_EXCHANGE.getMessageEnumTicketsExchangeOrReturnMenu());
     System.out.println(
         EnumTicketsExchangeOrReturnMenu.TO_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
     System.out.println(
         EnumTicketsExchangeOrReturnMenu.CANCELLATION_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
-    separator();
+    printSeparator();
 
   }
 
-  public static void administratorMenu() {
+  public static void printAdministratorMenu() {
     System.out.println(
         EnumAdministratorMenu.STATISTICS_PER_SESSION.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.STATISTICS_FOR_DAY.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
     System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
-    separator();
+    printSeparator();
   }
 
   //________________________________________________________________________________________
   //метод вывода РАСПИСАНИЯ
   public static void printTimetables() {
-    CinemaMenu.separator(); // вывод разделительной линии
+    CinemaMenu.printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ" + "\u001B[0m");
     System.out.println("Сегодня  трататататтатататта");
     System.out.println("Завтра таратататататтататата");
@@ -262,6 +262,7 @@ public class CinemaMenu {
   public static void inputDate() {
   }
 
+
   public static String inputDate1(Scanner scanner) throws DataFormatException {
     DateTimeFormatter inputDateFormate = DateTimeFormatter.ofPattern(
         "dd-MM-yy"); // ввод даты в формате "dd-MM-yy"
@@ -310,7 +311,9 @@ public class CinemaMenu {
     System.out.println("Введите колличество необходимых мест ->");
     System.out.println("Мы радуем приятным бонусом за покупку 4х и более мест");
     System.out.println("Введите номера выбранных мест ->");
+
   }
+
 
   //________________________________________________________________________________________
   //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
@@ -325,6 +328,7 @@ public class CinemaMenu {
   //метод подтверждения покупки в меню ПОКУПКА БИЛЕТОВ
   public static void confirmPurchase() {
     System.out.println("Подтвердите покупку вводом ФАМИЛИИ ->");
+
   }
 
   //________________________________________________________________________________________
