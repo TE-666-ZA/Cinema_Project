@@ -58,6 +58,15 @@ public class Session {
         }
     }
 
+    public boolean isDateCorrect(LocalDate date) {
+        for (LocalDate d : dates) {
+            if (d.equals(date)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void readTitle(String prefix, String splitter) throws IOException {
         this.title = fileEditor.readData(prefix).split(splitter);
     }
