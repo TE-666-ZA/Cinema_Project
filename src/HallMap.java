@@ -38,7 +38,12 @@ public class HallMap {
    */
   private void readAllSeats() throws IOException {
     for (int i = 0; i < 9; i++) {
-   fileEditor.readMap(new HashMap<>());
+      Map<Integer, Character[]> sessionMap = new HashMap<>();
+      for (int j = 1; j <= 5; j++) {
+        Character[] rowArray = fileEditor.readMap(new HashMap<>()).values().iterator().next();
+        sessionMap.put(j, rowArray);
+      }
+      sessions.add(sessionMap);
     }
   }
 
@@ -52,7 +57,7 @@ public class HallMap {
     Character[] rowArray = sessionMap.get(row);
     if (rowArray == null || seatNumber < 1 || seatNumber >= rowArray.length) {
       System.out.println("Что-то пошло не так при выборе ряда или места");
-        return;
+      return;
     }
 
     if (rowArray[seatNumber] == 'X' && chooseSeat) {
@@ -62,7 +67,7 @@ public class HallMap {
       System.out.println("Вы выбрали место №" + seatNumber + ", ряд " + row);
     } else if (rowArray[seatNumber] == 'X' && !chooseSeat) {
       // тут преобразуем номер в символ и прибавляем его к 0, так будет корректно
-      rowArray[seatNumber] = Integer.toString(seatNumber).charAt(0);
+      rowArray[seatNumber] = (char) (seatNumber + '0');
       System.out.println("Вы успешно вернули билет за место №" + seatNumber);
     } else {
       System.out.println("Место №" + seatNumber + " уже свободно");
@@ -70,27 +75,20 @@ public class HallMap {
   }
 
   // метод для демонстрации карты мест
-  public void showSessionMap(int sessionKey) {
-    Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
-    if (sessionMap == null) {
-      System.out.println("Такого сеанса нет");
-      return;
-    }
-    int seatsInRow = 11; // номер ряда + 10 мест
+  protected static void showSessionMap(Map<Integer, Character[]> sessionMap) {
+    int seatsInRow = 10; // номер ряда + 9 мест
     for (var rowNumber : sessionMap.keySet()) {
       Character[] rowArray = sessionMap.get(rowNumber);
       System.out.printf("Ряд %d: ", rowNumber);
       for (int seat = 0; seat < rowArray.length; ++seat) {
-        // тут, допустим, разделим номера мест в ряду пробелами
-        System.out.println(rowArray[seat] + " ");
-        // тут вторая проверка нужна для определения конца строки; условие будет верным только когда
-        // последний номер места разделится на кол-во сидений в ряду без остатка
-        if (seat > 0 && seat % seatsInRow == 0) {
+        System.out.print(rowArray[seat] + " ");
+        if ((seat + 1) % seatsInRow == 0) {
           System.out.println();
         }
       }
       System.out.println();
     }
+    System.out.println();
   }
 
   protected Map<Integer, Character[]> getSessionMap(int sessionKey) {

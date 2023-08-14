@@ -221,24 +221,20 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
-  public static void printHallMapsPerDay(LocalDate date, Session session, HallMap hallMap)
-      throws DataFormatException, IOException {
-    Map<Integer, Map<Integer, Character[]>> hallMapsForDate = session.getHallMapsForDate(date,
-        hallMap);
-
-    if (hallMapsForDate.isEmpty()) {
-      System.out.println("На выбранную дату нет сеансов.");
-      return;
-    }
-
-    for (Map.Entry<Integer, Map<Integer, Character[]>> entry : hallMapsForDate.entrySet()) {
-      int sessionKey = entry.getKey();
-      System.out.println("КАРТА СЕАНСА " + sessionKey);
-      hallMap.showSessionMap(sessionKey);
+  public static void printHallMapsPerDay() throws IOException {
+    for (int sessionKey = 1; sessionKey <= 3; sessionKey++) {
+      HallMap hallMap = new HallMap();
+      Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
+      if (sessionMap != null) {
+        System.out.println("СЕАНС " + sessionKey + ":");
+        HallMap.showSessionMap(sessionMap);
+      } else {
+        System.out.println("Сеанс " + sessionKey + " не найден");
+      }
     }
   }
 
-  //________________________________________________________________________________________
+//________________________________________________________________________________________
   //метод вывода КАРТЫ С МЕСТАМИ КОТОРЫЕ ВЫБРАЛ КЛИЕНТ С ПОДСВЕТКОЙ МЕСТ
   public static void printMapWithYourLocation() {
 
@@ -275,7 +271,7 @@ public class CinemaMenu {
     //ввели дату и проверяем на совпадение с датами в тексте//
     LocalDate date = checkDate(scanner, session);
     //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
-    printHallMapsPerDay(date, session, hallMap);
+    printHallMapsPerDay();
 
     boolean runFreeSpaseMenu = true;
     while (runFreeSpaseMenu) {
@@ -287,7 +283,7 @@ public class CinemaMenu {
               "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
           date = checkDate(scanner, session);
           //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
-          printHallMapsPerDay(date, session, hallMap);
+          printHallMapsPerDay();
           break;
         case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
           runFreeSpaseMenu = false;

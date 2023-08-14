@@ -43,13 +43,16 @@ public class FileEditor {
         }
         int key = Integer.parseInt(temp[0]);
         char[] charArray = temp[1].toCharArray();
-        Character[] value = new Character[charArray.length];
-        for (int i = 0; i < charArray.length; i++) {
+
+        Character[] value = new Character[9];
+        for (int i = 0; i < 9; i++) {
             value[i] = charArray[i];
         }
+
         thisMap.put(key, value);
         return thisMap;
     }
+
 
     public String readData(String prefix, String splitter) throws IOException {
         return read(prefix, splitter);
@@ -91,8 +94,7 @@ public class FileEditor {
             writer.write(MAP_PREFIX + thisMap.getKey() + MAP_KEY_VALUE_SPLITTER);
             Character[] temp = thisMap.getValue();
             for (Character value : temp) {
-                writer.write(value
-                );
+                writer.write(value + " ");
             }
             writer.newLine();
         }

@@ -117,7 +117,7 @@ public class Session {
 
   public static void printHallMapsPerDay(LocalDate date, Session session)
       throws DataFormatException, IOException {
-    Map<Integer, Map<Integer, Character[]>> hallMapsForDate = session.getHallMapsForDate(date, new HallMap());
+    Map<Integer, Map<Integer, Character[]>> hallMapsForDate = session.getHallMapsForDate(date, session);
 
     if (hallMapsForDate.isEmpty()) {
       System.out.println("На выбранную дату нет сеансов.");
@@ -126,7 +126,7 @@ public class Session {
   }
 
   protected Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date,
-      HallMap hallMap) {
+      Session hallMap) {
     Map<Integer, Map<Integer, Character[]>> hallMaps = new HashMap<>();
     for (int i = 0; i < dates.length; i++) {
       if (dates[i].equals(date)) {
@@ -136,6 +136,9 @@ public class Session {
     return hallMaps;
   }
 
+  public Map<Integer, Character[]> getSessionMap(int sessionKey) {
+    return hallMap.getSessionMap(sessionKey);
+  }
 
 
   public void readTitle(String prefix, String splitter) throws IOException {
