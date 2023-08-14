@@ -8,8 +8,10 @@ public class FileEditor {
     private final int KEY = 0;
     private final int VALUE = 1;
 
+
     private BufferedReader reader;
     private FileReader infoFull;
+
 
 
 
@@ -20,10 +22,10 @@ public class FileEditor {
         reader = new BufferedReader(infoFull);
     }
 
-    private String read() throws IOException, NullPointerException {
+    private String read(String prefix) throws IOException, NullPointerException {
         String input;
       while((input = reader.readLine()) != null){
-          if(!input.trim().startsWith("#")){
+          if(!input.trim().startsWith("#") && input.trim().startsWith(prefix)){
               return input;
           }
         }
@@ -38,7 +40,8 @@ public class FileEditor {
 
 
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException {
-    String[] temp = read().split(">");
+    String[] temp = read("|").split(">");
+    temp[KEY] = temp[KEY].substring(1);
     int key = Integer.parseInt(temp[KEY]);
     char[] charArray = temp[VALUE].toCharArray();
     Character[] value = new Character[charArray.length];
@@ -48,6 +51,10 @@ public class FileEditor {
     thisMap.put(key,value);
 
         return thisMap;
+    }
+
+    public String readRest () throws IOException {
+        return read("&");
     }
 
 
