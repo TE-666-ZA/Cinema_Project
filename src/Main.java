@@ -18,14 +18,15 @@ public class Main {
       // Вывод главного меню
       CinemaMenu.printSeparator(); // вывод разделительной линии
       System.out.println(
-          "\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ:" + "\u001B[0m");
+          "\u001B[32m" + "\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
       command = CinemaMenu.readCommandMainMenu(scanner);
       CinemaMenu.EnumMainMenu selectedMenu = CinemaMenu.EnumMainMenu.values()[command];
       switch (selectedMenu) {
         //1
         case TIMETABLES:// РАСПИСАНИЕ
+
           System.out.println(
-              "\u001B[32m" + "\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
+              "\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ:" + "\u001B[0m");
           session.showSchedule();
           break;
         // 2

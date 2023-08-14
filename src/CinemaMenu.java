@@ -270,13 +270,10 @@ public class CinemaMenu {
    */
   public static void freeSpace(Scanner scanner, Session session, HallMap hallMap)
       throws DataFormatException, IOException {
-    CinemaMenu.printSeparator(); // вывод разделительной линии
+    printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
     //ввели дату и проверяем на совпадение с датами в тексте//
     LocalDate date = checkDate(scanner, session);
-
-    //TODO удалить этот проверочный вывод
-    System.out.println(date);
     //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
     printHallMapsPerDay(date, session, hallMap);
 

@@ -37,16 +37,17 @@ public class FileEditor {
     }
 
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException {
-        String[] temp = read(MAP_PREFIX,MAP_SPLITTER).split(MAP_KEY_VALUE_SPLITTER);
-        temp[KEY] = temp[KEY].substring(REMOVE_FIRST_INDEX);
-        int key = Integer.parseInt(temp[KEY]);
-        char[] charArray = temp[VALUE].toCharArray();
+        String[] temp = read(MAP_PREFIX, MAP_SPLITTER).split(MAP_KEY_VALUE_SPLITTER);
+        if (temp.length < 2) {
+            throw new IOException("Неверный формат даты");
+        }
+        int key = Integer.parseInt(temp[0]);
+        char[] charArray = temp[1].toCharArray();
         Character[] value = new Character[charArray.length];
         for (int i = 0; i < charArray.length; i++) {
             value[i] = charArray[i];
         }
         thisMap.put(key, value);
-
         return thisMap;
     }
 
