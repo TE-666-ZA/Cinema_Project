@@ -30,7 +30,6 @@ public class Session {
     private String[] title;
     private String[] bonus;
 
-
     Session() throws IOException {
         fileEditor = new FileEditor();
         readDate(EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes(), EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());

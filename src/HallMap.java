@@ -40,6 +40,7 @@ public class HallMap {
     for (int i = 0; i < 9; i++) {
       sessions.add(i, fileEditor.readMap(new HashMap<>()));
     }
+      fileEditor.close();
   }
 
   // метод для того, чтобы купить/вернуть купленное место
