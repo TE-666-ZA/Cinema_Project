@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +26,7 @@ public class Session {
 
     FileEditor fileEditor;
     private LocalDate[] dates;
-    private LocalTime[] time;
+    private LocalTime[] times;
     private String[] title;
     private String[] bonus;
 
@@ -35,6 +34,7 @@ public class Session {
     Session() throws IOException {
         fileEditor = new FileEditor();
         readDate(EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes(), EnumInfoFullIndexes.SEPARATOR.getMessageEnumInfoFullIndexes());
+        readTime(EnumInfoFullIndexes.TIME_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SEPARATOR.getMessageEnumInfoFullIndexes());
     }
 
     public void readDate(String prefix, String separator) throws IOException {
@@ -45,4 +45,14 @@ public class Session {
             dates[i] = LocalDate.parse(temp[i], formatter);
         }
     }
+
+    public void readTime(String prefix, String separator) throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String[] temp = fileEditor.readData(prefix).split(separator);
+        this.times = new LocalTime[times.length];
+        for(int i = 0; i < title.length; i++){
+            times[i] = LocalTime.parse(temp[i],formatter);
+        }
+    }
+
 }
