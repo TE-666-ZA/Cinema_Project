@@ -7,6 +7,7 @@ import java.util.Map;
 public class HallMap {
 
   private List<Map<Integer, Character[]>> sessions;
+
   private FileEditor fileEditor; // для чтения и записи данных
 
   // тут создаём лист с местами, его можно забрать в FileEditor
