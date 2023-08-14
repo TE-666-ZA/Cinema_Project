@@ -24,7 +24,7 @@ public class Session {
         }
     }
 
-    FileEditor fileEditor;
+    private FileEditor fileEditor;
     private LocalDate[] dates;
     private LocalTime[] times;
     private String[] title;
@@ -37,6 +37,7 @@ public class Session {
         readTitle(EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
         readBonus(EnumInfoFullIndexes.BONUS_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
         fileEditor.close();
+        writeTitle(title ,EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes() );
     }
 
     public void readDate(String prefix, String splitter) throws IOException {
@@ -69,7 +70,11 @@ public class Session {
     public void readTitle(String prefix, String splitter) throws IOException {
         this.title = fileEditor.readData(prefix).split(splitter);
     }
-    
+
+   public void writeTitle(String[] data, String prefix) throws IOException {
+       fileEditor.write(data,prefix);
+   }
+
     public void readBonus(String prefix, String splitter) throws IOException {
         this.bonus = fileEditor.readData(prefix).split(splitter);
     }
