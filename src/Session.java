@@ -85,6 +85,15 @@ public class Session {
         return false;
     }
 
+    public boolean isTimeCorrect(LocalTime time) {
+        for (LocalTime t : times) {
+            if (t.equals(time)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void readTitle(String prefix, String splitter) throws IOException {
         this.title = fileEditor.readData(prefix,splitter).split(splitter);
     }
