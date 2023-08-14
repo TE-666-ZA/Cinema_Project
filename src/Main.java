@@ -60,6 +60,12 @@ public class Main {
                   + "\u001B[0m");
           System.out.println(
               "\u001B[32m" + "\t\t\t\t\t\t\t\t\t\t\t\tДО НОВЫХ ВСТРЕЧ! " + "\u001B[0m");
+          System.out.println("Проект реализован 'RAT FAMILY' ");
+          System.out.println("В ролях - Кенан Июсубови ");
+          System.out.println("В ролях - Устинья Петрова");
+          System.out.println("Озвучка - Виктория Щербина\n");
+          System.out.println(
+              "По вопросам рекламы и озвучки ваших проектов обращаться ratfamilly@gmail.com ");
           run = false;
           break;
       }

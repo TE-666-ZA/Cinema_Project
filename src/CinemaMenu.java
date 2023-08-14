@@ -290,7 +290,9 @@ public class CinemaMenu {
     LocalDate date = checkDate(scanner, session);
     //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
     printHallMapsPerDay(session);
-
+    //вызов подменю
+    //2.1 ИЗМЕНИТЬ ДАТУ
+    // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
     boolean runFreeSpaseMenu = true;
     while (runFreeSpaseMenu) {
       int commandFreeSpaseMenu = CinemaMenu.readCommandFreeSpaceMenu(scanner);
@@ -326,7 +328,10 @@ public class CinemaMenu {
     //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
     //buyTickets(scanner,sessoin);
 
-    //Вывод нового меню
+    //вызов подменю
+    // 3.1 ПОДТВЕРЖДЕНИЕ ПОКУПКИ
+    // 3.2 ИЗМЕНИТЬ ВЫБОР
+    //3.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
     boolean runBuyingTicketsMenu = true;
     while (runBuyingTicketsMenu) {
       int commandBuyingTicketsMenu = CinemaMenu.readCommandBuyingTicketsMenu(scanner);
