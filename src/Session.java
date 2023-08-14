@@ -10,7 +10,7 @@ public class Session {
         TIME_INDEX("["),
         TITLE_INDEX("&"),
         BONUS_INDEX("*"),
-        SPLITTER(",");
+        SPLITTER("\n");
 
 
         public final String messageEnumInfoFullIndexes;
@@ -32,17 +32,21 @@ public class Session {
 
     Session() throws IOException {
         fileEditor = new FileEditor();
-        readDate(EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes(), EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-        readTime(EnumInfoFullIndexes.TIME_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-        readTitle(EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-        readBonus(EnumInfoFullIndexes.BONUS_INDEX.getMessageEnumInfoFullIndexes(),EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-        fileEditor.close();
-        writeTitle(title ,EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes() );
+        readDate(EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes(),
+            EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
+        readTime(EnumInfoFullIndexes.TIME_INDEX.getMessageEnumInfoFullIndexes(),
+            EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
+        readTitle(EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes(),
+            EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
+        readBonus(EnumInfoFullIndexes.BONUS_INDEX.getMessageEnumInfoFullIndexes(),
+            EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
+        //fileEditor.close();
+        // writeTitle(title ,EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes() );
     }
 
     public void readDate(String prefix, String splitter) throws IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String[] temp = fileEditor.readData(prefix).split(splitter);
+        String[] temp = fileEditor.readData(prefix, splitter).split(splitter);
         this.dates = new LocalDate[temp.length];
         for (int i = 0; i < temp.length; i++) {
             dates[i] = LocalDate.parse(temp[i], formatter);
@@ -51,7 +55,7 @@ public class Session {
 
     public void readTime(String prefix, String splitter) throws IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String[] temp = fileEditor.readData(prefix).split(splitter);
+        String[] temp = fileEditor.readData(prefix, splitter).split(splitter);
         this.times = new LocalTime[temp.length];
         for(int i = 0; i < temp.length; i++){
             times[i] = LocalTime.parse(temp[i],formatter);
@@ -68,7 +72,7 @@ public class Session {
     }
 
     public void readTitle(String prefix, String splitter) throws IOException {
-        this.title = fileEditor.readData(prefix).split(splitter);
+        this.title = fileEditor.readData(prefix, splitter).split(splitter);
     }
 
    public void writeTitle(String[] data, String prefix) throws IOException {
@@ -76,7 +80,7 @@ public class Session {
    }
 
     public void readBonus(String prefix, String splitter) throws IOException {
-        this.bonus = fileEditor.readData(prefix).split(splitter);
+        this.bonus = fileEditor.readData(prefix, splitter).split(splitter);
     }
 
     public LocalDate[] getDates() {

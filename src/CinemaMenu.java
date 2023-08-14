@@ -231,8 +231,9 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
-  public static void printHallMapsPerDay(Scanner scanner) throws DataFormatException {
-    //String date = inputDate1(scanner);  //метод ввода ДАТЫ
+  public static void printHallMapsPerDay(LocalDate date, Session session)
+      throws DataFormatException {
+
     System.out.println("             КАРТА СЕАНСА 1");
     System.out.println("             КАРТА СЕАНСА 2");
     System.out.println("             КАРТА СЕАНСА 3");
@@ -260,9 +261,6 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-  //метод ввода даты
-  public static void inputDate() {
-  }
 
   /**
    * Метод пункта меню 2.СВОБОДНЫЕ МЕСТА содержит подменю 2.1 ИЗМЕНИТЬ ДАТУ содержит подменю
@@ -273,37 +271,186 @@ public class CinemaMenu {
    * @throws DataFormatException
    */
   public static void freeSpace(Scanner scanner, Session session) throws DataFormatException {
-    CinemaMenu.printSeparator(); // вывод разделительной линии
-    System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
-    //ввели дату и проверяем на совпадение с датами в тексте
-    boolean run = true;
-    while (run) {
-      if (!session.isDateCorrect(inputDate(scanner))) {
-        System.out.println("Несовпадение дат! ");
-      } else {
-        run = false;
-        break;
-      }
+//    CinemaMenu.printSeparator(); // вывод разделительной линии
+//    System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
+//    //ввели дату и проверяем на совпадение с датами в тексте//
+//    LocalDate date;
+//    boolean run = true;
+//    while (run) {
+//    date=inputDate(scanner);
+//
+//      if (!session.isDateCorrect(date)) {
+//        System.out.println("Несовпадение дат! ");
+//      } else {
+//        run = false;
+//        break;
+//      }
+    //TODO: ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
+    //  printHallMapsPerDay(date,session);
 
-      boolean runFreeSpaseMenu = true;
-      while (runFreeSpaseMenu) {
-        int commandFreeSpaseMenu = CinemaMenu.readCommandFreeSpaceMenu(scanner);
-        CinemaMenu.EnumFreeSpaceMenu selectedFreeSpaseMenu = CinemaMenu.EnumFreeSpaceMenu.values()[commandFreeSpaseMenu];
-        switch (selectedFreeSpaseMenu) {
-          case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
-            System.out.println(
-                "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
-            break;
-          case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
-            runFreeSpaseMenu = false;
-            break;
-        }
+    boolean runFreeSpaseMenu = true;
+    while (runFreeSpaseMenu) {
+      int commandFreeSpaseMenu = CinemaMenu.readCommandFreeSpaceMenu(scanner);
+      EnumFreeSpaceMenu selectedFreeSpaseMenu = EnumFreeSpaceMenu.values()[commandFreeSpaseMenu];
+      switch (selectedFreeSpaseMenu) {
+        case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
+
+          break;
+        case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+          runFreeSpaseMenu = false;
+          break;
       }
-      break;
     }
-    //
+  }
+  //________________________________________________________________________________________
+
+  /**
+   * Меню пункт 3 3. ПОКУПКА БИЛЕТОВ содержит подменю 3.1 ПОДТВЕРЖДЕНИЕ ПОКУПКИ 3.2 ИЗМЕНИТЬ ВЫБОР
+   * 3.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+   *
+   * @param scanner
+   * @param session
+   * @throws DataFormatException
+   */
+  public static void buyingTickets(Scanner scanner, Session session) throws DataFormatException {
+    CinemaMenu.printSeparator(); // вывод разделительной линии
+    System.out.println("\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ" + "\u001B[0m");
+    CinemaMenu.buyTickets(); //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
+    //Вывод нового меню
+    boolean runBuyingTicketsMenu = true;
+    while (runBuyingTicketsMenu) {
+      int commandBuyingTicketsMenu = CinemaMenu.readCommandBuyingTicketsMenu(scanner);
+      EnumBuyingTicketsMenu selectedBuyingTicketsMenu = EnumBuyingTicketsMenu.values()[commandBuyingTicketsMenu];
+      switch (selectedBuyingTicketsMenu) {
+        case TO_CONFIRM: // 3.1 ПОДТВЕРЖДЕНИЕ ПОКУПКИ
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ПОДТВЕРЖДЕНИЕ ПОКУПКИ :"
+                  + "\u001B[0m");
+          CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
+          //ввод фамилии
+          runBuyingTicketsMenu = false;
+          break;
+        case CHANGE_SELECTION: // 3.2 ИЗМЕНИТЬ ВЫБОР
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ИЗМЕНИТЬ ВЫБОР :" + "\u001B[0m");
+          CinemaMenu.inputDateTime(scanner); //метод ввода ДАТЫ и СЕАНСА
+          // заново запрашиваем ряд/количество мест/места
+          CinemaMenu.inputRowQuantityPlace();// метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+          CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
+          break;
+        case CANCELLATION: // 3.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+          runBuyingTicketsMenu = false;
+          break;
+      }
+    }
+  }
+  //________________________________________________________________________________________
+
+  /**
+   * Метод меню 4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ содержит подменю 4.1 ОБМЕН БИЛЕТОВ 4.2 СДАТЬ БИЛЕТЫ 4.3
+   * ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+   *
+   * @param scanner
+   * @param session
+   * @throws DataFormatException
+   */
+  public static void ticketsExchangeOrReturn(Scanner scanner, Session session)
+      throws DataFormatException {
+    CinemaMenu.printSeparator(); // вывод разделительной линии
+    System.out.println("\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ:" + "\u001B[0m");
+    CinemaMenu.inputLastName();  //
+    // ввод фио
+    // вывод из файла  ПЕТРОВ 2 билета  Завтра 12.00 Русалочка
+    boolean runTicketsExchangeOrReturnMenu = true;
+    while (runTicketsExchangeOrReturnMenu) {
+      int commandTicketsExchangeOrReturnMenu = CinemaMenu.readCommandTicketsExchangeOrReturnMenu(
+          scanner);
+      EnumTicketsExchangeOrReturnMenu selectedTicketsExchangeOrReturnMenu = EnumTicketsExchangeOrReturnMenu.values()[commandTicketsExchangeOrReturnMenu];
+      switch (selectedTicketsExchangeOrReturnMenu) {
+        case TICKETS_EXCHANGE: // 4.1 ОБМЕН БИЛЕТОВ
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ -> ОБМЕН БИЛЕТОВ :"
+                  + "\u001B[0m");
+          CinemaMenu.printSeparator(); // вывод разделительной линии
+          // вывод РАСПИСАНИЯ
+          CinemaMenu.inputDateTime(scanner);  //метод ввода ДАТЫ и СЕАНСА
+          // вывод карты мест для конкретного сеанса
+
+          CinemaMenu.inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+          //////////////////////////////////////////////////////////////////////////////////
+          System.out.println("Введите ряд - >");
+          //ввод ряда
+          // Вывод карты ряда на экран
+          System.out.println("Введите количество мест - >");
+          ////////////////////////////////////////////////////////////////////////////////
+          System.out.println("Вы обменяли______билета на ______   ______");
+          runTicketsExchangeOrReturnMenu = false;
+          break;
+        case TO_RETURN_TICKETS: //4.2 СДАТЬ БИЛЕТЫ
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ -> СДАТЬ БИЛЕТЫ :"
+                  + "\u001B[0m");
+          CinemaMenu.toReturnTickets(); // метод СДАТЬ БИЛЕТЫ С ВЫВОДОМ ИНФОРМАЦИИ НА КАКОЙ СЕАНС И ФИО
+          runTicketsExchangeOrReturnMenu = false;
+          break;
+        case CANCELLATION_RETURN_TICKETS: // 4.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+          runTicketsExchangeOrReturnMenu = false;
+          break;
+      }
+    }
   }
 
+  //________________________________________________________________________________________
+
+  /**
+   * Метод меню 5. АДМИНИСТРАТОР 5.1 СТАТИСТИКА ЗА СЕАНС 5.2 СТАТИСТИКА ЗА ДЕНЬ 5.3 ИЗМЕНИТЬ БОНУС
+   * Выход в предыдущее меню
+   *
+   * @param scanner
+   * @param session
+   * @throws DataFormatException
+   */
+  public static void administartor(Scanner scanner, Session session) throws DataFormatException {
+    boolean runAdministratorMenu = true;
+    while (runAdministratorMenu) {
+      int commandAdministratorMenu = CinemaMenu.readCommandAdministratorMenu(scanner);
+      EnumAdministratorMenu selectedAdministratorMenu = EnumAdministratorMenu.values()[commandAdministratorMenu];
+      switch (selectedAdministratorMenu) {
+        case STATISTICS_PER_SESSION: // 5.1 СТАТИСТИКА ЗА СЕАНС
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> СТАТИСТИКА ЗА СЕАНС :"
+                  + "\u001B[0m");
+          CinemaMenu.printStatisticsForSession(); //метод вывода СТАТИСТИКИ ЗА СЕАНС
+          break;
+        case STATISTICS_FOR_DAY: // 5.2 СТАТИСТИКА ЗА ДЕНЬ
+          System.out.println("\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> СТАТИСТИКА ЗА ДЕНЬ :"
+              + "\u001B[0m");
+          CinemaMenu.printStatisticsForDay(); //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
+          break;
+        case CHOICE_BONUS: // 5.3 ИЗМЕНИТЬ БОНУС
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> ИЗМЕНИТЬ БОНУС :" + "\u001B[0m");
+          CinemaMenu.changeBonus(); //метод ИЗМЕНЕНИЯ БОНУСА
+          break;
+        case EXIT_MAIN_MENU: // Выход в предыдущее меню
+          runAdministratorMenu = false;
+          break;
+      }
+    }
+  }
+  //________________________________________________________________________________________
+  //________________________________________________________________________________________
+
+  //________________________________________________________________________________________
+
+  /**
+   * метод ввода даты
+   *
+   * @param scanner
+   * @return
+   */
   public static LocalDate inputDate(Scanner scanner) {
     DateTimeFormatter inputDateFormate = DateTimeFormatter.ofPattern(
         "dd-MM-yy"); // ввод даты в формате "dd-MM-yy"
@@ -324,7 +471,14 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-  //метод ввода даты и сеанса
+
+  /**
+   * метод ввода даты и сеанса
+   *
+   * @param scanner
+   * @throws DataFormatException
+   */
+
   public static void inputDateTime(Scanner scanner) throws DataFormatException {
 //    LocalDate date = inputDate(scanner); // вызов метода ввода ДАТЫ
 //    DateTimeFormatter inputTimeFormate = DateTimeFormatter.ofPattern(
@@ -343,7 +497,10 @@ public class CinemaMenu {
   // проверку на корректный ввод и проверку на считывание с файла
 
   //________________________________________________________________________________________
-  //метод ввода Ряд/Колличество/Места
+
+  /**
+   * метод ввода Ряд/Колличество/Места
+   */
   public static void inputRowQuantityPlace() {
     System.out.println("Осуществите ввод выбраного ряда ->");
     // Вывод карты ряда на экран
@@ -353,9 +510,11 @@ public class CinemaMenu {
 
   }
 
-
   //________________________________________________________________________________________
-  //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
+
+  /**
+   * метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
+   */
   public static void buyTickets() {
     printHallMapPerSession();// метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
     inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
@@ -403,7 +562,7 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
   public static void printStatisticsForDay() {
-    inputDate();
+   // inputDate();
   }
 
   //________________________________________________________________________________________
