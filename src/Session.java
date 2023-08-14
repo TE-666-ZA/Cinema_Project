@@ -4,10 +4,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.DataFormatException;
 
 public class Session {
-
-  private Session hallMap;
 
   static enum EnumInfoFullIndexes {
 
@@ -29,6 +28,7 @@ public class Session {
   }
 
   private FileEditor fileEditor;
+  private Session hallMap;
   private DateTimeFormatter timeFormatter;
   private DateTimeFormatter dateFormatter;
   private LocalDate[] dates;
@@ -115,19 +115,27 @@ public class Session {
     }
   }
 
-  private Map<Integer, Character[]> getSessionMap(int sessionKey) {
-    return hallMap.getSessionMap(sessionKey);
+  public static void printHallMapsPerDay(LocalDate date, Session session)
+      throws DataFormatException, IOException {
+    Map<Integer, Map<Integer, Character[]>> hallMapsForDate = session.getHallMapsForDate(date, new HallMap());
+
+    if (hallMapsForDate.isEmpty()) {
+      System.out.println("На выбранную дату нет сеансов.");
+      return;
+    }
   }
 
-  public Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date) {
+  public Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date, HallMap hallMap) {
     Map<Integer, Map<Integer, Character[]>> hallMaps = new HashMap<>();
     for (int i = 0; i < dates.length; i++) {
       if (dates[i].equals(date)) {
-        hallMaps.put(i + 1, getSessionMap(i + 1)); // Получаем карту мест для данного сеанса
+        hallMaps.put(i + 1, hallMap.getSessionMap(i + 1));
       }
     }
     return hallMaps;
   }
+
+
 
   public void readTitle(String prefix, String splitter) throws IOException {
     this.title = fileEditor.readData(prefix, splitter).split(splitter);
