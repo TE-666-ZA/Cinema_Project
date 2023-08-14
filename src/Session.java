@@ -52,8 +52,8 @@ public class Session {
     public void readTime(String prefix, String splitter) throws IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         String[] temp = fileEditor.readData(prefix).split(splitter);
-        this.times = new LocalTime[times.length];
-        for(int i = 0; i < title.length; i++){
+        this.times = new LocalTime[temp.length];
+        for(int i = 0; i < temp.length; i++){
             times[i] = LocalTime.parse(temp[i],formatter);
         }
     }
