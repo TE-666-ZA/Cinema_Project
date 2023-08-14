@@ -210,22 +210,9 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-  //метод вывода РАСПИСАНИЯ
-  public static void printTimetables() throws IOException {
-    CinemaMenu.printSeparator(); // вывод разделительной линии
-    System.out.println("\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ" + "\u001B[0m");
-    Session session = new Session();
-    session.showSchedule();
-    System.out.println("Сегодня  трататататтатататта");
-    System.out.println("Завтра таратататататтататата");
-    System.out.println("День вслед за затра трататата");
-
-  }
-
-  //________________________________________________________________________________________
   //метод вывода 9 КАРТ ЗА 3 ДНЯ
   public static void printHallMapsForAllDays() {
-    //inputDateTime(); //метод ввода ДАТЫ
+
     System.out.println("             КАРТА СЕАНСА 1");
     System.out.println("             КАРТА СЕАНСА 2");
     System.out.println("             КАРТА СЕАНСА 3");
@@ -234,13 +221,21 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
-  public static void printHallMapsPerDay(LocalDate date, Session session)
-      throws DataFormatException {
+  public static void printHallMapsPerDay(LocalDate date, Session session, HallMap hallMap)
+      throws DataFormatException, IOException {
+    Map<Integer, Map<Integer, Character[]>> hallMapsForDate = session.getHallMapsForDate(date,
+        hallMap);
 
-    System.out.println("             КАРТА СЕАНСА 1");
-    System.out.println("             КАРТА СЕАНСА 2");
-    System.out.println("             КАРТА СЕАНСА 3");
+    if (hallMapsForDate.isEmpty()) {
+      System.out.println("На выбранную дату нет сеансов.");
+      return;
+    }
 
+    for (Map.Entry<Integer, Map<Integer, Character[]>> entry : hallMapsForDate.entrySet()) {
+      int sessionKey = entry.getKey();
+      System.out.println("КАРТА СЕАНСА " + sessionKey);
+      hallMap.showSessionMap(sessionKey);
+    }
   }
 
   //________________________________________________________________________________________
@@ -273,26 +268,17 @@ public class CinemaMenu {
    * @param session
    * @throws DataFormatException
    */
-  public static void freeSpace(Scanner scanner, Session session) throws DataFormatException {
+  public static void freeSpace(Scanner scanner, Session session, HallMap hallMap)
+      throws DataFormatException, IOException {
     CinemaMenu.printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
     //ввели дату и проверяем на совпадение с датами в тексте//
-    LocalDate date = null;
-    boolean run = true;
-    while (run) {
-      date = inputDate(scanner);
+    LocalDate date = checkDate(scanner, session);
 
-      if (!session.isDateCorrect(date)) {
-        System.out.println("Несовпадение дат! ");
-      } else {
-        run = false;
-        break;
-      }
-    }
     //TODO удалить этот проверочный вывод
     System.out.println(date);
-    //TODO: ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
-    //  printHallMapsPerDay(date,session);
+    //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
+    printHallMapsPerDay(date, session, hallMap);
 
     boolean runFreeSpaseMenu = true;
     while (runFreeSpaseMenu) {
@@ -302,7 +288,9 @@ public class CinemaMenu {
         case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
           System.out.println(
               "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
-
+          date = checkDate(scanner, session);
+          //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
+          printHallMapsPerDay(date, session, hallMap);
           break;
         case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
           runFreeSpaseMenu = false;
@@ -323,7 +311,10 @@ public class CinemaMenu {
   public static void buyingTickets(Scanner scanner, Session session) throws DataFormatException {
     CinemaMenu.printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ" + "\u001B[0m");
-    CinemaMenu.buyTickets(); //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
+
+    //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
+    //buyTickets(scanner,sessoin);
+
     //Вывод нового меню
     boolean runBuyingTicketsMenu = true;
     while (runBuyingTicketsMenu) {
@@ -341,7 +332,10 @@ public class CinemaMenu {
         case CHANGE_SELECTION: // 3.2 ИЗМЕНИТЬ ВЫБОР
           System.out.println(
               "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ИЗМЕНИТЬ ВЫБОР :" + "\u001B[0m");
-          CinemaMenu.inputDateTime(scanner); //метод ввода ДАТЫ и СЕАНСА
+          // метод ввода ДАТЫ и СЕАНСА
+          LocalDate date = checkDate(scanner, session);
+          LocalDate time = checkDate(scanner, session);
+
           // заново запрашиваем ряд/количество мест/места
           CinemaMenu.inputRowQuantityPlace();// метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
           CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
@@ -381,7 +375,11 @@ public class CinemaMenu {
                   + "\u001B[0m");
           CinemaMenu.printSeparator(); // вывод разделительной линии
           // вывод РАСПИСАНИЯ
-          CinemaMenu.inputDateTime(scanner);  //метод ввода ДАТЫ и СЕАНСА
+          session.showSchedule();
+          //метод ввода ДАТЫ и СЕАНСА
+          LocalDate date = checkDate(scanner, session);
+          LocalDate time = checkDate(scanner, session);
+
           // вывод карты мест для конкретного сеанса
 
           CinemaMenu.inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
@@ -476,6 +474,28 @@ public class CinemaMenu {
     return date;
   }
 
+  /**
+   * метод проверки введеной пользователем ДАТЫ с датой записаной в файле
+   *
+   * @param scanner
+   * @param session
+   * @return
+   */
+  public static LocalDate checkDate(Scanner scanner, Session session) {
+    LocalDate date = null;
+    boolean run = true;
+    while (run) {
+      date = inputDate(scanner);
+
+      if (!session.isDateCorrect(date)) {
+        System.out.println("Несовпадение дат! ");
+      } else {
+        run = false;
+        break;
+      }
+    }
+    return date;
+  }
   //________________________________________________________________________________________
 
   /**
@@ -485,23 +505,47 @@ public class CinemaMenu {
    * @throws DataFormatException
    */
 
-  public static void inputDateTime(Scanner scanner) throws DataFormatException {
-//    LocalDate date = inputDate(scanner); // вызов метода ввода ДАТЫ
-//    DateTimeFormatter inputTimeFormate = DateTimeFormatter.ofPattern(
-//        "HH:mm"); // ввод времени в формате "HH:mm"
-//    DateTimeFormatter outputTimeFormate = DateTimeFormatter.ofPattern(
-//        "HH.mm"); // вывод времени будет осуществлен в формате "HH.mm"
-//    System.out.println("Введите времени сеанса ->");
-//    String timeString = scanner.nextLine(); // ввод пользователем Времени в формате "HH:mm"
-//    LocalTime time = LocalTime.parse(timeString, inputTimeFormate);
-//    String outputTime = time.format(outputTimeFormate);
-//    Map<String, String> mapDAteTime = new HashMap<>();
-//    mapDAteTime.put(date, outputTime);
-//    System.out.println(date + "     " + outputTime);
-//    return mapDAteTime;
+  public static LocalTime inputTime(Scanner scanner) throws DataFormatException {
+    DateTimeFormatter inputTimeFormate = DateTimeFormatter.ofPattern(
+        "HH:mm"); // ввод времени в формате "HH:mm"
+    System.out.println("Введите времени сеанса HH:mm ->");
+    String timeString;
+    LocalTime time;
+    while (true) {
+      try {
+        timeString = scanner.nextLine(); // ввод пользователем Времени в формате "HH:mm"
+        time = LocalTime.parse(timeString, inputTimeFormate);
+        break;
+      } catch (DateTimeParseException e) {
+        System.out.println("Неверный формат ввода времени: " + e.getMessage());
+      }
+    }
+    return time;
   }
-  // проверку на корректный ввод и проверку на считывание с файла
 
+  /**
+   * метод проверки введеного пользователем ВРЕМЕНИ со ВРЕМЕНЕМ записанвм в файле
+   *
+   * @param scanner
+   * @param session
+   * @return
+   * @throws DataFormatException
+   */
+  public static LocalTime checkTime(Scanner scanner, Session session) throws DataFormatException {
+    LocalTime time = null;
+    boolean run = true;
+    while (run) {
+      time = inputTime(scanner);
+
+      if (!session.isTimeCorrect(time)) {
+        System.out.println("Несовпадение времени меансов! ");
+      } else {
+        run = false;
+        break;
+      }
+    }
+    return time;
+  }
   //________________________________________________________________________________________
 
   /**
@@ -521,7 +565,11 @@ public class CinemaMenu {
   /**
    * метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
    */
-  public static void buyTickets() {
+  public static void buyTickets(Scanner scanner, Session session) {
+    //метод ввода ДАТЫ и СЕАНСА
+    LocalDate date = checkDate(scanner, session);
+    LocalDate time = checkDate(scanner, session);
+
     printHallMapPerSession();// метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
     inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
     printMapWithYourLocation(); //метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС С ПОДСВЕТКОЙ МЕСТ

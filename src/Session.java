@@ -125,7 +125,8 @@ public class Session {
     }
   }
 
-  public Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date, HallMap hallMap) {
+  protected Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date,
+      HallMap hallMap) {
     Map<Integer, Map<Integer, Character[]>> hallMaps = new HashMap<>();
     for (int i = 0; i < dates.length; i++) {
       if (dates[i].equals(date)) {

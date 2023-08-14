@@ -38,7 +38,7 @@ public class HallMap {
    */
   private void readAllSeats() throws IOException {
     for (int i = 0; i < 9; i++) {
-      sessions.add(i, fileEditor.readMap(new HashMap<>()));
+   fileEditor.readMap(new HashMap<>());
     }
   }
 
@@ -93,7 +93,7 @@ public class HallMap {
     }
   }
 
-  private Map<Integer, Character[]> getSessionMap(int sessionKey) {
+  protected Map<Integer, Character[]> getSessionMap(int sessionKey) {
     return sessions.get(sessionKey - 1);
   }
 }

@@ -9,6 +9,7 @@ public class Main {
   //
   public static void main(String[] args) throws IOException, DataFormatException {
     Session session = new Session();
+    HallMap hallMap = new HallMap();
     Scanner scanner = new Scanner(System.in);
 
     boolean run = true;
@@ -17,18 +18,20 @@ public class Main {
       // Вывод главного меню
       CinemaMenu.printSeparator(); // вывод разделительной линии
       System.out.println(
-          "\u001B[32m" + "\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
+          "\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ:" + "\u001B[0m");
       command = CinemaMenu.readCommandMainMenu(scanner);
       CinemaMenu.EnumMainMenu selectedMenu = CinemaMenu.EnumMainMenu.values()[command];
       switch (selectedMenu) {
         //1
         case TIMETABLES:// РАСПИСАНИЕ
-          CinemaMenu.printTimetables(); //метод вывода РАСПИСАНИЯ
+          System.out.println(
+              "\u001B[32m" + "\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'" + "\u001B[0m");
+          session.showSchedule();
           break;
         // 2
 
         case FREE_SPACE: // КАРТА СВОБОДНЫХ МЕСТ
-          CinemaMenu.freeSpace(scanner, session);
+          CinemaMenu.freeSpace(scanner, session, hallMap);
           break;
         //3
         case BUYING_TICKETS: //  ПОКУПКА БИЛЕТОВ
