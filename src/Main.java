@@ -22,50 +22,42 @@ public class Main {
       command = CinemaMenu.readCommandMainMenu(scanner);
       CinemaMenu.EnumMainMenu selectedMenu = CinemaMenu.EnumMainMenu.values()[command];
       switch (selectedMenu) {
-        //1
-        case TIMETABLES:// РАСПИСАНИЕ
+        //1.   РАСПИСАНИЕ
+        case TIMETABLES://
 
           System.out.println(
               "\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ:" + "\u001B[0m");
           session.showSchedule();
           CinemaMenu.printHallMapsForAllDays(session);
           break;
-        // 2
-
-        case FREE_SPACE: // КАРТА СВОБОДНЫХ МЕСТ
+        //
+        //2.    КАРТА СВОБОДНЫХ МЕСТ
+        case FREE_SPACE:
           CinemaMenu.freeSpace(scanner, session, hallMap);
           break;
-        //3
-        case BUYING_TICKETS: //  ПОКУПКА БИЛЕТОВ
+        //3.    ПОКУПКА БИЛЕТОВ
+        case BUYING_TICKETS:
           CinemaMenu.buyingTickets(scanner, session);
           break;
-        //4
-        case TICKETS_EXCHANGE_OR_RETURN: // 4 ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+        //4.    ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+        case TICKETS_EXCHANGE_OR_RETURN:
           CinemaMenu.ticketsExchangeOrReturn(scanner, session);
           break;
-        // 5
-        case ADMINISTRATOR: // МЕНЮ АДМИНИСТРАТОРА
-          CinemaMenu.printSeparator(); // вывод разделительной линии
+        // 5.   МЕНЮ АДМИНИСТРАТОРА
+        case ADMINISTRATOR:
+          // вывод разделительной линии
+          CinemaMenu.printSeparator();
           System.out.println("\u001B[32m" + "\t\t\t\t5. АДМИНИСТРАТОР:" + "\u001B[0m");
           boolean password = CinemaMenu.inputPass(scanner); // Метод ввода пароля Администратора
           if (!password) {
             break;
-          }  // если пароль не совпадает, возвразаемся в главное меню
+          }
+          // если пароль не совпадает, возвразаемся в главное меню
           CinemaMenu.administartor(scanner, session);
           break;
         //0
         case EXIT:
-          System.out.println(
-              "\u001B[32m" + "\t\t\t\tБЛАГОДАРИМ, ЧТО ВОСПОЛЬЗОВАЛИСЬ НАШИМ СЕРВИСОМ! "
-                  + "\u001B[0m");
-          System.out.println(
-              "\u001B[32m" + "\t\t\t\t\t\t\t\t\t\t\t\tДО НОВЫХ ВСТРЕЧ! " + "\u001B[0m");
-          System.out.println("Проект реализован 'RAT FAMILY' ");
-          System.out.println("В ролях - Кенан Июсубови ");
-          System.out.println("В ролях - Устинья Петрова");
-          System.out.println("Озвучка - Виктория Щербина\n");
-          System.out.println(
-              "По вопросам рекламы и озвучки ваших проектов обращаться ratfamilly@gmail.com ");
+          CinemaMenu.printExit();
           run = false;
           break;
       }
