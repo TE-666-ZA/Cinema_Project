@@ -11,7 +11,6 @@ import java.util.zip.DataFormatException;
 
 public class CinemaMenu {
 
-  //меню и проверки меню тут
   protected static final int INCORRECT = -1;
 
   // Метод для вывода разделительной строки между меню
@@ -19,8 +18,12 @@ public class CinemaMenu {
     System.out.println("--------------------------------------------------------------");
   }
 
-  //________________________________________________________________________________________
-  //методы вывода и проверки ГЛАВНОГО МЕНЮ
+  /**
+   * Методы провеки введеного пункта меню
+   *
+   * @param command
+   * @return
+   */
 
   protected static boolean isCommandEnumMainMenu(int command) {
     switch (command) {
@@ -70,7 +73,7 @@ public class CinemaMenu {
   protected static int readCommandFreeSpaceMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumFreeSpaceMenu(command)) {
-      printFreeSpaceMenu();
+      EnumFreeSpaceMenu.printFreeSpaceMenu();
       System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
@@ -87,9 +90,13 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-  //методы вывода и проверки меню пунктов
-  // 3.ПОКУПКА БИЛЕТОВ
-  // 4.ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+
+  /**
+   * методы вывода и проверки меню пунктов 3.ПОКУПКА БИЛЕТОВ 4.ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+   *
+   * @param command
+   * @return
+   */
   protected static boolean isCommandEnumBuyingTicketsMenu(int command) {
     switch (command) {
       case 0:
@@ -104,7 +111,7 @@ public class CinemaMenu {
   protected static int readCommandBuyingTicketsMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumBuyingTicketsMenu(command)) {
-      printBuyingTicketsMenu();
+      EnumBuyingTicketsMenu.printBuyingTicketsMenu();
       System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
@@ -120,11 +127,17 @@ public class CinemaMenu {
     return command;
   }
 
+  /**
+   * Методы реализуюзие пункт
+   *
+   * @param scanner
+   * @return
+   */
   // 4.ОБМЕН/ВОЗВРАТ БИЛЕТОВ
   protected static int readCommandTicketsExchangeOrReturnMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumBuyingTicketsMenu(command)) {
-      printTicketsExchangeOrReturnMenu();
+      EnumTicketsExchangeOrReturnMenu.printTicketsExchangeOrReturnMenu();
       System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
@@ -157,7 +170,7 @@ public class CinemaMenu {
   protected static int readCommandAdministratorMenu(Scanner scanner) {
     int command = INCORRECT;
     while (!isCommandEnumAdministratorMenu(command)) {
-      printAdministratorMenu();
+      EnumAdministratorMenu.printAdministratorMenu();
       System.out.print("Введите пункт меню: ");
       try {
         command = scanner.nextInt();
@@ -171,41 +184,6 @@ public class CinemaMenu {
       }
     }
     return command;
-  }
-
-  //________________________________________________________________________________________
-  //методы вывода МЕНЮ и ПОДМЕНЮ
-  public static void printFreeSpaceMenu() {
-    System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageEnumFreeSpaceMenu());
-    System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
-    printSeparator();
-  }
-
-  public static void printBuyingTicketsMenu() {
-    System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getMessageEnumBuyingTicketsMenu());
-    System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
-    System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getMessageEnumBuyingTicketsMenu());
-    printSeparator();
-  }
-
-  public static void printTicketsExchangeOrReturnMenu() {
-    System.out.println(
-        EnumTicketsExchangeOrReturnMenu.TICKETS_EXCHANGE.getMessageEnumTicketsExchangeOrReturnMenu());
-    System.out.println(
-        EnumTicketsExchangeOrReturnMenu.TO_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
-    System.out.println(
-        EnumTicketsExchangeOrReturnMenu.CANCELLATION_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
-    printSeparator();
-
-  }
-
-  public static void printAdministratorMenu() {
-    System.out.println(
-        EnumAdministratorMenu.STATISTICS_PER_SESSION.getMessageEnumAdministratorMenu());
-    System.out.println(EnumAdministratorMenu.STATISTICS_FOR_DAY.getMessageEnumAdministratorMenu());
-    System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
-    System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
-    printSeparator();
   }
 
   //________________________________________________________________________________________
@@ -271,7 +249,7 @@ public class CinemaMenu {
   public static void freeSpace(Scanner scanner, Session session, HallMap hallMap)
       throws DataFormatException, IOException {
     printSeparator(); // вывод разделительной линии
-    System.out.println("\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА" + "\u001B[0m");
+    System.out.println("\u001B[32m\t\t\t\t2. СВОБОДНЫЕ МЕСТА\u001B[0m");
     //ввели дату и проверяем на совпадение с датами в тексте//
     LocalDate date = checkDate(scanner, session);
     //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
@@ -286,7 +264,7 @@ public class CinemaMenu {
       switch (selectedFreeSpaseMenu) {
         case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
           System.out.println(
-              "\u001B[32m" + "\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: " + "\u001B[0m");
+              "\u001B[32m\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: \u001B[0m");
           date = checkDate(scanner, session);
           //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
           printHallMapsPerDay(session);
@@ -311,7 +289,7 @@ public class CinemaMenu {
   public static void buyingTickets(Scanner scanner, Session session, HallMap hallMap)
       throws DataFormatException, IOException {
     CinemaMenu.printSeparator(); // вывод разделительной линии
-    System.out.println("\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ" + "\u001B[0m");
+    System.out.println("\u001B[32m\t\t\t\t3. ПОКУПКА БИЛЕТОВ\u001B[0m");
 
     //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
     //buyTickets(scanner,sessoin);
@@ -327,21 +305,21 @@ public class CinemaMenu {
       switch (selectedBuyingTicketsMenu) {
         case TO_CONFIRM: // 3.1 ПОДТВЕРЖДЕНИЕ ПОКУПКИ
           System.out.println(
-              "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ПОДТВЕРЖДЕНИЕ ПОКУПКИ :"
-                  + "\u001B[0m");
+              "\u001B[32m\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ПОДТВЕРЖДЕНИЕ ПОКУПКИ :\u001B[0m");
           //CinemaMenu.confirmPurchase(scanner, ); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
           //ввод фамилии
           runBuyingTicketsMenu = false;
           break;
         case CHANGE_SELECTION: // 3.2 ИЗМЕНИТЬ ВЫБОР
           System.out.println(
-              "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ИЗМЕНИТЬ ВЫБОР :" + "\u001B[0m");
+              "\u001B[32m\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ИЗМЕНИТЬ ВЫБОР :\u001B[0m");
           // метод ввода ДАТЫ и СЕАНСА
           LocalDate selectedDate = checkDate(scanner, session);
           LocalDate selectedTime = checkDate(scanner, session);
 
           // заново запрашиваем ряд/количество мест/места
-          CinemaMenu.inputRowQuantityPlace(scanner, session);// метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+          CinemaMenu.inputRowQuantityPlace(scanner,
+              session);// метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
           //CinemaMenu.confirmPurchase(scanner); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
           break;
         case CANCELLATION: // 3.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
@@ -362,8 +340,9 @@ public class CinemaMenu {
    */
   public static void ticketsExchangeOrReturn(Scanner scanner, Session session)
       throws DataFormatException, IOException {
-    CinemaMenu.printSeparator(); // вывод разделительной линии
-    System.out.println("\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ:" + "\u001B[0m");
+    // вывод разделительной линии
+    CinemaMenu.printSeparator();
+    System.out.println("\u001B[32m\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ:\u001B[0m");
     // CinemaMenu.inputLastName();  //
     // ввод фио
     // вывод из файла  ПЕТРОВ 2 билета  Завтра 12.00 Русалочка
@@ -373,11 +352,12 @@ public class CinemaMenu {
           scanner);
       EnumTicketsExchangeOrReturnMenu selectedTicketsExchangeOrReturnMenu = EnumTicketsExchangeOrReturnMenu.values()[commandTicketsExchangeOrReturnMenu];
       switch (selectedTicketsExchangeOrReturnMenu) {
-        case TICKETS_EXCHANGE: // 4.1 ОБМЕН БИЛЕТОВ
+        // 4.1 ОБМЕН БИЛЕТОВ
+        case TICKETS_EXCHANGE:
           System.out.println(
-              "\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ -> ОБМЕН БИЛЕТОВ :"
-                  + "\u001B[0m");
-          CinemaMenu.printSeparator(); // вывод разделительной линии
+              "\u001B[32m\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ -> ОБМЕН БИЛЕТОВ :\u001B[0m");
+          // вывод разделительной линии
+          CinemaMenu.printSeparator();
           // вывод РАСПИСАНИЯ
           session.showSchedule();
           //метод ввода ДАТЫ и СЕАНСА
@@ -386,7 +366,8 @@ public class CinemaMenu {
 
           // вывод карты мест для конкретного сеанса
 
-          CinemaMenu.inputRowQuantityPlace(scanner, session); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+          CinemaMenu.inputRowQuantityPlace(scanner,
+              session); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
           //////////////////////////////////////////////////////////////////////////////////
           System.out.println("Введите ряд - >");
           //ввод ряда
@@ -396,14 +377,16 @@ public class CinemaMenu {
           System.out.println("Вы обменяли______билета на ______   ______");
           runTicketsExchangeOrReturnMenu = false;
           break;
-        case TO_RETURN_TICKETS: //4.2 СДАТЬ БИЛЕТЫ
+        //4.2 СДАТЬ БИЛЕТЫ
+        case TO_RETURN_TICKETS:
           System.out.println(
-              "\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ -> СДАТЬ БИЛЕТЫ :"
-                  + "\u001B[0m");
-          CinemaMenu.toReturnTickets(); // метод СДАТЬ БИЛЕТЫ С ВЫВОДОМ ИНФОРМАЦИИ НА КАКОЙ СЕАНС И ФИО
+              "\u001B[32m\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ -> СДАТЬ БИЛЕТЫ :\u001B[0m");
+          // метод СДАТЬ БИЛЕТЫ С ВЫВОДОМ ИНФОРМАЦИИ НА КАКОЙ СЕАНС И ФИО
+          CinemaMenu.toReturnTickets();
           runTicketsExchangeOrReturnMenu = false;
           break;
-        case CANCELLATION_RETURN_TICKETS: // 4.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+        // 4.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
+        case CANCELLATION_RETURN_TICKETS:
           runTicketsExchangeOrReturnMenu = false;
           break;
       }
@@ -426,31 +409,33 @@ public class CinemaMenu {
       int commandAdministratorMenu = CinemaMenu.readCommandAdministratorMenu(scanner);
       EnumAdministratorMenu selectedAdministratorMenu = EnumAdministratorMenu.values()[commandAdministratorMenu];
       switch (selectedAdministratorMenu) {
-        case STATISTICS_PER_SESSION: // 5.1 СТАТИСТИКА ЗА СЕАНС
+        // 5.1 СТАТИСТИКА ЗА СЕАНС
+        case STATISTICS_PER_SESSION:
           System.out.println(
-              "\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> СТАТИСТИКА ЗА СЕАНС :"
-                  + "\u001B[0m");
-          CinemaMenu.printStatisticsForSession(); //метод вывода СТАТИСТИКИ ЗА СЕАНС
+              "\u001B[32m\t\t\t\t4. АДМИНИСТРАТОР -> СТАТИСТИКА ЗА СЕАНС :\u001B[0m");
+          //метод вывода СТАТИСТИКИ ЗА СЕАНС
+          CinemaMenu.printStatisticsForSession();
           break;
-        case STATISTICS_FOR_DAY: // 5.2 СТАТИСТИКА ЗА ДЕНЬ
-          System.out.println("\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> СТАТИСТИКА ЗА ДЕНЬ :"
-              + "\u001B[0m");
-          CinemaMenu.printStatisticsForDay(); //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
+        // 5.2 СТАТИСТИКА ЗА ДЕНЬ
+        case STATISTICS_FOR_DAY:
+          System.out.println("\u001B[32m\t\t\t\t4. АДМИНИСТРАТОР -> СТАТИСТИКА ЗА ДЕНЬ :\u001B[0m");
+          //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
+          CinemaMenu.printStatisticsForDay();
           break;
-        case CHOICE_BONUS: // 5.3 ИЗМЕНИТЬ БОНУС
+        // 5.3 ИЗМЕНИТЬ БОНУС
+        case CHOICE_BONUS:
           System.out.println(
-              "\u001B[32m" + "\t\t\t\t4. АДМИНИСТРАТОР -> ИЗМЕНИТЬ БОНУС :" + "\u001B[0m");
-          CinemaMenu.changeBonus(); //метод ИЗМЕНЕНИЯ БОНУСА
+              "\u001B[32m\t\t\t\t4. АДМИНИСТРАТОР -> ИЗМЕНИТЬ БОНУС :\u001B[0m");
+          //метод ИЗМЕНЕНИЯ БОНУСА
+          CinemaMenu.changeBonus();
           break;
-        case EXIT_MAIN_MENU: // Выход в предыдущее меню
+        // Выход в предыдущее меню
+        case EXIT_MAIN_MENU:
           runAdministratorMenu = false;
           break;
       }
     }
   }
-  //________________________________________________________________________________________
-  //________________________________________________________________________________________
-
   //________________________________________________________________________________________
 
   /**
@@ -460,14 +445,16 @@ public class CinemaMenu {
    * @return
    */
   public static LocalDate inputDate(Scanner scanner) {
+    // ввод даты в формате "dd-MM-yy"
     DateTimeFormatter inputDateFormate = DateTimeFormatter.ofPattern(
-        "dd-MM-yy"); // ввод даты в формате "dd-MM-yy"
+        "dd-MM-yy");
     System.out.println("Введите дату ->");
     String dateString;
     LocalDate date;
     while (true) {
       try {
-        dateString = scanner.nextLine();  // ввод пользователем Даты в формате "dd-MM-yy"
+        // ввод пользователем Даты в формате "dd-MM-yy"
+        dateString = scanner.nextLine();
         // Введеную строку переводим в формат времени
         date = LocalDate.parse(dateString, inputDateFormate);
         break;
@@ -503,21 +490,23 @@ public class CinemaMenu {
   //________________________________________________________________________________________
 
   /**
-   * метод ввода даты и сеанса
+   * метод ввода сеанса и проверка на его правильный ввод
    *
    * @param scanner
    * @throws DataFormatException
    */
 
   public static LocalTime inputTime(Scanner scanner) throws DataFormatException {
+    // ввод времени в формате "HH:mm"
     DateTimeFormatter inputTimeFormate = DateTimeFormatter.ofPattern(
-        "HH:mm"); // ввод времени в формате "HH:mm"
+        "HH:mm");
     System.out.println("Введите времени сеанса HH:mm ->");
     String timeString;
     LocalTime time;
     while (true) {
       try {
-        timeString = scanner.nextLine(); // ввод пользователем Времени в формате "HH:mm"
+        // ввод пользователем Времени в формате "HH:mm"
+        timeString = scanner.nextLine();
         time = LocalTime.parse(timeString, inputTimeFormate);
         break;
       } catch (DateTimeParseException e) {
@@ -528,7 +517,7 @@ public class CinemaMenu {
   }
 
   /**
-   * метод проверки введеного пользователем ВРЕМЕНИ со ВРЕМЕНЕМ записанвм в файле
+   * метод проверки введеного пользователем ВРЕМЕНИ со ВРЕМЕНЕМ записаным в файле
    *
    * @param scanner
    * @param session
@@ -542,7 +531,7 @@ public class CinemaMenu {
       time = inputTime(scanner);
 
       if (!session.isTimeCorrect(time)) {
-        System.out.println("Несовпадение времени меансов! ");
+        System.out.println("Несовпадение времени сеансов! ");
       } else {
         run = false;
         break;
@@ -576,12 +565,12 @@ public class CinemaMenu {
       System.out.print("Введите номер выбранного фильма: ");
       selectedMovieKey = Integer.parseInt(scanner.nextLine());
     }
-
-    int sessionKey = selectedMovieKey; // Просто используем номер фильма как номер сеанса
+    // Просто используем номер фильма как номер сеанса
+    int sessionKey = selectedMovieKey;
     HallMap hallMap = new HallMap();
     hallMap.showRowMap(rowNumber, sessionKey, hallMap);
-
-    int quantity = readQuantity(scanner); // Метод для ввода количества
+    // Метод для ввода количества
+    int quantity = readQuantity(scanner);
     if (quantity >= 4) {
       System.out.println("Мы радуем приятным бонусом за покупку 4х и более мест");
     }
@@ -590,7 +579,12 @@ public class CinemaMenu {
     return selectedSeats;
   }
 
-
+  /**
+   * метод ввода и проверки Количества мест
+   *
+   * @param scanner
+   * @return
+   */
   private static int readQuantity(Scanner scanner) {
     boolean validQuantity = false;
     int quantity = 0;
@@ -606,6 +600,13 @@ public class CinemaMenu {
     return quantity;
   }
 
+  /**
+   * метод выбора места при покупке
+   *
+   * @param scanner
+   * @param quantity
+   * @return
+   */
   private static int[] readSelectedSeats(Scanner scanner, int quantity) {
     int[] selectedSeats = new int[quantity];
     for (int i = 0; i < quantity; i++) {
@@ -652,32 +653,42 @@ public class CinemaMenu {
 
     String selectedMovieTitle = availableMovies.get(selectedMovieKey);
     session.selectMovie(date, selectedMovieTitle);
-
-    int sessionKey = selectedMovieKey; // Просто используем номер фильма как номер сеанса
+    // Просто используем номер фильма как номер сеанса
+    int sessionKey = selectedMovieKey;
     Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
-    LocalTime time = session.getSchedule().get(date).get(selectedMovieTitle); // Получение времени сеанса
+    // Получение времени сеанса
+    LocalTime time = session.getSchedule().get(date).get(selectedMovieTitle);
 
     System.out.print("Введите номер ряда: ");
     int selectedRow = Integer.parseInt(scanner.nextLine());
 
     System.out.println("Карта ряда:");
-    hallMap.showRowMap(selectedRow, sessionKey, hallMap); // Метод вывода карты ряда
-
-    int[] selectedSeats = inputRowQuantityPlace(scanner, session); // Метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+    // Метод вывода карты ряда
+    hallMap.showRowMap(selectedRow, sessionKey, hallMap);
+    // Метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+    int[] selectedSeats = inputRowQuantityPlace(scanner, session);
     boolean isMoreThanFourTickets = selectedSeats.length >= 4;
-
+    // Метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС С ПОДСВЕТКОЙ МЕСТ
     printMapWithYourLocation(sessionMap, selectedRow, selectedSeats,
-        isMoreThanFourTickets); // Метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС С ПОДСВЕТКОЙ МЕСТ
+        isMoreThanFourTickets);
 
     // Подтверждение покупки
     System.out.println("Сумма покупки ...");
     confirmPurchase(scanner, selectedSeats, selectedRow, date.toString(), time.toString());
   }
 
-
-
   //________________________________________________________________________________________
-  //метод подтверждения покупки в меню ПОКУПКА БИЛЕТОВ
+
+  /**
+   * метод подтверждения покупки в меню ПОКУПКА БИЛЕТОВ
+   *
+   * @param scanner
+   * @param selectedSeats
+   * @param rowNumber
+   * @param selectedDate
+   * @param selectedTime
+   * @throws IOException
+   */
   public static void confirmPurchase(Scanner scanner, int[] selectedSeats, int rowNumber,
       String selectedDate, String selectedTime) throws IOException {
     System.out.println("Подтвердите покупку вводом ФАМИЛИИ -> ");
@@ -688,13 +699,24 @@ public class CinemaMenu {
     FileEditor fileEditor = new FileEditor("res/VisitorsData.txt");
     fileEditor.write(new String[]{purchaseInfo}, "");
   }
+//TODO удалить этот метод
 
+  /**
+   * @param scanner
+   * @throws IOException
+   */
   public static void inputLastName(Scanner scanner) throws IOException {
     System.out.println("Введите ФАМИЛИЮ -> ");
     String lastName = scanner.nextLine();
 
   }
 
+  /**
+   * метод сохранения символов строки в массив
+   *
+   * @param arr
+   * @return
+   */
   public static String arrayToString(int[] arr) {
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < arr.length; i++) {
@@ -707,7 +729,10 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-  //метод СДАТЬ БИЛЕТЫ
+
+  /**
+   * метод СДАТЬ БИЛЕТЫ
+   */
   public static void toReturnTickets() {
     System.out.println(" ФИО ___билетов на ____ _____");
     System.out.println(" Возврат _____ евро");
@@ -715,12 +740,21 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-  //метод ввода пароля Администратора
+
+  /**
+   * метод ввода пароля Администратора
+   *
+   * @param scanner
+   * @return
+   */
   public static boolean inputPass(Scanner scanner) {
-    String pass = "Admin945";  // сохраненный пароль для Администратора
+    // сохраненный пароль для Администратора
+    String pass = "Admin945";
     System.out.println("Введите пароль ->");
-    String passUser = scanner.nextLine(); // ввод пароля с консоли
-    if (pass.equals(passUser)) {          // сравниваем введенный и созраненные пароли
+    // ввод пароля с консоли
+    String passUser = scanner.nextLine();
+    // сравниваем введенный и созраненные пароли
+    if (pass.equals(passUser)) {
       System.out.println("Пароль верный!");
       return true;
     } else {
@@ -730,24 +764,49 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-  //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
+
+  /**
+   * метод вывода СТАТИСТИКИ ЗА ДЕНЬ
+   */
   public static void printStatisticsForDay() {
     // inputDate();
   }
 
   //________________________________________________________________________________________
-  //метод вывода СТАТИСТИКИ ЗА СЕАНС
+
+  /**
+   * метод вывода СТАТИСТИКИ ЗА СЕАНС
+   */
   public static void printStatisticsForSession() {
     // inputDateTime();
   }
 
   //________________________________________________________________________________________
-  //метод ИЗМЕНЕНИЯ БОНУСА
+
+  /**
+   * метод ИЗМЕНЕНИЯ БОНУСА
+   */
   public static void changeBonus() {
     System.out.println("Введите НОВЫЙ БОНУС ->");
   }
 
-  //классы Enum - пункты меню
+  public static void printExit() {
+    System.out.println(
+        "\u001B[32m\t\t\t\tБЛАГОДАРИМ, ЧТО ВОСПОЛЬЗОВАЛИСЬ НАШИМ СЕРВИСОМ! \u001B[0m");
+    System.out.println(
+        "\u001B[32m\t\t\t\t\t\t\t\t\t\t\t\tДО НОВЫХ ВСТРЕЧ! \u001B[0m");
+    System.out.println("Проект реализован 'RAT FAMILY' ");
+    System.out.println("В ролях - Кенан Июсубови ");
+    System.out.println("В ролях - Устинья Петрова");
+    System.out.println("Озвучка - Виктория Щербина\n");
+    System.out.println(
+        "По вопросам рекламы и озвучки ваших проектов обращаться we.ratfamily@gmail.com ");
+  }
+
+
+  /**
+   * Enum класс реализующий вывод Главного меню
+   */
   protected enum EnumMainMenu {
     //пункты первого меню mainMenu
     EXIT("Выход"),
@@ -775,6 +834,9 @@ public class CinemaMenu {
     }
   }
 
+  /**
+   * Enum класс реализующий вывод 2. СВОБОДНЫЕ МЕСТА
+   */
   enum EnumFreeSpaceMenu {
     //пункты меню Свободные места
     RETURN_TO_THE_MAIN_MENU("Введите 0 чтоб ВЕРНУТЬСЯ В ГЛАВНОЕ МЕНЮ"),
@@ -788,8 +850,17 @@ public class CinemaMenu {
     public String getMessageEnumFreeSpaceMenu() {
       return messageEnumFreeSpaceMenu;
     }
+
+    public static void printFreeSpaceMenu() {
+      System.out.println(EnumFreeSpaceMenu.CHANGE_DATE.getMessageEnumFreeSpaceMenu());
+      System.out.println(EnumFreeSpaceMenu.RETURN_TO_THE_MAIN_MENU.getMessageEnumFreeSpaceMenu());
+      printSeparator();
+    }
   }
 
+  /**
+   * Enum класс реализующий вывод 3. ПРОДАЖА БИЛЕТОВ
+   */
   enum EnumBuyingTicketsMenu {
     CANCELLATION("Введите 0 чтобы ОТМЕНИТЬ ПОКУПКУ"),
     TO_CONFIRM("Введите 1 чтоб ПОДТВЕРДИТЬ ПОКУПКУ"),
@@ -803,8 +874,18 @@ public class CinemaMenu {
     public String getMessageEnumBuyingTicketsMenu() {
       return messageEnumBuyingTicketsMenu;
     }
+
+    public static void printBuyingTicketsMenu() {
+      System.out.println(EnumBuyingTicketsMenu.TO_CONFIRM.getMessageEnumBuyingTicketsMenu());
+      System.out.println(EnumBuyingTicketsMenu.CHANGE_SELECTION.getMessageEnumBuyingTicketsMenu());
+      System.out.println(EnumBuyingTicketsMenu.CANCELLATION.getMessageEnumBuyingTicketsMenu());
+      printSeparator();
+    }
   }
 
+  /**
+   * Enum класс реализующий вывод 4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+   */
   enum EnumTicketsExchangeOrReturnMenu {
     CANCELLATION_RETURN_TICKETS("Введите 0 если хотите ОТМЕНИТЬ ОБМЕН/ВОЗВРАТ БИЛЕТОВ"),
     TICKETS_EXCHANGE("Введите 1 если хотите СОВЕРШИТЬ ОБМЕН БИЛЕТОВ"),
@@ -820,8 +901,21 @@ public class CinemaMenu {
       return messageEnumTicketsExchangeOrReturnMenu;
     }
 
+    public static void printTicketsExchangeOrReturnMenu() {
+      System.out.println(
+          EnumTicketsExchangeOrReturnMenu.TICKETS_EXCHANGE.getMessageEnumTicketsExchangeOrReturnMenu());
+      System.out.println(
+          EnumTicketsExchangeOrReturnMenu.TO_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
+      System.out.println(
+          EnumTicketsExchangeOrReturnMenu.CANCELLATION_RETURN_TICKETS.getMessageEnumTicketsExchangeOrReturnMenu());
+      printSeparator();
+    }
+
   }
 
+  /**
+   * Enum класс реализующий вывод 5. АДМИНИСТРАТОР
+   */
   enum EnumAdministratorMenu {
     EXIT_MAIN_MENU("Введите 0 для ВОЗВРАТА В ПРЕДЫДУЩЕЕ МЕНЮ"),
     STATISTICS_PER_SESSION("Введите 1 чтоб отобразить СТАТИСТИКУ ЗА СЕАНС"),
@@ -835,6 +929,16 @@ public class CinemaMenu {
 
     public String getMessageEnumAdministratorMenu() {
       return messageEnumAdministratorMenu;
+    }
+
+    public static void printAdministratorMenu() {
+      System.out.println(
+          EnumAdministratorMenu.STATISTICS_PER_SESSION.getMessageEnumAdministratorMenu());
+      System.out.println(
+          EnumAdministratorMenu.STATISTICS_FOR_DAY.getMessageEnumAdministratorMenu());
+      System.out.println(EnumAdministratorMenu.CHOICE_BONUS.getMessageEnumAdministratorMenu());
+      System.out.println(EnumAdministratorMenu.EXIT_MAIN_MENU.getMessageEnumAdministratorMenu());
+      printSeparator();
     }
   }
 }
