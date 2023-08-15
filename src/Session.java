@@ -157,6 +157,10 @@ public class Session {
     fileEditor.write(data, prefix);
   }
 
+  public int getSessionKey() {
+     return 1;
+  }
+
   public LocalDate[] getDates() {
     return dates;
   }

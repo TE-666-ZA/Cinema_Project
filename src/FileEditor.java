@@ -15,10 +15,15 @@ public class FileEditor {
     private FileWriter out;
     private BufferedWriter writer;
     private String file;
+    private String file2;
 
 
-    FileEditor() {
+    public FileEditor() {
         this.file = "res/InfoFull.txt";
+    }
+
+    public FileEditor(String fileName) {
+        this.file2 = fileName;
     }
 
 

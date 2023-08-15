@@ -1,8 +1,10 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class HallMap {
 
@@ -91,7 +93,34 @@ public class HallMap {
     System.out.println();
   }
 
+  public static void showRowMap(int rowNumber, int sessionKey, HallMap hallMap) {
+    Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
+
+    if (sessionMap != null) {
+      Character[] seats = sessionMap.get(rowNumber);
+      if (seats != null) {
+        System.out.print("Ряд " + rowNumber + ": ");
+        for (Character seat : seats) {
+          System.out.print(seat + " ");
+        }
+        System.out.println();
+      } else {
+        System.out.println("Ряд " + rowNumber + " не найден");
+      }
+    } else {
+      System.out.println("Сеанс " + sessionKey + " не найден");
+    }
+  }
+
   protected Map<Integer, Character[]> getSessionMap(int sessionKey) {
     return sessions.get(sessionKey - 1);
+  }
+
+  public Set<Integer> getAllSessionKeys() {
+    Set<Integer> sessionKeys = new HashSet<>();
+    for (int i = 0; i < sessions.size(); i++) {
+      sessionKeys.add(i + 1);
+    }
+    return sessionKeys;
   }
 }
