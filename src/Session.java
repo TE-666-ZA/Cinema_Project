@@ -42,7 +42,7 @@ public class Session {
   private LocalTime[] times;
   private String[] title;
   private String[] bonus;
-  private Map<LocalDate, Map<String, LocalTime>> schedule;
+  private Map<LocalDate, Map<String, LocalTime>> schedule; //TODO что тут хранится????
 
   public Session() throws IOException {
     this.fileEditor = new FileEditor();
@@ -95,6 +95,12 @@ public class Session {
     fileEditor.write(data, prefix);
   }
 
+  /**
+   * Метод проверки ВВеденной даты пользователем с датой в файле
+   *
+   * @param date
+   * @return
+   */
   public boolean isDateCorrect(LocalDate date) {
     for (LocalDate d : dates) {
       if (d.equals(date)) {
@@ -104,6 +110,12 @@ public class Session {
     return false;
   }
 
+  /**
+   * Метод проверки введенного пользователем Времени с Временем в файле
+   *
+   * @param time -
+   * @return
+   */
   public boolean isTimeCorrect(LocalTime time) {
     for (LocalTime t : times) {
       if (t.equals(time)) {
@@ -113,6 +125,10 @@ public class Session {
     return false;
   }
 
+  /**
+   * @param date
+   * @return
+   */
   public Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date) {
     Map<Integer, Map<Integer, Character[]>> hallMaps = new LinkedHashMap<>();
     for (int i = 0; i < dates.length; i++) {
@@ -123,6 +139,9 @@ public class Session {
     return hallMaps;
   }
 
+  /**
+   *
+   */
   public void showSchedule() {
     System.out.println("Расписание сеансов: ");
     for (int i = 0; i < dates.length; i++) {

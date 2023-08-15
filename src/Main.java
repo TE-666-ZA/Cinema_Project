@@ -10,8 +10,10 @@ public class Main {
 
   //
   public static void main(String[] args) throws IOException, DataFormatException {
+    int numberCheck;
     Session session = new Session();
     HallMap hallMap = new HallMap();
+
     Scanner scanner = new Scanner(System.in);
 
     boolean run = true;
@@ -41,6 +43,7 @@ public class Main {
           boolean isMoreThanFourTickets = false;
           CinemaMenu.printMapWithYourLocation(sessionMap, selectedRow, selectedSeats,
               isMoreThanFourTickets);
+          //TODO передать в метод номер чека
           CinemaMenu.buyingTickets(scanner, session, hallMap);
           CinemaMenu.buyTickets(scanner, session);
           break;
