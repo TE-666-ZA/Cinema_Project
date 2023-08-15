@@ -27,7 +27,7 @@ public class FileEditor {
     }
 
 
-    private String read(String prefix, String splitter) throws IOException, NullPointerException {
+    protected String read(String prefix, String splitter) throws IOException, NullPointerException {
         this.in = new FileReader(file);
         this.reader = new BufferedReader(in);
         StringBuilder result = new StringBuilder();

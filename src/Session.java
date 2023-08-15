@@ -1,12 +1,19 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.zip.DataFormatException;
 
 public class Session {
+
+  private String prefix;
+  private String splitter;
 
   static enum EnumInfoFullIndexes {
 
@@ -35,9 +42,11 @@ public class Session {
   private LocalTime[] times;
   private String[] title;
   private String[] bonus;
+  private Map<LocalDate, Map<String, LocalTime>> schedule;
 
-  Session() throws IOException {
+  public Session() throws IOException {
     this.fileEditor = new FileEditor();
+    this.schedule = new HashMap<>();
     this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     readDate(EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes(),
@@ -104,6 +113,16 @@ public class Session {
     return false;
   }
 
+  public Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date) {
+    Map<Integer, Map<Integer, Character[]>> hallMaps = new LinkedHashMap<>();
+    for (int i = 0; i < dates.length; i++) {
+      if (dates[i].equals(date)) {
+        hallMaps.put(i + 1, hallMap.getSessionMap(i + 1));
+      }
+    }
+    return hallMaps;
+  }
+
   public void showSchedule() {
     System.out.println("Расписание сеансов: ");
     for (int i = 0; i < dates.length; i++) {
@@ -115,26 +134,15 @@ public class Session {
     }
   }
 
-  public static void printHallMapsPerDay(LocalDate date, Session session)
-      throws DataFormatException, IOException {
-    Map<Integer, Map<Integer, Character[]>> hallMapsForDate = session.getHallMapsForDate(date, session);
-
-    if (hallMapsForDate.isEmpty()) {
-      System.out.println("На выбранную дату нет сеансов.");
-      return;
-    }
-  }
-
-  protected Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date,
-      Session hallMap) {
-    Map<Integer, Map<Integer, Character[]>> hallMaps = new HashMap<>();
-    for (int i = 0; i < dates.length; i++) {
-      if (dates[i].equals(date)) {
-        hallMaps.put(i + 1, hallMap.getSessionMap(i + 1));
-      }
-    }
-    return hallMaps;
-  }
+//  public static void printHallMapsPerDay(LocalDate date, Session session)
+//      throws DataFormatException, IOException {
+//    Map<Integer, Map<Integer, Character[]>> hallMapsForDate = session.getHallMapsForDate(date, session);
+//
+//    if (hallMapsForDate.isEmpty()) {
+//      System.out.println("На выбранную дату нет сеансов.");
+//      return;
+//    }
+//  }
 
   public Map<Integer, Character[]> getSessionMap(int sessionKey) {
     return hallMap.getSessionMap(sessionKey);
@@ -157,8 +165,89 @@ public class Session {
     fileEditor.write(data, prefix);
   }
 
-  public int getSessionKey() {
-     return 1;
+  public String getSessionKey() {
+    LocalDate currentDate = LocalDate.now();
+    LocalTime currentTime = LocalTime.now();
+
+    for (int i = 0; i < dates.length; i++) {
+      if (currentDate.isEqual(dates[i]) && currentTime.isAfter(times[i])) {
+        return Integer.toString(i + 1);
+      }
+    }
+    // Если нет текущего сеанса, возвращаем сообщение.
+    return "Такого сеанса нет";
+  }
+
+  public void saveScheduleToFile(String filePath) throws IOException {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+      for (Map.Entry<LocalDate, Map<String, LocalTime>> entry : schedule.entrySet()) {
+        LocalDate date = entry.getKey();
+        Map<String, LocalTime> movies = entry.getValue();
+
+        for (Map.Entry<String, LocalTime> movieEntry : movies.entrySet()) {
+          String movieTitle = movieEntry.getKey();
+          LocalTime movieTime = movieEntry.getValue();
+
+          writer.write(date.toString() + "," + movieTitle + "," + movieTime.toString());
+          writer.newLine();
+        }
+      }
+    }
+  }
+
+  public void loadScheduleFromFile(String filePath) throws IOException {
+    FileEditor fileEditor = new FileEditor(); // Создаем экземпляр FileEditor
+
+    String fileContent = fileEditor.read(prefix, splitter); // Считываем содержимое файла
+
+    String[] lines = fileContent.split("\\r?\\n"); // Разбиваем содержимое на строки
+
+    for (String line : lines) {
+      String[] parts = line.split(",");
+      if (parts.length == 3) {
+        LocalDate date = LocalDate.parse(parts[0]);
+        LocalTime movieTime = LocalTime.parse(parts[2]);
+        String movieTitle = parts[1];
+
+        addSession(date, movieTime, movieTitle); // Правильный порядок параметров
+      }
+    }
+  }
+
+
+
+  public Map<Integer, String> getMoviesForDate(LocalDate date) {
+    Map<Integer, String> movieMap = new HashMap<>();
+    int count = 1;
+
+    if (schedule.containsKey(date)) {
+      for (String movieTitle : schedule.get(date).keySet()) {
+        movieMap.put(count, movieTitle);
+        count++;
+      }
+    }
+    return movieMap;
+  }
+
+  public void selectMovie(LocalDate date, String selectedMovieTitle) {
+    Map<String, LocalTime> movies = schedule.get(date);
+    if (movies != null && movies.containsKey(selectedMovieTitle)) {
+      LocalTime selectedTime = movies.get(selectedMovieTitle);
+      System.out.println("Вы выбрали фильм '" + selectedMovieTitle + "' на " + selectedTime);
+    } else {
+      System.out.println("Выбранный фильм не доступен.");
+    }
+  }
+
+  public void addSession(LocalDate date, LocalTime time, String title) {
+    if (!schedule.containsKey(date)) {
+      schedule.put(date, new HashMap<>());
+    }
+    schedule.get(date).put(title, time);
+  }
+
+  public Map<LocalDate, Map<String, LocalTime>> getSchedule() {
+    return schedule;
   }
 
   public LocalDate[] getDates() {

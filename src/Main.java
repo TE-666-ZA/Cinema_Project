@@ -1,6 +1,8 @@
 //import CinemaMenu.EnumMainMenu;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.zip.DataFormatException;
 
@@ -28,7 +30,6 @@ public class Main {
           System.out.println(
               "\u001B[32m" + "\t\t\t\t1. РАСПИСАНИЕ:" + "\u001B[0m");
           session.showSchedule();
-          CinemaMenu.printHallMapsForAllDays(session);
           break;
         // 2
 
@@ -37,7 +38,13 @@ public class Main {
           break;
         //3
         case BUYING_TICKETS: //  ПОКУПКА БИЛЕТОВ
-          CinemaMenu.buyingTickets(scanner, session);
+          Map<Integer, Character[]> sessionMap = new HashMap<>();
+          int selectedRow = 0;
+          int[] selectedSeats = new int[0];
+          boolean isMoreThanFourTickets = false;
+          CinemaMenu.printMapWithYourLocation(sessionMap, selectedRow, selectedSeats, isMoreThanFourTickets);
+          CinemaMenu.buyingTickets(scanner, session, hallMap);
+          CinemaMenu.buyTickets(scanner, session);
           break;
         //4
         case TICKETS_EXCHANGE_OR_RETURN: // 4 ОБМЕН/ВОЗВРАТ БИЛЕТОВ
@@ -51,7 +58,7 @@ public class Main {
           if (!password) {
             break;
           }  // если пароль не совпадает, возвразаемся в главное меню
-          CinemaMenu.administartor(scanner, session);
+          CinemaMenu.administrator(scanner, session);
           break;
         //0
         case EXIT:
@@ -68,6 +75,8 @@ public class Main {
               "По вопросам рекламы и озвучки ваших проектов обращаться ratfamilly@gmail.com ");
           run = false;
           break;
+        default:
+          throw new IllegalStateException("Unexpected value: " + selectedMenu);
       }
     }
   }

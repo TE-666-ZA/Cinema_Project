@@ -1,10 +1,9 @@
 import java.io.IOException;
-import java.sql.Struct;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
@@ -210,30 +209,6 @@ public class CinemaMenu {
   }
 
   //________________________________________________________________________________________
-  //метод вывода 9 КАРТ ЗА 3 ДНЯ
-  public static void printHallMapsForAllDays(Session session) throws IOException {
-    LocalDate[] dates = session.getDates();
-    LocalTime[] times = session.getTimes();
-    String[] titles = session.getTitle();
-
-    for (LocalDate date : dates) {
-      System.out.println("\u001B[34m" + "             КАРТА СЕАНСА " + date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "\u001B[0m");
-      for (int sessionKey = 1; sessionKey <= 3; sessionKey++) {
-        HallMap hallMap = new HallMap();
-        Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
-
-        if (sessionMap != null) {
-          System.out.println(times[sessionKey - 1] + " " + titles[sessionKey - 1]);
-          HallMap.showSessionMap(sessionMap);
-        } else {
-          System.out.println("Сеанс " + sessionKey + " не найден");
-        }
-      }
-      System.out.println();
-    }
-  }
-
-  //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
   public static void printHallMapsPerDay(Session session) throws IOException {
     LocalTime[] times = session.getTimes();
@@ -252,14 +227,25 @@ public class CinemaMenu {
     }
   }
 
-//________________________________________________________________________________________
+  //________________________________________________________________________________________
   //метод вывода КАРТЫ С МЕСТАМИ КОТОРЫЕ ВЫБРАЛ КЛИЕНТ С ПОДСВЕТКОЙ МЕСТ
-  public static void printMapWithYourLocation() {
-
-    System.out.println("     КАРТА СЕАНСА ");
-    System.out.println("     1.  1 2 3 4 Х Х 7 8 9");
-    System.out.println("     1.  Х Х 3 4 5 6 7 8 9");
-
+  public static void printMapWithYourLocation(Map<Integer, Character[]> sessionMap, int selectedRow,
+      int[] selectedSeats, boolean isMoreThanFourTickets) {
+    for (var entry : sessionMap.entrySet()) {
+      int rowNumber = entry.getKey();
+      Character[] rowArray = entry.getValue();
+      System.out.print("Ряд " + rowNumber + ": ");
+      for (int seat = 0; seat < rowArray.length; ++seat) {
+        if (selectedRow == rowNumber && Arrays.asList(selectedSeats).contains(seat)) {
+          System.out.print("\u001B[31m" + "X" + "\u001B[0m" + " ");
+        } else if (isMoreThanFourTickets && rowArray[seat] == 'X') {
+          System.out.print("\u001B[33m" + "*" + "\u001B[0m" + " ");
+        } else {
+          System.out.print(rowArray[seat] + " ");
+        }
+      }
+      System.out.println();
+    }
   }
 
   //________________________________________________________________________________________
@@ -319,9 +305,11 @@ public class CinemaMenu {
    *
    * @param scanner
    * @param session
+   * @param hallMap
    * @throws DataFormatException
    */
-  public static void buyingTickets(Scanner scanner, Session session) throws DataFormatException {
+  public static void buyingTickets(Scanner scanner, Session session, HallMap hallMap)
+      throws DataFormatException, IOException {
     CinemaMenu.printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ" + "\u001B[0m");
 
@@ -341,7 +329,7 @@ public class CinemaMenu {
           System.out.println(
               "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ПОДТВЕРЖДЕНИЕ ПОКУПКИ :"
                   + "\u001B[0m");
-          CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
+          //CinemaMenu.confirmPurchase(scanner, ); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
           //ввод фамилии
           runBuyingTicketsMenu = false;
           break;
@@ -349,12 +337,12 @@ public class CinemaMenu {
           System.out.println(
               "\u001B[32m" + "\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ИЗМЕНИТЬ ВЫБОР :" + "\u001B[0m");
           // метод ввода ДАТЫ и СЕАНСА
-          LocalDate date = checkDate(scanner, session);
-          LocalDate time = checkDate(scanner, session);
+          LocalDate selectedDate = checkDate(scanner, session);
+          LocalDate selectedTime = checkDate(scanner, session);
 
           // заново запрашиваем ряд/количество мест/места
-          CinemaMenu.inputRowQuantityPlace();// метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
-          CinemaMenu.confirmPurchase(); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
+          CinemaMenu.inputRowQuantityPlace(scanner, session);// метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+          //CinemaMenu.confirmPurchase(scanner); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
           break;
         case CANCELLATION: // 3.3 ОТМЕНА, ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
           runBuyingTicketsMenu = false;
@@ -373,10 +361,10 @@ public class CinemaMenu {
    * @throws DataFormatException
    */
   public static void ticketsExchangeOrReturn(Scanner scanner, Session session)
-      throws DataFormatException {
+      throws DataFormatException, IOException {
     CinemaMenu.printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m" + "\t\t\t\t4. ОБМЕН/ВОЗВРАТ БИЛЕТОВ:" + "\u001B[0m");
-    CinemaMenu.inputLastName();  //
+    // CinemaMenu.inputLastName();  //
     // ввод фио
     // вывод из файла  ПЕТРОВ 2 билета  Завтра 12.00 Русалочка
     boolean runTicketsExchangeOrReturnMenu = true;
@@ -394,11 +382,11 @@ public class CinemaMenu {
           session.showSchedule();
           //метод ввода ДАТЫ и СЕАНСА
           LocalDate date = checkDate(scanner, session);
-          LocalDate time = checkDate(scanner, session);
+          LocalTime time = checkTime(scanner, session);
 
           // вывод карты мест для конкретного сеанса
 
-          CinemaMenu.inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+          CinemaMenu.inputRowQuantityPlace(scanner, session); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
           //////////////////////////////////////////////////////////////////////////////////
           System.out.println("Введите ряд - >");
           //ввод ряда
@@ -432,7 +420,7 @@ public class CinemaMenu {
    * @param session
    * @throws DataFormatException
    */
-  public static void administartor(Scanner scanner, Session session) throws DataFormatException {
+  public static void administrator(Scanner scanner, Session session) throws DataFormatException {
     boolean runAdministratorMenu = true;
     while (runAdministratorMenu) {
       int commandAdministratorMenu = CinemaMenu.readCommandAdministratorMenu(scanner);
@@ -565,15 +553,75 @@ public class CinemaMenu {
   //________________________________________________________________________________________
 
   /**
-   * метод ввода Ряд/Колличество/Места
+   * метод ввода Ряд/Количество/Места
    */
-  public static void inputRowQuantityPlace() {
-    System.out.println("Осуществите ввод выбраного ряда ->");
-    // Вывод карты ряда на экран
-    System.out.println("Введите колличество необходимых мест ->");
-    System.out.println("Мы радуем приятным бонусом за покупку 4х и более мест");
-    System.out.println("Введите номера выбранных мест ->");
+  public static int[] inputRowQuantityPlace(Scanner scanner, Session session) throws IOException {
+    System.out.print("Введите номер ряда -> ");
+    int rowNumber = Integer.parseInt(scanner.nextLine());
 
+    LocalDate date = checkDate(scanner, session);
+    Map<Integer, String> availableMovies = session.getMoviesForDate(date);
+    if (availableMovies.isEmpty()) {
+      System.out.println("В выбранный день доступных для просмотра фильмов нет");
+      return new int[0];
+    }
+
+    System.out.println("Выберите фильм из списка: ");
+    for (Map.Entry<Integer, String> entry : availableMovies.entrySet()) {
+      System.out.println(entry.getKey() + ". " + entry.getValue());
+    }
+
+    int selectedMovieKey = -1;
+    while (!availableMovies.containsKey(selectedMovieKey)) {
+      System.out.print("Введите номер выбранного фильма: ");
+      selectedMovieKey = Integer.parseInt(scanner.nextLine());
+    }
+
+    int sessionKey = selectedMovieKey; // Просто используем номер фильма как номер сеанса
+    HallMap hallMap = new HallMap();
+    hallMap.showRowMap(rowNumber, sessionKey, hallMap);
+
+    int quantity = readQuantity(scanner); // Метод для ввода количества
+    if (quantity >= 4) {
+      System.out.println("Мы радуем приятным бонусом за покупку 4х и более мест");
+    }
+
+    int[] selectedSeats = readSelectedSeats(scanner, quantity);
+    return selectedSeats;
+  }
+
+
+  private static int readQuantity(Scanner scanner) {
+    boolean validQuantity = false;
+    int quantity = 0;
+    while (!validQuantity) {
+      try {
+        System.out.print("Введите количество необходимых мест: ");
+        quantity = Integer.parseInt(scanner.nextLine());
+        validQuantity = true;
+      } catch (NumberFormatException e) {
+        System.out.println("Неверный формат. Введите число.");
+      }
+    }
+    return quantity;
+  }
+
+  private static int[] readSelectedSeats(Scanner scanner, int quantity) {
+    int[] selectedSeats = new int[quantity];
+    for (int i = 0; i < quantity; i++) {
+      boolean validSeat = false;
+      while (!validSeat) {
+        try {
+          System.out.print("Введите номер выбранного места: ");
+          int seatNumber = Integer.parseInt(scanner.nextLine());
+          selectedSeats[i] = seatNumber;
+          validSeat = true;
+        } catch (NumberFormatException e) {
+          System.out.println("Неверный формат. Введите число.");
+        }
+      }
+    }
+    return selectedSeats;
   }
 
   //________________________________________________________________________________________
@@ -581,29 +629,81 @@ public class CinemaMenu {
   /**
    * метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
    */
-  public static void buyTickets(Scanner scanner, Session session) {
-    //метод ввода ДАТЫ и СЕАНСА
+  public static void buyTickets(Scanner scanner, Session session) throws IOException {
+    HallMap hallMap = new HallMap();
     LocalDate date = checkDate(scanner, session);
-    LocalDate time = checkDate(scanner, session);
+    Map<Integer, String> availableMovies = session.getMoviesForDate(date);
 
-    printHallMapPerSession();// метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
-    inputRowQuantityPlace(); // метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
-    printMapWithYourLocation(); //метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС С ПОДСВЕТКОЙ МЕСТ
+    if (availableMovies.isEmpty()) {
+      System.out.println("В выбранный день доступных для просмотра фильмов нет");
+      return;
+    }
+
+    System.out.println("Выберите фильм из списка:");
+    for (Map.Entry<Integer, String> entry : availableMovies.entrySet()) {
+      System.out.println(entry.getKey() + ". " + entry.getValue());
+    }
+
+    int selectedMovieKey = -1;
+    while (!availableMovies.containsKey(selectedMovieKey)) {
+      System.out.print("Введите номер выбранного фильма: ");
+      selectedMovieKey = Integer.parseInt(scanner.nextLine());
+    }
+
+    String selectedMovieTitle = availableMovies.get(selectedMovieKey);
+    session.selectMovie(date, selectedMovieTitle);
+
+    int sessionKey = selectedMovieKey; // Просто используем номер фильма как номер сеанса
+    Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
+    LocalTime time = session.getSchedule().get(date).get(selectedMovieTitle); // Получение времени сеанса
+
+    System.out.print("Введите номер ряда: ");
+    int selectedRow = Integer.parseInt(scanner.nextLine());
+
+    System.out.println("Карта ряда:");
+    hallMap.showRowMap(selectedRow, sessionKey, hallMap); // Метод вывода карты ряда
+
+    int[] selectedSeats = inputRowQuantityPlace(scanner, session); // Метод ввода РЯДА/КОЛЛИЧЕСТВА МЕСТ/МЕСТ
+    boolean isMoreThanFourTickets = selectedSeats.length >= 4;
+
+    printMapWithYourLocation(sessionMap, selectedRow, selectedSeats,
+        isMoreThanFourTickets); // Метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС С ПОДСВЕТКОЙ МЕСТ
+
+    // Подтверждение покупки
     System.out.println("Сумма покупки ...");
+    confirmPurchase(scanner, selectedSeats, selectedRow, date.toString(), time.toString());
   }
+
+
 
   //________________________________________________________________________________________
   //метод подтверждения покупки в меню ПОКУПКА БИЛЕТОВ
-  public static void confirmPurchase() {
-    System.out.println("Подтвердите покупку вводом ФАМИЛИИ ->");
+  public static void confirmPurchase(Scanner scanner, int[] selectedSeats, int rowNumber,
+      String selectedDate, String selectedTime) throws IOException {
+    System.out.println("Подтвердите покупку вводом ФАМИЛИИ -> ");
+    String lastName = scanner.nextLine();
+    String purchaseInfo =
+        selectedDate + " " + selectedTime + " Ряд " + rowNumber + " Места " + arrayToString(
+            selectedSeats) + " Фамилия: " + lastName;
+    FileEditor fileEditor = new FileEditor("res/VisitorsData.txt");
+    fileEditor.write(new String[]{purchaseInfo}, "");
+  }
+
+  public static void inputLastName(Scanner scanner) throws IOException {
+    System.out.println("Введите ФАМИЛИЮ -> ");
+    String lastName = scanner.nextLine();
 
   }
 
-  //________________________________________________________________________________________
-  //метод для меню ОБМЕН/ВАЗВРАТ БИЛЕТОВ, когда по фамиии выводим кол-во билетов/день/сеанс
-  public static void inputLastName() {
-    System.out.println("Введите ФАМИЛИЮ ->");
-    // фамилия колва билетов   ряд/место дата/время фильм
+  public static String arrayToString(int[] arr) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < arr.length; i++) {
+      sb.append(arr[i]);
+      if (i < arr.length - 1) {
+        sb.append(", ");
+      }
+    }
+    return sb.toString();
   }
 
   //________________________________________________________________________________________
@@ -632,7 +732,7 @@ public class CinemaMenu {
   //________________________________________________________________________________________
   //метод вывода СТАТИСТИКИ ЗА ДЕНЬ
   public static void printStatisticsForDay() {
-   // inputDate();
+    // inputDate();
   }
 
   //________________________________________________________________________________________
@@ -736,6 +836,5 @@ public class CinemaMenu {
     public String getMessageEnumAdministratorMenu() {
       return messageEnumAdministratorMenu;
     }
-
   }
 }
