@@ -4,9 +4,9 @@ public enum EnumFileTools {
     TITLE_INDEX("&"),
     BONUS_INDEX("*"),
     CHEQUE_INDEX("~"),
-    SUM_INDEX("`"),
+    CHEQUE_SEPARATOR(","),
     MAP_PREFIX("|"),
-    MAP_SPLITTER(""),
+    MAP_CHEQUE_SPLITTER(""),
     MAP_KEY_VALUE_SPLITTER(">"),
     Money_index("€"),
     SPLITTER("\n");
