@@ -245,24 +245,24 @@ public class Session {
     }
   }
 
-  public void loadScheduleFromFile(String filePath) throws IOException {
-    FileEditor fileEditor = new FileEditor(); // Создаем экземпляр FileEditor
+//  public void loadScheduleFromFile(String filePath) throws IOException {
+  //  FileEditor fileEditor = new FileEditor(); // Создаем экземпляр FileEditor
 
-    String fileContent = fileEditor.read(prefix, splitter); // Считываем содержимое файла
+  //String fileContent = fileEditor.read(prefix, splitter); // Считываем содержимое файла
 
-    String[] lines = fileContent.split("\\r?\\n"); // Разбиваем содержимое на строки
+  // String[] lines = fileContent.split("\\r?\\n"); // Разбиваем содержимое на строки
 
-    for (String line : lines) {
-      String[] parts = line.split(",");
-      if (parts.length == 3) {
-        LocalDate date = LocalDate.parse(parts[0]);
-        LocalTime movieTime = LocalTime.parse(parts[2]);
-        String movieTitle = parts[1];
+  // for (String line : lines) {
+  //  String[] parts = line.split(",");
+  //  if (parts.length == 3) {
+  //    LocalDate date = LocalDate.parse(parts[0]);
+  //    LocalTime movieTime = LocalTime.parse(parts[2]);
+  //   String movieTitle = parts[1];
 
-        addSession(date, movieTime, movieTitle); // Правильный порядок параметров
-      }
-    }
-  }
+  //   addSession(date, movieTime, movieTitle); // Правильный порядок параметров
+  //    }
+//    }
+  // }
 
 
 
