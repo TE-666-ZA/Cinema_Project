@@ -188,21 +188,31 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод вывода 3 КАРТ НА ВЫБРАННЫЙ ДЕНЬ
-  public static void printHallMapsPerDay(Session session) throws IOException {
+  public static void printHallMapsPerDay(Scanner scanner, Session session)
+      throws IOException, DataFormatException {
+    LocalDate date = checkDate(scanner, session);
+
+    LocalDate[] dates = session.getDates();
     LocalTime[] times = session.getTimes();
     String[] titles = session.getTitle();
+    for (int i = 0; i < dates.length; i++) {
+      if (date.isEqual(dates[i])) {
 
-    for (int sessionKey = 1; sessionKey <= 3; sessionKey++) {
-      HallMap hallMap = new HallMap();
-      Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
-
-      if (sessionMap != null) {
-        System.out.println(times[sessionKey - 1] + " " + titles[sessionKey - 1]);
-        HallMap.showSessionMap(sessionMap);
-      } else {
-        System.out.println("Сеанс " + sessionKey + " не найден");
       }
     }
+
+//
+//    for (int sessionKey = 1; sessionKey <= 3; sessionKey++) {
+//      HallMap hallMap = new HallMap();
+//      Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
+//
+//      if (sessionMap != null) {
+//        System.out.println(times[sessionKey - 1] + " " + titles[sessionKey - 1]);
+//        HallMap.showSessionMap(sessionMap);
+//      } else {
+//        System.out.println("Сеанс " + sessionKey + " не найден");
+//      }
+//    }
   }
 
   //________________________________________________________________________________________
@@ -228,12 +238,32 @@ public class CinemaMenu {
 
   //________________________________________________________________________________________
   //метод вывода 1й КАРТЫ НА ВЫБРАННЫЙ СЕАНС
-  public static void printHallMapPerSession() {
+  public static void printHallMapPerSession(Scanner scanner, Session session)
+      throws DataFormatException {
+//    LocalDate date = checkDate(scanner, session);
+//    LocalTime time = checkTime(scanner,session);
+//
+//
+//    LocalTime[] times = session.getTimes();
+//    String[] titles = session.getTitle();
+//
+//    for (int sessionKey = 1; sessionKey <= 3; sessionKey++) {
+//      if (date==) {
+//        System.out.println("Несовпадение дат! ");
+//      } else {
+//
+//        if (sessionMap != null) {
+//          System.out.println(times[sessionKey - 1] + " " + titles[sessionKey - 1]);
+//          HallMap.showSessionMap(sessionMap);
+//        } else {
+//          System.out.println("Сеанс " + sessionKey + " не найден");
+//        }
+//      }
+
     //inputDateTime(); //метод ввода ДАТЫ и СЕАНСА
     System.out.println("1.  1 2 3 4 5 6 7 8 9");
     System.out.println("2.  1 2 3 4 5 6 7 8 9");
     System.out.println("3.  1 2 3 4 5 6 7 8 9");
-
   }
 
   //________________________________________________________________________________________
@@ -251,9 +281,11 @@ public class CinemaMenu {
     printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m\t\t\t\t2. СВОБОДНЫЕ МЕСТА\u001B[0m");
     //ввели дату и проверяем на совпадение с датами в тексте//
-    LocalDate date = checkDate(scanner, session);
+
     //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
-    printHallMapsPerDay(session);
+    //TODO исправить методы вывода трех карт за день
+    //printHallMapsPerDay(session);
+
     //вызов подменю
     //2.1 ИЗМЕНИТЬ ДАТУ
     // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
@@ -265,9 +297,9 @@ public class CinemaMenu {
         case CHANGE_DATE: // 2.1 ИЗМЕНИТЬ ДАТУ
           System.out.println(
               "\u001B[32m\t\t\t\t2. СВОБОДНЫЕ МЕСТА -> ИЗМЕНИТЬ ДАТУ: \u001B[0m");
-          date = checkDate(scanner, session);
+          LocalDate date = checkDate(scanner, session);
           //ВЫВОД ТРЕХ КАРТ ЗА ОДИН ДЕНЬ
-          printHallMapsPerDay(session);
+          // printHallMapsPerDay(session);
           break;
         case RETURN_TO_THE_MAIN_MENU: // 2.2 ВОЗВРАТ В ПРЕДЫДУЩЕЕ МЕНЮ
           runFreeSpaseMenu = false;
@@ -290,6 +322,9 @@ public class CinemaMenu {
       throws DataFormatException, IOException {
     CinemaMenu.printSeparator(); // вывод разделительной линии
     System.out.println("\u001B[32m\t\t\t\t3. ПОКУПКА БИЛЕТОВ\u001B[0m");
+    //ввели дату и проверяем на совпадение с датами в тексте//
+    LocalDate date = checkDate(scanner, session);
+    LocalTime time = checkTime(scanner, session);
 
     //метод ПОКУПКИ БИЛЕТА С ВЫВОДОМ КАРТЫ С ПОДСВЧЕННЫМИ МЕСТАМИ
     //buyTickets(scanner,sessoin);
@@ -307,7 +342,7 @@ public class CinemaMenu {
           System.out.println(
               "\u001B[32m\t\t\t\t3. ПОКУПКА БИЛЕТОВ -> ПОДТВЕРЖДЕНИЕ ПОКУПКИ :\u001B[0m");
           //CinemaMenu.confirmPurchase(scanner, ); //метод ПОДТВЕРЖДЕНИЯ ПОКУПКИ
-          //ввод фамилии
+          //TODO вызываем метод ЗАПИСИ ЧЕКА В ФАЙЛ
           runBuyingTicketsMenu = false;
           break;
         case CHANGE_SELECTION: // 3.2 ИЗМЕНИТЬ ВЫБОР
@@ -689,28 +724,19 @@ public class CinemaMenu {
    * @param selectedTime
    * @throws IOException
    */
+
+  //TODO ПЕРЕДАТЬ СЮДА НОМЕ ЧЕКА - переписать метод
   public static void confirmPurchase(Scanner scanner, int[] selectedSeats, int rowNumber,
       String selectedDate, String selectedTime) throws IOException {
-    System.out.println("Подтвердите покупку вводом ФАМИЛИИ -> ");
+
+    //TODO ПЕРЕДАТЬ СЮДА НОМЕ ЧЕКА
     String lastName = scanner.nextLine();
     String purchaseInfo =
         selectedDate + " " + selectedTime + " Ряд " + rowNumber + " Места " + arrayToString(
-            selectedSeats) + " Фамилия: " + lastName;
+            selectedSeats) + " Номер Чека: " + lastName;
     FileEditor fileEditor = new FileEditor("res/VisitorsData.txt");
     fileEditor.write(new String[]{purchaseInfo}, "");
   }
-//TODO удалить этот метод
-
-  /**
-   * @param scanner
-   * @throws IOException
-   */
-  public static void inputLastName(Scanner scanner) throws IOException {
-    System.out.println("Введите ФАМИЛИЮ -> ");
-    String lastName = scanner.nextLine();
-
-  }
-
   /**
    * метод сохранения символов строки в массив
    *
