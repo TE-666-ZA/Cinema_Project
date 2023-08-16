@@ -11,6 +11,14 @@ import java.util.Map;
 
 public class Session {
   private final int PRICE = 20;
+  private final int CHEQUE_NUMBER = 0;
+  private final int CHEQUE_DATE = 1;
+  private final int CHEQUE_TIME = 2;
+  private final int CHEQUE_TITLE = 3;
+  private final int CHEQUE_RAW = 4;
+  private final int CHEQUE_SEATS_NUMBERS = 5;
+  private final int CHEQUE_SUM = 6;
+  private final int CHEQUE_ISVALID = 7;
 
   private String prefix;
   private String splitter;
@@ -23,6 +31,7 @@ public class Session {
   private LocalTime[] times;
   private String[] title;
   private String[] bonus;
+  private String[] chequeData;
   private Map<LocalDate, Map<String, LocalTime>> schedule; //TODO что тут хранится????
 
   public Session() throws IOException {
@@ -147,11 +156,64 @@ public class Session {
     fileEditor.write(temp, EnumFileTools.BONUS_INDEX.getTool());
   }
 
+  public void readCheque(int chequeNumber) throws IOException {
+    String data = fileEditor.readCheque(chequeNumber);
+    this.chequeData = data.split(EnumFileTools.CHEQUE_SEPARATOR.getTool());
+  }
+
+  public int getChequeNumber() {
+    int result = Integer.parseInt(chequeData[CHEQUE_NUMBER]);
+    return result;
+  }
+
+  public LocalDate getChequeDate() {
+    LocalDate result = (LocalDate) dateFormatter.parse(chequeData[CHEQUE_DATE]);
+    return result;
+  }
+
+  public LocalTime getChequeTime() {
+    LocalTime result = (LocalTime) timeFormatter.parse(chequeData[CHEQUE_TIME]);
+    return result;
+  }
+
+  public String getChequeTitle() {
+    return chequeData[CHEQUE_TITLE];
+  }
+
+  public int getChequeRaw() {
+    int result = Integer.parseInt(chequeData[CHEQUE_RAW]);
+    return result;
+  }
+
+  public int[] getChequeSeatsNumbers() {
+    int[] result = new int[]{Integer.parseInt(chequeData[CHEQUE_SEATS_NUMBERS])};
+    return result;
+  }
+
+  public int getChequeSum() {
+    int result = Integer.parseInt(chequeData[CHEQUE_SUM]);
+    return result;
+  }
+
+  public boolean IsChequeValid() {
+    int temp = Integer.parseInt(chequeData[CHEQUE_ISVALID]);
+    if (temp > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  public void returnCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime) {
+
+  }
   public void writeCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime) throws IOException {
     int sum = PRICE * rowNumber;
-    String[] data = {fileEditor.getChequeNumber() + EnumFileTools.DATE_INDEX.getTool() +
-            selectedDate + EnumFileTools.TIME_INDEX.getTool() + selectedTime +
-            rowNumber + EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool() + Arrays.toString(selectedSeats) + sum + EnumFileTools.Money_index};
+    int isValid = 1;
+    String[] data = {fileEditor.getChequeNumberAmount() + selectedDate +
+            EnumFileTools.CHEQUE_SEPARATOR.getTool() + selectedTime +
+            EnumFileTools.CHEQUE_SEPARATOR.getTool() + rowNumber
+            + EnumFileTools.CHEQUE_SEPARATOR.getTool() + Arrays.toString(selectedSeats) +
+            sum + EnumFileTools.CHEQUE_SEPARATOR.getTool() + isValid};
     fileEditor.write(data, EnumFileTools.CHEQUE_INDEX.getTool());
   }
 
