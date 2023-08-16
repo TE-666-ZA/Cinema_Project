@@ -54,7 +54,9 @@ public class FileEditor {
     }
 
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException { // эта функция читает и заполняет мапу предназначен для использования в классе HALLMAP
-        String[] temp = read(EnumFileTools.MAP_PREFIX.getTool(), EnumFileTools.MAP_CHEQUE_SPLITTER.getTool()).split(EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
+        String[] temp = read(EnumFileTools.MAP_PREFIX.getTool(),
+            EnumFileTools.MAP_CHEQUE_SPLITTER.getTool()).split(EnumFileTools.
+            MAP_KEY_VALUE_SPLITTER.getTool());
         if (temp.length < 2) {
             throw new IOException("Неверный формат даты");
         }
@@ -76,7 +78,9 @@ public class FileEditor {
     }
 
     public String readCheque(int chequeNumber) throws IOException { // этот метод считывает чек из файла Check по заданному номеру чека предназначен для класса Session
-        String[] temp = read(EnumFileTools.CHEQUE_INDEX.getTool(), EnumFileTools.MAP_CHEQUE_SPLITTER.getTool()).split(EnumFileTools.CHEQUE_SEPARATOR.getTool());
+        String[] temp = read(EnumFileTools.CHEQUE_INDEX.getTool(),
+            EnumFileTools.MAP_CHEQUE_SPLITTER.getTool())
+            .split(EnumFileTools.CHEQUE_SEPARATOR.getTool());
         return temp[chequeNumber].toString();
     }
 
@@ -109,7 +113,8 @@ public class FileEditor {
         this.out = new FileWriter(fileAllData);
         this.writer = new BufferedWriter(out);
         for (Map.Entry<Integer, Character[]> thisMap : map.entrySet()) {
-            writer.write(EnumFileTools.MAP_PREFIX.getTool() + thisMap.getKey() + EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
+            writer.write(EnumFileTools.MAP_PREFIX.getTool() + thisMap.getKey()
+                + EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
             Character[] temp = thisMap.getValue();
             for (Character value : temp) {
                 writer.write(value + EnumFileTools.MAP_CHEQUE_SPLITTER.getTool());
@@ -119,6 +124,11 @@ public class FileEditor {
         writer.close();
     }
 
+    /**
+     * Возвращает метод общее Количество чеков в файле
+     *
+     * @return
+     */
     public int getChequeNumberAmount() {
         return chequeNumberAmount;
     }
