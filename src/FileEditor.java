@@ -24,11 +24,11 @@ public class FileEditor {
     }
 
     protected String read(String prefix, String splitter) throws IOException, NullPointerException {
-        boolean isCheque = false;
+        boolean isCheque = true;
         StringBuilder result = new StringBuilder();
         String input;
         if (prefix != EnumFileTools.CHEQUE_INDEX.getTool()) {
-            isCheque = true;
+            isCheque = false;
             this.in = new FileReader(fileAllData);
         } else {
             this.in = new FileReader(fileCheque);
@@ -36,9 +36,11 @@ public class FileEditor {
         this.reader = new BufferedReader(in);
         while ((input = reader.readLine()) != null) {
             lines++;
-            if (isCheque && input.trim().startsWith(prefix)) {
+            if (!isCheque && input.trim().startsWith(prefix)) {
                 result.append(input.substring(REMOVE_FIRST_INDEX)).append(splitter);
-            } else if (!isCheque) {
+                reader.close();
+                return result.toString();
+            } else if (isCheque) {
                 chequeNumber++;
                 result.append(input.substring(REMOVE_FIRST_INDEX)).append(splitter);
                 if (input.trim().startsWith(EnumFileTools.SUM_INDEX.getTool())) {
@@ -53,7 +55,7 @@ public class FileEditor {
     }
 
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException {
-        String[] temp = read(EnumFileTools.MAP_PREFIX.getTool(), EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool()).split(EnumFileTools.MAP_SPLITTER.getTool());
+        String[] temp = read(EnumFileTools.MAP_PREFIX.getTool(), EnumFileTools.MAP_SPLITTER.getTool()).split(EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
         if (temp.length < 2) {
             throw new IOException("Неверный формат даты");
         }
@@ -106,7 +108,7 @@ public class FileEditor {
             writer.write(EnumFileTools.MAP_PREFIX.getTool() + thisMap.getKey() + EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
             Character[] temp = thisMap.getValue();
             for (Character value : temp) {
-                writer.write(value + "");
+                writer.write(value + EnumFileTools.MAP_SPLITTER.getTool());
             }
             writer.newLine();
         }
