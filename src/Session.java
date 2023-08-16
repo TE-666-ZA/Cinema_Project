@@ -1,38 +1,19 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Session {
+  private final int PRICE = 20;
 
   private String prefix;
   private String splitter;
-
-  static enum EnumInfoFullIndexes {
-
-    DATE_INDEX("/"),
-    TIME_INDEX("["),
-    TITLE_INDEX("&"),
-    BONUS_INDEX("*"),
-    SPLITTER("/n");
-
-    public final String messageEnumInfoFullIndexes;
-
-    private EnumInfoFullIndexes(String messageEnumInfoFullIndexes) {
-      this.messageEnumInfoFullIndexes = messageEnumInfoFullIndexes;
-    }
-
-    public String getMessageEnumInfoFullIndexes() {
-      return this.messageEnumInfoFullIndexes;
-    }
-  }
 
   private FileEditor fileEditor;
   private Session hallMap;
@@ -49,50 +30,38 @@ public class Session {
     this.schedule = new HashMap<>();
     this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    readDate(EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes(),
-        EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-    readTime(EnumInfoFullIndexes.TIME_INDEX.getMessageEnumInfoFullIndexes(),
-        EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-    readTitle(EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes(),
-        EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-    readBonus(EnumInfoFullIndexes.BONUS_INDEX.getMessageEnumInfoFullIndexes(),
-        EnumInfoFullIndexes.SPLITTER.getMessageEnumInfoFullIndexes());
-//        writeDate(dates,EnumInfoFullIndexes.DATE_INDEX.getMessageEnumInfoFullIndexes());
-//        writeTime(times,EnumInfoFullIndexes.TIME_INDEX.getMessageEnumInfoFullIndexes());
-//        writeTitle(title ,EnumInfoFullIndexes.TITLE_INDEX.getMessageEnumInfoFullIndexes());
-//        writeBonus(bonus,EnumInfoFullIndexes.BONUS_INDEX.getMessageEnumInfoFullIndexes());
   }
 
-  public void readDate(String prefix, String splitter) throws IOException {
-    String[] temp = fileEditor.readData(prefix, splitter).split(splitter);
+  public void readDate() throws IOException {
+    String[] temp = fileEditor.readData(EnumFileTools.DATE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
     this.dates = new LocalDate[temp.length];
     for (int i = 0; i < temp.length; i++) {
       dates[i] = LocalDate.parse(temp[i], dateFormatter);
     }
   }
 
-  public void writeDate(LocalDate[] dates, String prefix) throws IOException {
+  public void writeDate(LocalDate[] dates) throws IOException {
     String[] data = new String[dates.length];
     for (int i = 0; i < dates.length; i++) {
       data[i] = dates[i].format(dateFormatter);
     }
-    fileEditor.write(data, prefix);
+    fileEditor.write(data, EnumFileTools.DATE_INDEX.getTool());
   }
 
-  public void readTime(String prefix, String splitter) throws IOException {
-    String[] temp = fileEditor.readData(prefix, splitter).split(splitter);
+  public void readTime() throws IOException {
+    String[] temp = fileEditor.readData(EnumFileTools.TITLE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.DATE_INDEX.getTool());
     this.times = new LocalTime[temp.length];
     for (int i = 0; i < temp.length; i++) {
       times[i] = LocalTime.parse(temp[i], timeFormatter);
     }
   }
 
-  public void writeTime(LocalTime[] times, String prefix) throws IOException {
+  public void writeTime(LocalTime[] times) throws IOException {
     String[] data = new String[times.length];
     for (int i = 0; i < times.length; i++) {
       data[i] = times[i].format(timeFormatter);
     }
-    fileEditor.write(data, prefix);
+    fileEditor.write(data, EnumFileTools.TIME_INDEX.getTool());
   }
 
   public boolean isDateCorrect(LocalDate date) {
@@ -134,35 +103,37 @@ public class Session {
     }
   }
 
-//  public static void printHallMapsPerDay(LocalDate date, Session session)
-//      throws DataFormatException, IOException {
-//    Map<Integer, Map<Integer, Character[]>> hallMapsForDate = session.getHallMapsForDate(date, session);
-//
-//    if (hallMapsForDate.isEmpty()) {
-//      System.out.println("На выбранную дату нет сеансов.");
-//      return;
-//    }
-//  }
-
   public Map<Integer, Character[]> getSessionMap(int sessionKey) {
     return hallMap.getSessionMap(sessionKey);
   }
 
 
-  public void readTitle(String prefix, String splitter) throws IOException {
-    this.title = fileEditor.readData(prefix, splitter).split(splitter);
+  public void readTitle() throws IOException {
+    this.title = fileEditor.readData(EnumFileTools.TITLE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
   }
 
-  public void writeTitle(String[] data, String prefix) throws IOException {
-    fileEditor.write(data, prefix);
+  public void writeTitle(String data) throws IOException {
+    String[] temp = new String[1];
+    temp[0] = data;
+    fileEditor.write(temp, EnumFileTools.TITLE_INDEX.getTool());
   }
 
-  public void readBonus(String prefix, String splitter) throws IOException {
-    this.bonus = fileEditor.readData(prefix, splitter).split(splitter);
+  public void readBonus() throws IOException {
+    this.bonus = fileEditor.readData(EnumFileTools.BONUS_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.BONUS_INDEX.getTool());
   }
 
-  public void writeBonus(String[] data, String prefix) throws IOException {
-    fileEditor.write(data, prefix);
+  public void writeBonus(String data) throws IOException {
+    String[] temp = new String[1];
+    temp[0] = data;
+    fileEditor.write(temp, EnumFileTools.BONUS_INDEX.getTool());
+  }
+
+  public void writeCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime) throws IOException {
+    int sum = PRICE * rowNumber;
+    String[] data = {fileEditor.getChequeNumber() + EnumFileTools.DATE_INDEX.getTool() +
+            selectedDate + EnumFileTools.TIME_INDEX.getTool() + selectedTime +
+            rowNumber + EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool() + Arrays.toString(selectedSeats) + sum + EnumFileTools.Money_index};
+    fileEditor.write(data, EnumFileTools.CHEQUE_INDEX.getTool());
   }
 
   public String getSessionKey() {
