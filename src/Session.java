@@ -202,10 +202,6 @@ public class Session {
     }
     return false;
   }
-
-  public void returnCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime) {
-
-  }
   public void writeCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime) throws IOException {
     int sum = PRICE * rowNumber;
     int isValid = 1;
