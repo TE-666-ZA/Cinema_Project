@@ -14,7 +14,7 @@ public class FileEditor {
     private String fileAllData;
     private String fileCheque;
     private int lines;
-    private int chequeNumber;
+    private int chequeNumberAmount; // peremennaya chtobi znat skolko chekov u nas uje est vizivat cherez getChequeNumberCount
 
 
     public FileEditor() {
@@ -41,13 +41,10 @@ public class FileEditor {
                 reader.close();
                 return result.toString();
             } else if (isCheque) {
-                chequeNumber++;
-                result.append(input.substring(REMOVE_FIRST_INDEX)).append(splitter);
-                if (input.trim().startsWith(EnumFileTools.SUM_INDEX.getTool())) {
+                chequeNumberAmount++;
+                result.append(input.substring(REMOVE_FIRST_INDEX));
                     reader.close();
                     return result.toString();
-                }
-
             }
         }
         reader.close();
@@ -55,7 +52,7 @@ public class FileEditor {
     }
 
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) throws IOException {
-        String[] temp = read(EnumFileTools.MAP_PREFIX.getTool(), EnumFileTools.MAP_SPLITTER.getTool()).split(EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
+        String[] temp = read(EnumFileTools.MAP_PREFIX.getTool(), EnumFileTools.MAP_CHEQUE_SPLITTER.getTool()).split(EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
         if (temp.length < 2) {
             throw new IOException("Неверный формат даты");
         }
@@ -74,6 +71,11 @@ public class FileEditor {
 
     public String readData(String prefix, String splitter) throws IOException {
         return read(prefix, splitter);
+    }
+
+    public String readCheque(int chequeNumber) throws IOException {
+        String[] temp = read(EnumFileTools.CHEQUE_INDEX.getTool(), EnumFileTools.MAP_CHEQUE_SPLITTER.getTool()).split(EnumFileTools.CHEQUE_SEPARATOR.getTool());
+        return temp[chequeNumber].toString();
     }
 
     public void write(String[] data, String prefix) throws IOException {
@@ -108,14 +110,14 @@ public class FileEditor {
             writer.write(EnumFileTools.MAP_PREFIX.getTool() + thisMap.getKey() + EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
             Character[] temp = thisMap.getValue();
             for (Character value : temp) {
-                writer.write(value + EnumFileTools.MAP_SPLITTER.getTool());
+                writer.write(value + EnumFileTools.MAP_CHEQUE_SPLITTER.getTool());
             }
             writer.newLine();
         }
         writer.close();
     }
 
-    public int getChequeNumber() {
-        return chequeNumber;
+    public int getChequeNumberAmount() {
+        return chequeNumberAmount;
     }
 }
