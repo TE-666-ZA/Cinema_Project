@@ -143,20 +143,16 @@ public class Session {
     this.titles = fileEditor.readData(EnumFileTools.TITLE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
   }
 
-  public void writeTitle(String data) throws IOException {
-    String[] temp = new String[1];
-    temp[0] = data;
-    fileEditor.write(temp, EnumFileTools.TITLE_INDEX.getTool());
+  public void writeTitle(String[] data) throws IOException {
+    fileEditor.write(data, EnumFileTools.TITLE_INDEX.getTool());
   }
 
   public void readBonus() throws IOException {
     this.bonus = fileEditor.readData(EnumFileTools.BONUS_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
   }
 
-  public void writeBonus(String data) throws IOException { // этот метод записывает бонус в Fullinfo
-    String[] temp = new String[1];
-    temp[0] = data;
-    fileEditor.write(temp, EnumFileTools.BONUS_INDEX.getTool());
+  public void writeBonus(String[] data) throws IOException { // этот метод записывает бонус в Fullinfo
+    fileEditor.write(data, EnumFileTools.BONUS_INDEX.getTool());
   }
 
   public void readCheque(int chequeNumber) throws IOException { // этот метод считывает из файла CHECK всю информацию по номеру чека
