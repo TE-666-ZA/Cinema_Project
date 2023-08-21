@@ -102,29 +102,17 @@ public class CinemaMenu2 {
   }
 
   public static void chooseDateAndTime(Scanner scanner, HallMap hallMap, Session session) {
-    List<LocalDate> dates = List.of(session.getDates());
-    List<LocalTime> times = List.of(session.getTimes());
-    int[] datesIntArray = new int[dates.size()];
-    int[] timesIntArray = new int[times.size()];
-    for (int i = 0; i < dates.size(); i++) {
-      datesIntArray[i] = dates.get(i).getDayOfMonth();
+    System.out.println("В какой день хотите посмотреть кино?");
+    for (int i = 0; i < session.getDates().length; i++) {
+      System.out.println((i + 1) + ". " + session.getDates()[i].format(session.getDateFormatter()));
     }
-    for (int i = 0; i < times.size(); i++) {
-      timesIntArray[i] = times.get(i).getHour() * 60 + times.get(i).getMinute();
+    System.out.println("Выберите время: ");
+    int selectedDateIndex = scanner.nextInt();
+    for (int i = 0; i < session.getTimes().length; i++) {
+      System.out.println((i + 1) + ". " + session.getTimes()[i].format(session.getTimeFormatter()));
     }
-    System.out.println("В какой день вы хотите посмотреть кино?");
-    for (int i = 0; i < datesIntArray.length; i++) {
-      System.out.println((i + 1) + ". " + dates.get(i));
-    }
-    int selectedDateIndex = scanner.nextInt() - 1;
-    int selectedDate = datesIntArray[selectedDateIndex];
-    System.out.println("Выберите время:");
-    for (int i = 0; i < times.size(); i++) {
-      System.out.println((i + 1) + ". " + times.get(i));
-    }
-    int selectedTimeIndex = scanner.nextInt() - 1;
-    int selectedTime = timesIntArray[selectedTimeIndex];
-    hallMap.showPlacesByDateTime(selectedDate, selectedTime);
+    int selectedTimeIndex = scanner.nextInt();
+    hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
   }
 
 
