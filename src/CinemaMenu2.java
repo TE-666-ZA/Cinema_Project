@@ -106,12 +106,13 @@ public class CinemaMenu2 {
     for (int i = 0; i < session.getDates().length; i++) {
       System.out.println((i + 1) + ". " + session.getDates()[i].format(session.getDateFormatter()));
     }
-    System.out.println("Выберите время: ");
     int selectedDateIndex = scanner.nextInt();
+    System.out.println("Выберите время: ");
     for (int i = 0; i < session.getTimes().length; i++) {
       System.out.println((i + 1) + ". " + session.getTimes()[i].format(session.getTimeFormatter()));
     }
     int selectedTimeIndex = scanner.nextInt();
+    System.out.println("\u001B[32m\t\t\t\tКарта свободных мест:\u001B[0m");
     hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
   }
 

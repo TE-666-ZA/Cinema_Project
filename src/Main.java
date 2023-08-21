@@ -17,12 +17,12 @@ public class Main {
     HallMap hallMap = new HallMap();
     Scanner scanner = new Scanner(System.in);
 
+    System.out.println("\u001B[32m\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'\u001B[0m");
     boolean run = true;
     int command;
     while (run) {
       // Вывод главного меню
       CinemaMenu2.printSeparator();
-      System.out.println("\u001B[32m\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'\u001B[0m");
       command = CinemaMenu2.readCommandMainMenu(scanner);
       CinemaMenu2.EnumMainMenu selectedMenu = CinemaMenu2.EnumMainMenu.values()[command];
       String menuText = selectedMenu.getMenuText();
@@ -34,7 +34,6 @@ public class Main {
           break;
         //2.  КАРТА СВОБОДНЫХ МЕСТ
         case FREE_SPACE:
-          System.out.println(menuText);
           CinemaMenu2.chooseDateAndTime(scanner, hallMap, session);
           break;
         //2.  ПОКУПКА БИЛЕТОВ
