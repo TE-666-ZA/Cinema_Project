@@ -134,7 +134,15 @@ public class HallMap {
   public void showPlacesByDateTime(int date, int time) {
     int index = sessionsIndexGenerator(date, time);
 
-    System.out.println(sessions.get(index));
+    for (Map.Entry<Integer, Character[]> entry : sessions.get(index).entrySet()) {
+      Integer key = entry.getKey();
+      Character[] values = entry.getValue();
 
+      System.out.print("ряд: " + key + " Места: ");
+      for (Character value : values) {
+        System.out.print(value + " ");
+      }
+      System.out.println();
+    }
   }
 }
