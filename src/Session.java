@@ -61,7 +61,7 @@ public class Session {
   }
 
   public void readTime() throws IOException {
-    String[] temp = fileEditor.readData(EnumFileTools.TITLE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.DATE_INDEX.getTool());
+    String[] temp = fileEditor.readData(EnumFileTools.TIME_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
     this.times = new LocalTime[temp.length];
     for (int i = 0; i < temp.length; i++) {
       times[i] = LocalTime.parse(temp[i], timeFormatter);
@@ -150,7 +150,7 @@ public class Session {
   }
 
   public void readBonus() throws IOException {
-    this.bonus = fileEditor.readData(EnumFileTools.BONUS_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.BONUS_INDEX.getTool());
+    this.bonus = fileEditor.readData(EnumFileTools.BONUS_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
   }
 
   public void writeBonus(String data) throws IOException { // этот метод записывает бонус в Fullinfo
