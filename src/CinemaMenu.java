@@ -709,7 +709,7 @@ public class CinemaMenu {
 
     // Подтверждение покупки
     System.out.println("Сумма покупки ...");
-    confirmPurchase(scanner, selectedSeats, selectedRow, date.toString(), time.toString());
+    // confirmPurchase(scanner, selectedSeats, selectedRow, date.toString(), time.toString());
   }
 
   //________________________________________________________________________________________
@@ -726,17 +726,7 @@ public class CinemaMenu {
    */
 
   //TODO ПЕРЕДАТЬ СЮДА НОМЕ ЧЕКА - переписать метод
-  public static void confirmPurchase(Scanner scanner, int[] selectedSeats, int rowNumber,
-      String selectedDate, String selectedTime) throws IOException {
 
-    //TODO ПЕРЕДАТЬ СЮДА НОМЕ ЧЕКА
-    String lastName = scanner.nextLine();
-    String purchaseInfo =
-        selectedDate + " " + selectedTime + " Ряд " + rowNumber + " Места " + arrayToString(
-            selectedSeats) + " Номер Чека: " + lastName;
-    FileEditor fileEditor = new FileEditor("res/VisitorsData.txt");
-    fileEditor.write(new String[]{purchaseInfo}, "");
-  }
   /**
    * метод сохранения символов строки в массив
    *
@@ -885,7 +875,7 @@ public class CinemaMenu {
   }
 
   /**
-   * Enum класс реализующий вывод 3. ПРОДАЖА БИЛЕТОВ
+   * Enum клaасс реализующий вывод 3. ПРОДАЖА БИЛЕТОВ
    */
   enum EnumBuyingTicketsMenu {
     CANCELLATION("Введите 0 чтобы ОТМЕНИТЬ ПОКУПКУ"),

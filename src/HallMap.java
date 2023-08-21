@@ -1,33 +1,16 @@
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class HallMap {
-  //Список( Мапа(ряд,номера сидений)
-  private Map<LocalDate, Map> dateMap;
-  private Map<LocalDate, Map> timeMap;
-  private Map<Integer, Character[]> hallMap;
-  // поле для чтения и записи данных
-  private FileEditor fileEditor;
-  private Session session;
 
-  //
-  //
+  private List<Map<Integer, Character[]>> sessions;
 
-  /**
-   * конструктор HallMap()
-   * создается массив из 9 элементов в которых лежат в которые должны попасть карты зала
-   * и поле с экземпляром класса, который читает файл
-   *
-   * @throws IOException
-   */
+  private FileEditor fileEditor; // для чтения и записи данных
+
+  // тут создаём лист с местами, его можно забрать в FileEditor
   public HallMap() throws IOException {
-    this.dateMap = new HashMap<>();
+    sessions = new ArrayList<>(9);
     this.fileEditor = new FileEditor();
-    this.session = new Session();
     readAllSeats();
   }
 
@@ -35,7 +18,7 @@ public class HallMap {
   // делаем это в следующе методе:
   private void writeAllSeats() throws IOException {
     for (int i = 0; i < 9; i++) {
-      //  fileEditor.writeMap(exposition.get(i));
+      fileEditor.writeMap(sessions.get(i));
     }
   }
 
@@ -52,13 +35,12 @@ public class HallMap {
    */
   private void readAllSeats() throws IOException {
     for (int i = 0; i < 9; i++) {
-      this.timeMap = new HashMap<>();
-
-      for (int j = 0; j < session.getDates().length; j++) {
-        this.hallMap = new HashMap<>();
-        timeMap.put(LocalDate.from(session.getTimes()[j]), fileEditor.readMap(hallMap));
-        dateMap.put(session.getDates()[j],timeMap);
+      Map<Integer, Character[]> sessionMap = new HashMap<>();
+      for (int j = 1; j <= 5; j++) {
+        Character[] rowArray = fileEditor.readMap(new HashMap<>()).values().iterator().next();
+        sessionMap.put(j, rowArray);
       }
+      sessions.add(sessionMap);
     }
   }
 
@@ -126,12 +108,12 @@ public class HallMap {
   }
 
   protected Map<Integer, Character[]> getSessionMap(int sessionKey) {
-    return exposition.get(sessionKey - 1);
+    return sessions.get(sessionKey - 1);
   }
 
   public Set<Integer> getAllSessionKeys() {
     Set<Integer> sessionKeys = new HashSet<>();
-    for (int i = 0; i < exposition.size(); i++) {
+    for (int i = 0; i < sessions.size(); i++) {
       sessionKeys.add(i + 1);
     }
     return sessionKeys;
