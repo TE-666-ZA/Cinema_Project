@@ -138,11 +138,21 @@ public class HallMap {
       Integer key = entry.getKey();
       Character[] values = entry.getValue();
 
-      System.out.print("ряд: " + key + " Места: ");
+      System.out.print("Ряд: " + key + "  Места: ");
       for (Character value : values) {
         System.out.print(value + " ");
       }
       System.out.println();
     }
+  }
+
+  public void buyTickets(int date, int time, int raw, int[] places) throws IOException {
+    int index = sessionsIndexGenerator(date, time);
+    Character[] seats = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    for (int i : places) {
+      seats[i] = 'X';
+    }
+    this.sessions.get(index).put(raw, seats);
+    fileEditor.writeMap(sessions.get(index));
   }
 }
