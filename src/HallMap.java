@@ -118,4 +118,23 @@ public class HallMap {
     }
     return sessionKeys;
   }
+
+  private int sessionsIndexGenerator(int date, int time) {
+    time = time - 1;
+    if (date < 2) {
+      date = 0;
+    } else if (date > 2) {
+      date = 6;
+    } else {
+      date = 3;
+    }
+    return time + date;
+  }
+
+  public void showPlacesByDateTime(int date, int time) {
+    int index = sessionsIndexGenerator(date, time);
+
+    System.out.println(sessions.get(index));
+
+  }
 }
