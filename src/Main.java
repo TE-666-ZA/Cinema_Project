@@ -32,10 +32,6 @@ public class Main {
           System.out.println(menuText);
           session.showSchedule();
           break;
-        //2.  КАРТА СВОБОДНЫХ МЕСТ
-        case FREE_SPACE:
-          CinemaMenu2.chooseDateAndTime(scanner, hallMap, session);
-          break;
         //2.  ПОКУПКА БИЛЕТОВ
         case BUYING_TICKETS:
           System.out.println(menuText);
@@ -47,14 +43,14 @@ public class Main {
               isMoreThanFourTickets);
           //TODO передать в метод номер чека
           CinemaMenu2.buyingTickets(scanner, session, hallMap);
-          CinemaMenu2.buyTickets(scanner, session);
+          CinemaMenu2.buyTickets(scanner, session, hallMap);
           break;
-        //4.  ОБМЕН/ВОЗВРАТ БИЛЕТОВ
+        //3.  ОБМЕН/ВОЗВРАТ БИЛЕТОВ
         case TICKETS_EXCHANGE_OR_RETURN: // 4
           System.out.println(menuText);
           CinemaMenu2.ticketsExchangeOrReturn(scanner, session);
           break;
-        //5.  МЕНЮ АДМИНИСТРАТОРА
+        //4.  МЕНЮ АДМИНИСТРАТОРА
         case ADMINISTRATOR:
           System.out.println(menuText);
           CinemaMenu2.printSeparator(); // вывод разделительной линии
@@ -64,7 +60,7 @@ public class Main {
           }  // если пароль не совпадает, возвразаемся в главное меню
           CinemaMenu2.administrator(scanner, session);
           break;
-        //0.  Выход
+        //5.  Выход
         case EXIT:
           System.out.println(menuText);
           CinemaMenu2.printExit();

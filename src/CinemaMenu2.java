@@ -1,10 +1,7 @@
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.zip.DataFormatException;
 
 public class CinemaMenu2 {
 
@@ -90,35 +87,50 @@ public class CinemaMenu2 {
   }
 
   public static void buyingTickets(Scanner scanner, Session session, HallMap hallMap) {
-    // функционал покупки билетов
+
   }
 
-  public static void buyTickets(Scanner scanner, Session session) {
-    // метод для проведения покупки билетов
-  }
-
-  public static void ticketsExchangeOrReturn(Scanner scanner, Session session) {
-    // функционал обмена/возврата билетов
-  }
-
-  public static void chooseDateAndTime(Scanner scanner, HallMap hallMap, Session session) {
+  public static void buyTickets(Scanner scanner, Session session, HallMap hallMap) throws IOException {
+    session.showSchedule();
+    System.out.println("Выберите дату и время сеанса :)");
     System.out.println("В какой день хотите посмотреть кино?");
     for (int i = 0; i < session.getDates().length; i++) {
       System.out.println((i + 1) + ". " + session.getDates()[i].format(session.getDateFormatter()));
     }
     int selectedDateIndex = scanner.nextInt();
-    System.out.println("Выберите время: ");
+    System.out.println("Выберите время сеанса:");
     for (int i = 0; i < session.getTimes().length; i++) {
       System.out.println((i + 1) + ". " + session.getTimes()[i].format(session.getTimeFormatter()));
     }
     int selectedTimeIndex = scanner.nextInt();
-    System.out.println("\u001B[32m\t\t\t\tКарта свободных мест:\u001B[0m");
     hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
+    System.out.println("Введите номер ряда от 1 до 9:");
+    int selectedRow = scanner.nextInt();
+    System.out.println("Введите места (через пробел):");
+    String seatsInput = scanner.nextLine();
+    String[] selectedSeatsStr = seatsInput.split(" ");
+    int[] selectedSeats = new int[selectedSeatsStr.length];
+    for (int i = 0; i < selectedSeatsStr.length; i++) {
+      selectedSeats[i] = Integer.parseInt(selectedSeatsStr[i]);
+    }
+    hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, selectedSeats);
+    int ticketPrice = selectedSeats.length * 20;
+    System.out.println("Стоимость билета: " + ticketPrice + " евро");
+    System.out.println("Ваша покупка: " + ticketPrice + " евро");
+    System.out.println("Номер чека: " + session.getChequeNumber());
+  }
+
+
+  public static void ticketsExchangeOrReturn(Scanner scanner, Session session) {
+    // функционал обмена/возврата билетов
   }
 
 
   public static void printExit() {
-    System.out.println("Программа завершена.");
+    System.out.println(
+        "\u001B[32m\t\t\t\tБЛАГОДАРИМ, ЧТО ВОСПОЛЬЗОВАЛИСЬ НАШИМ СЕРВИСОМ! \u001B[0m");
+    System.out.println(
+        "\u001B[32m\t\t\t\t\t\t\t\t\t\t\t\tДО НОВЫХ ВСТРЕЧ! \u001B[0m");
   }
 
   public static void printMapWithSelectedSeats(Map<Integer, Character[]> sessionMap,
