@@ -150,7 +150,7 @@ public class HallMap {
     int index = sessionsIndexGenerator(date, time);
     Character[] seats = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     for (int i : places) {
-      seats[i] = 'X';
+      seats[i - 1] = 'X';
     }
     this.sessions.get(index).put(raw, seats);
     fileEditor.writeMap(sessions.get(index));
