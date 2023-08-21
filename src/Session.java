@@ -28,7 +28,7 @@ public class Session {
   private DateTimeFormatter dateFormatter;
   private LocalDate[] dates;
   private LocalTime[] times;
-  private String[] title;
+  private String[] titles;
   private String[] bonus;
   private Map<LocalDate, Map<String, LocalTime>> schedule; //TODO что тут хранится????
   private String[] chequeData;
@@ -40,7 +40,7 @@ public class Session {
     this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     readDate();
     readTime();
-    readTitle();
+    readTitles();
     readBonus();
   }
 
@@ -126,9 +126,9 @@ public class Session {
   public void showSchedule() {
     System.out.println("Расписание сеансов: ");
     for (int i = 0; i < dates.length; i++) {
-      System.out.println("ДЕНЬ " + dates[i] + 1);
+      System.out.println("ДЕНЬ " + dates[i]);
       for (int j = 0; j < times.length; j++) {
-        System.out.println(times[j].format(timeFormatter) + " " + title[j] + " (" + bonus[j] + ")");
+        System.out.println(times[j].format(timeFormatter) + " " + titles[j] + " (" + bonus[j] + ")");
       }
       System.out.println();
     }
@@ -139,8 +139,8 @@ public class Session {
   }
 
 
-  public void readTitle() throws IOException {
-    this.title = fileEditor.readData(EnumFileTools.TITLE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
+  public void readTitles() throws IOException {
+    this.titles = fileEditor.readData(EnumFileTools.TITLE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
   }
 
   public void writeTitle(String data) throws IOException {
@@ -290,8 +290,8 @@ public class Session {
     return times;
   }
 
-  public String[] getTitle() {
-    return title;
+  public String[] getTitles() {
+    return titles;
   }
 
   public String[] getBonus() {

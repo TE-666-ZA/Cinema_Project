@@ -9,7 +9,7 @@ public enum EnumFileTools {
     MAP_CHEQUE_SPLITTER(""),
     MAP_KEY_VALUE_SPLITTER(">"),
     Money_index("€"),
-    SPLITTER("\n");
+    SPLITTER(",");
 
     private final String messageEnumFileTools;
 
