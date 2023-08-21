@@ -29,17 +29,17 @@ public class Main {
       switch (selectedMenu) {
         //1.  РАСПИСАНИЕ
         case TIMETABLES:
-          System.out.println("\u001B[32m\t\t\t\t1. " + menuText + ":\u001B[0m");
+          System.out.println(menuText);
           session.showSchedule();
           break;
         //2.  КАРТА СВОБОДНЫХ МЕСТ
         case FREE_SPACE:
-          System.out.println("\u001B[32m\t\t\t\t1. " + menuText + ":\u001B[0m");
-          CinemaMenu2.freeSpace(scanner, session, hallMap);
+          System.out.println(menuText);
+          CinemaMenu2.chooseDateAndTime(scanner, hallMap, session);
           break;
         //2.  ПОКУПКА БИЛЕТОВ
         case BUYING_TICKETS:
-          System.out.println("\u001B[32m\t\t\t\t1. " + menuText + ":\u001B[0m");
+          System.out.println(menuText);
           Map<Integer, Character[]> sessionMap = new HashMap<>();
           int selectedRow = 0;
           int[] selectedSeats = new int[0];
@@ -52,14 +52,13 @@ public class Main {
           break;
         //4.  ОБМЕН/ВОЗВРАТ БИЛЕТОВ
         case TICKETS_EXCHANGE_OR_RETURN: // 4
-          System.out.println("\u001B[32m\t\t\t\t1. " + menuText + ":\u001B[0m");
+          System.out.println(menuText);
           CinemaMenu2.ticketsExchangeOrReturn(scanner, session);
           break;
         //5.  МЕНЮ АДМИНИСТРАТОРА
         case ADMINISTRATOR:
-          System.out.println("\u001B[32m\t\t\t\t1. " + menuText + ":\u001B[0m");
+          System.out.println(menuText);
           CinemaMenu2.printSeparator(); // вывод разделительной линии
-          System.out.println("\u001B[32m\t\t\t\t5. АДМИНИСТРАТОР:");
           boolean password = CinemaMenu2.inputPass(scanner); // Метод ввода пароля Администратора
           if (!password) {
             break;
@@ -68,12 +67,12 @@ public class Main {
           break;
         //0.  Выход
         case EXIT:
-          System.out.println("\u001B[32m\t\t\t\t1. " + menuText + ":\u001B[0m");
+          System.out.println(menuText);
           CinemaMenu2.printExit();
           run = false;
           break;
         default:
-          throw new IllegalStateException("Unexpected value: " + selectedMenu);
+          throw new IllegalStateException("Неверное значение: " + selectedMenu);
       }
     }
   }
