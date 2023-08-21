@@ -1,5 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,7 +16,7 @@ public class Session {
   private final int CHEQUE_RAW = 4;
   private final int CHEQUE_SEATS_NUMBERS = 5;
   private final int CHEQUE_SUM = 6;
-  private final int CHEQUE_ISVALID = 7;
+  private final int PAYMENT_METHOD = 7;
   private String prefix;
   private String splitter;
 
@@ -194,54 +192,19 @@ public class Session {
     return result;
   }
 
-  public boolean IsChequeValid() { // этот метод вазвращает true если считаный из Check, чек методом public void readCheque(int chequeNumber) не был отменен и FALSE если отмена произогшла
-    int temp = Integer.parseInt(chequeData[CHEQUE_ISVALID]);
-    if (temp > 0) {
-      return true;
-    }
-    return false;
+  public String getPaymentMethod() {
+    return chequeData[PAYMENT_METHOD];
   }
 
   // этот метод записывает чек в файл check
-  public void writeCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime) throws IOException {
+  public void writeCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime, String paymentMethod) throws IOException {
     int sum = PRICE * rowNumber;
-    int isValid = 1;
     String[] data = {fileEditor.getChequeNumberAmount() + selectedDate +
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + selectedTime +
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + rowNumber
             + EnumFileTools.CHEQUE_SEPARATOR.getTool() + Arrays.toString(selectedSeats) +
-            sum + EnumFileTools.CHEQUE_SEPARATOR.getTool() + isValid};
+            sum + EnumFileTools.CHEQUE_SEPARATOR.getTool() + paymentMethod};
     fileEditor.write(data, EnumFileTools.CHEQUE_INDEX.getTool());
-  }
-
-  public String getSessionKey() {
-    LocalDate currentDate = LocalDate.now();
-    LocalTime currentTime = LocalTime.now();
-
-    for (int i = 0; i < dates.length; i++) {
-      if (currentDate.isEqual(dates[i]) && currentTime.isAfter(times[i])) {
-        return Integer.toString(i + 1);
-      }
-    }
-    // Если нет текущего сеанса, возвращаем сообщение.
-    return "Такого сеанса нет";
-  }
-
-  public void saveScheduleToFile(String filePath) throws IOException {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-      for (Map.Entry<LocalDate, Map<String, LocalTime>> entry : schedule.entrySet()) {
-        LocalDate date = entry.getKey();
-        Map<String, LocalTime> movies = entry.getValue();
-
-        for (Map.Entry<String, LocalTime> movieEntry : movies.entrySet()) {
-          String movieTitle = movieEntry.getKey();
-          LocalTime movieTime = movieEntry.getValue();
-
-          writer.write(date.toString() + "," + movieTitle + "," + movieTime.toString());
-          writer.newLine();
-        }
-      }
-    }
   }
 
   public Map<Integer, String> getMoviesForDate(LocalDate date) {
