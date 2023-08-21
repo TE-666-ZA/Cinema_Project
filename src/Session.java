@@ -282,8 +282,16 @@ public class Session {
     return dates;
   }
 
+  public DateTimeFormatter getDateFormatter() {
+    return dateFormatter;
+  }
+
   public LocalTime[] getTimes() {
     return times;
+  }
+
+  public DateTimeFormatter getTimeFormatter() {
+    return timeFormatter;
   }
 
   public String[] getTitles() {
@@ -293,4 +301,5 @@ public class Session {
   public String[] getBonus() {
     return bonus;
   }
+
 }
