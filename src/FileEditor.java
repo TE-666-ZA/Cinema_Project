@@ -6,7 +6,7 @@ public class FileEditor {
     private final int KEY = 0;
     private final int VALUE = 1;
     private final int REMOVE_FIRST_INDEX = 1;
-    private final int INFO_FULL_LENGHT = 67;
+    private final int INFO_FULL_LENGHT = 48;
     private BufferedReader reader;
     private FileReader in;
     private FileWriter out;
@@ -37,7 +37,6 @@ public class FileEditor {
         }
         this.reader = new BufferedReader(in);
         while ((input = reader.readLine()) != null) {
-            lines++;
             if (!isCheque && input.trim().startsWith(prefix)) {
                 result.append(input.substring(REMOVE_FIRST_INDEX)).append(splitter);
                 reader.close();
@@ -50,6 +49,7 @@ public class FileEditor {
             }
         }
         reader.close();
+        in.close();
         return result.toString();
     }
 
@@ -81,36 +81,51 @@ public class FileEditor {
         String[] temp = read(EnumFileTools.CHEQUE_INDEX.getTool(),
             EnumFileTools.MAP_CHEQUE_SPLITTER.getTool())
             .split(EnumFileTools.CHEQUE_SEPARATOR.getTool());
-        return temp[chequeNumber].toString();
+        return temp[chequeNumber];
     }
 
-    public void write(String[] data, String prefix) throws IOException { // этот метод записывает файлы по заданным параметрам предназначен для класса Session
-        boolean isCheque = false;
+    public void writeData(String data, String prefix) throws IOException { // этот метод записывает файлы по заданным параметрам предназначен для класса Session
+        boolean isCheque = true;
         if (prefix != EnumFileTools.CHEQUE_INDEX.getTool()) {
-            isCheque = true;
+            isCheque = false;
             this.out = new FileWriter(fileAllData, true);
         } else {
             this.out = new FileWriter(fileCheque, true);
         }
         this.writer = new BufferedWriter(out);
-        if (this.lines > INFO_FULL_LENGHT && !isCheque) {
+        if (getLines() >= INFO_FULL_LENGHT && !isCheque) {
             resetFile();
         }
-        for (String output : data) {
-            writer.write(prefix + output);
+        writer.write(prefix + data);
             writer.newLine();
-        }
+
         writer.close();
+        out.close();
+    }
+
+    private int getLines() throws IOException {
+        this.in = new FileReader(fileAllData);
+        BufferedReader reader = new BufferedReader(in);
+        String input;
+        this.lines = 0;
+        while ((input = reader.readLine()) != null) {
+            lines++;
+        }
+        reader.close();
+        in.close();
+        return lines;
     }
 
 
     private void resetFile() throws IOException { //этот метод только внутреклассовый он нужен для того чтобы перезаписывать значения в FullInfo а не создавать новые по тз
+        writer.close();
+        out.close();
         this.out = new FileWriter(fileAllData, false);
         this.writer = new BufferedWriter(out);
     }
 
     public void writeMap(Map<Integer, Character[]> map) throws IOException { // этот метод записывает карту в файл FullInfo предназначен для класса HallMap
-        this.out = new FileWriter(fileAllData);
+        this.out = new FileWriter(fileAllData, true);
         this.writer = new BufferedWriter(out);
         for (Map.Entry<Integer, Character[]> thisMap : map.entrySet()) {
             writer.write(EnumFileTools.MAP_PREFIX.getTool() + thisMap.getKey()
@@ -122,6 +137,7 @@ public class FileEditor {
             writer.newLine();
         }
         writer.close();
+        out.close();
     }
 
     /**

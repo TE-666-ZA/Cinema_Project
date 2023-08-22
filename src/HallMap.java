@@ -8,15 +8,21 @@ public class HallMap {
   private FileEditor fileEditor; // для чтения и записи данных
 
   // тут создаём лист с местами, его можно забрать в FileEditor
+  private CinemaManager cinemaManager;
   public HallMap() throws IOException {
     sessions = new ArrayList<>(9);
     this.fileEditor = new FileEditor();
+    cinemaManager = new CinemaManager();
     readAllSeats();
   }
 
   // вызываем метод для записи данных
   // делаем это в следующе методе:
-  private void writeAllSeats() throws IOException {
+  private void writeAll() throws IOException {
+    cinemaManager.writeDate(cinemaManager.getDates());
+    cinemaManager.writeTime(cinemaManager.getTimes());
+    cinemaManager.writeTitle(cinemaManager.getTitles());
+    cinemaManager.writeBonus(cinemaManager.getBonus());
     for (int i = 0; i < 9; i++) {
       fileEditor.writeMap(sessions.get(i));
     }
@@ -25,7 +31,7 @@ public class HallMap {
   // при выходе из проги нужен метод, в который записывается вся инфа о местах
   // сначала заполняем мапу, потом всё остальное
   public void saveSeatsToFile() throws IOException {
-    writeAllSeats();
+    writeAll();
   }
 
   /**
@@ -148,11 +154,11 @@ public class HallMap {
 
   public void buyTickets(int date, int time, int raw, int[] places) throws IOException {
     int index = sessionsIndexGenerator(date, time);
-    Character[] seats = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    Character[] seats = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
     for (int i : places) {
       seats[i - 1] = 'X';
     }
     this.sessions.get(index).put(raw, seats);
-    fileEditor.writeMap(sessions.get(index));
+    writeAll();
   }
 }

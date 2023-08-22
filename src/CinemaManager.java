@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Session {
+public class CinemaManager {
   private final int PRICE = 20;
   private final int CHEQUE_NUMBER = 0;
   private final int CHEQUE_DATE = 1;
@@ -21,7 +21,7 @@ public class Session {
   private String splitter;
 
   private FileEditor fileEditor;
-  private Session hallMap;
+  private CinemaManager hallMap;
   private DateTimeFormatter timeFormatter;
   private DateTimeFormatter dateFormatter;
   private LocalDate[] dates;
@@ -31,7 +31,7 @@ public class Session {
   private Map<LocalDate, Map<String, LocalTime>> schedule; //TODO что тут хранится????
   private String[] chequeData;
 
-  public Session() throws IOException {
+  public CinemaManager() throws IOException {
     this.fileEditor = new FileEditor();
     this.schedule = new HashMap<>();
     this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -51,11 +51,12 @@ public class Session {
   }
 
   public void writeDate(LocalDate[] dates) throws IOException {
-    String[] data = new String[dates.length];
+    StringBuilder result = new StringBuilder();
+
     for (int i = 0; i < dates.length; i++) {
-      data[i] = dates[i].format(dateFormatter);
+      result.append(dates[i].format(dateFormatter)).append(EnumFileTools.SPLITTER.getTool());
     }
-    fileEditor.write(data, EnumFileTools.DATE_INDEX.getTool());
+    fileEditor.writeData(result.toString(), EnumFileTools.DATE_INDEX.getTool());
   }
 
   public void readTime() throws IOException {
@@ -67,11 +68,11 @@ public class Session {
   }
 
   public void writeTime(LocalTime[] times) throws IOException {
-    String[] data = new String[times.length];
+    StringBuilder result = new StringBuilder();
     for (int i = 0; i < times.length; i++) {
-      data[i] = times[i].format(timeFormatter);
+      result.append(times[i].format(timeFormatter)).append(EnumFileTools.SPLITTER.getTool());
     }
-    fileEditor.write(data, EnumFileTools.TIME_INDEX.getTool());
+    fileEditor.writeData(result.toString(), EnumFileTools.TIME_INDEX.getTool());
   }
 
   /**
@@ -142,7 +143,11 @@ public class Session {
   }
 
   public void writeTitle(String[] data) throws IOException {
-    fileEditor.write(data, EnumFileTools.TITLE_INDEX.getTool());
+    StringBuilder resul = new StringBuilder();
+    for (String s : data) {
+      resul.append(s).append(EnumFileTools.SPLITTER.getTool());
+    }
+    fileEditor.writeData(resul.toString(), EnumFileTools.TITLE_INDEX.getTool());
   }
 
   public void readBonus() throws IOException {
@@ -150,7 +155,11 @@ public class Session {
   }
 
   public void writeBonus(String[] data) throws IOException { // этот метод записывает бонус в Fullinfo
-    fileEditor.write(data, EnumFileTools.BONUS_INDEX.getTool());
+    StringBuilder result = new StringBuilder();
+    for (String s : data) {
+      result.append(s).append(EnumFileTools.SPLITTER.getTool());
+    }
+    fileEditor.writeData(result.toString(), EnumFileTools.BONUS_INDEX.getTool());
   }
 
   public void readCheque(int chequeNumber) throws IOException { // этот метод считывает из файла CHECK всю информацию по номеру чека
@@ -159,8 +168,8 @@ public class Session {
   }
 
   public int getChequeNumber() { // этот метод вазвращает номер считанного из файла CHECK с помощью метода public void readCheque(int chequeNumber) по переданному номеру чека
-    int result = Integer.parseInt(chequeData[CHEQUE_NUMBER]);
-    return result;
+
+    return fileEditor.getChequeNumberAmount();
   }
 
   public LocalDate getChequeDate() { // этот метод вазвращает дату считанного из файла CHECK с помощью метода public void readCheque(int chequeNumber)по переданному номеру чека
@@ -204,7 +213,7 @@ public class Session {
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + rowNumber
             + EnumFileTools.CHEQUE_SEPARATOR.getTool() + Arrays.toString(selectedSeats) +
             sum + EnumFileTools.CHEQUE_SEPARATOR.getTool() + paymentMethod};
-    fileEditor.write(data, EnumFileTools.CHEQUE_INDEX.getTool());
+    fileEditor.writeData(data.toString(), EnumFileTools.CHEQUE_INDEX.getTool());
   }
 
   public Map<Integer, String> getMoviesForDate(LocalDate date) {
