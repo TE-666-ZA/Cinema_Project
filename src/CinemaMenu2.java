@@ -32,11 +32,25 @@ public class CinemaMenu2 {
   }
 
   public static int readCommandMainMenu(Scanner scanner) {
-    for (int i = 0; i < EnumMainMenu.values().length; i++) {
+    int menuLength = EnumMainMenu.values().length;
+    for (int i = 0; i < menuLength; i++) {
       System.out.println(i + 1 + ". " + EnumMainMenu.values()[i].getMenuText());
     }
-    System.out.print("Выберите пункт меню: ");
-    return scanner.nextInt() - 1;
+    int input;
+    do {
+      while (!scanner.hasNextInt()) {
+        System.out.print(
+            "\u001B[31mИзвините, эти символы не подходят. Пожалуйста, введите число: \u001B[0m");
+        scanner.next();
+      }
+      input = scanner.nextInt();
+      if (input < 1 || input > menuLength) {
+        System.out.print(
+            "\u001B[31mНеверно. Пожалуйста, введите число от 1 до " + menuLength + ": \u001B[0m");
+      }
+    } while (input < 1 || input > menuLength);
+
+    return input - 1;
   }
 
   public static void printMapWithYourLocation(Map<Integer, Character[]> sessionMap,
@@ -58,7 +72,6 @@ public class CinemaMenu2 {
         } else {
           System.out.print("\u001B[0m"); // обычный цвет
         }
-
         System.out.print(rowSeats[i] + " ");
       }
 
@@ -88,21 +101,25 @@ public class CinemaMenu2 {
 
   }
 
-  public static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap) throws IOException {
+  public static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap)
+      throws IOException {
     cinemaManager.showSchedule();
-    System.out.println("Выберите дату и время сеанса :)");
+    System.out.println("\u001B[32mВыберите дату и время сеанса :)\u001B[0m");
     System.out.println("В какой день хотите посмотреть кино?");
-    for (int i = 0; i < cinemaManager.getDates().length; i++) {
-      System.out.println((i + 1) + ". " + cinemaManager.getDates()[i].format(cinemaManager.getDateFormatter()));
+    int datesLength = cinemaManager.getDates().length;
+    for (int i = 0; i < datesLength; i++) {
+      System.out.println(
+          (i + 1) + ". " + cinemaManager.getDates()[i].format(cinemaManager.getDateFormatter()));
     }
-    int selectedDateIndex = scanner.nextInt();
+    int selectedDateIndex = readIntInput(scanner, "Выберите дату: ", 1, datesLength) - 1;
     System.out.println("Выберите время сеанса:");
     for (int i = 0; i < cinemaManager.getTimes().length; i++) {
-      System.out.println((i + 1) + ". " + cinemaManager.getTimes()[i].format(cinemaManager.getTimeFormatter()));
+      System.out.println(
+          (i + 1) + ". " + cinemaManager.getTimes()[i].format(cinemaManager.getTimeFormatter()));
     }
     int selectedTimeIndex = scanner.nextInt();
     hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
-    System.out.println("Введите номер ряда от 1 до 9:");
+    System.out.println("Введите номер ряда от 1 до 5:");
     int selectedRow = scanner.nextInt();
     System.out.println("Введите места (через пробел):");
     System.out.println("Введите количество мест:");
@@ -117,6 +134,19 @@ public class CinemaMenu2 {
     System.out.println("Стоимость билета: " + ticketPrice + " евро");
     System.out.println("Ваша покупка: " + ticketPrice + " евро");
     System.out.println("Номер чека: " + cinemaManager.getChequeNumber());
+  }
+
+  private static int readIntInput(Scanner scanner, String prompt, int min, int max) {
+    int input;
+    do {
+      System.out.print(prompt);
+      input = scanner.nextInt();
+      if (input < min || input > max) {
+        System.out.println(
+            "Неверный ввод. Пожалуйста, введите число от " + min + " до " + max + ".");
+      }
+    } while (input < min || input > max);
+    return input;
   }
 
 
