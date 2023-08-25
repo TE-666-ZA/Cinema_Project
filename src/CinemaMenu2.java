@@ -102,17 +102,31 @@ public class CinemaMenu2 {
 
   }
 
-  public static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap)
+  static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap)
       throws IOException {
     cinemaManager.showSchedule();
 
     int selectedDateIndex = selectDate(scanner, cinemaManager);
-    int selectedTimeIndex = selectTime(scanner, cinemaManager);
+    if (selectedDateIndex == 0) {
+      return; // Вернуться в главное меню
+    }
 
-    hallMap.showPlacesByDateTime(selectedDateIndex - 1, selectedTimeIndex - 1);
+    int selectedTimeIndex = selectTime(scanner, cinemaManager);
+    if (selectedTimeIndex == 0) {
+      return; // Вернуться в главное меню
+    }
+
+    hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
 
     int selectedRow = selectRow(scanner);
+    if (selectedRow == 0) {
+      return; // Вернуться в главное меню
+    }
+
     int numberOfSeats = selectNumberOfSeats(scanner);
+    if (numberOfSeats == 0) {
+      return; // Вернуться в главное меню
+    }
 
     int[] selectedSeats = selectSeats(scanner, numberOfSeats);
     hallMap.buyTickets(selectedDateIndex - 1, selectedTimeIndex - 1, selectedRow, selectedSeats);
