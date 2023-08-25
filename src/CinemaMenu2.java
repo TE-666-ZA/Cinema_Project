@@ -6,6 +6,7 @@ public class CinemaMenu2 {
 
   HallMap hallMap = new HallMap();
   CinemaManager cinemaManager = new CinemaManager();
+  static final int TICKET_PRICE = 2;
 
   public CinemaMenu2() throws IOException {
   }
@@ -104,51 +105,91 @@ public class CinemaMenu2 {
   public static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap)
       throws IOException {
     cinemaManager.showSchedule();
-    System.out.println("\u001B[32mВыберите дату и время сеанса :)\u001B[0m");
-    System.out.println("В какой день хотите посмотреть кино?");
+
+    int selectedDateIndex = selectDate(scanner, cinemaManager);
+    int selectedTimeIndex = selectTime(scanner, cinemaManager);
+
+    hallMap.showPlacesByDateTime(selectedDateIndex - 1, selectedTimeIndex - 1);
+
+    int selectedRow = selectRow(scanner);
+    int numberOfSeats = selectNumberOfSeats(scanner);
+
+    int[] selectedSeats = selectSeats(scanner, numberOfSeats);
+    hallMap.buyTickets(selectedDateIndex - 1, selectedTimeIndex - 1, selectedRow, selectedSeats);
+
+    int price = selectedSeats.length * TICKET_PRICE;
+    System.out.println("Стоимость одного билета: " + TICKET_PRICE + " евро");
+    System.out.println("Ваша покупка: " + price + " евро");
+    System.out.println("Номер чека: " + cinemaManager.getChequeNumber());
+  }
+
+  private static int selectDate(Scanner scanner, CinemaManager cinemaManager) {
+    System.out.println("\u001B[32mВыберите дату и время сеанса.\u001B[0m");
+
     int datesLength = cinemaManager.getDates().length;
     for (int i = 0; i < datesLength; i++) {
       System.out.println(
           (i + 1) + ". " + cinemaManager.getDates()[i].format(cinemaManager.getDateFormatter()));
     }
-    int selectedDateIndex = readIntInput(scanner, "Выберите дату: ", 1, datesLength) - 1;
+
+    return readBuyingInput(scanner, 0, "Пожалуйста, выберите дату сеанса (или введите 0 для выхода в главное меню):", 1, datesLength);
+  }
+
+  private static int selectTime(Scanner scanner, CinemaManager cinemaManager) {
     System.out.println("Выберите время сеанса:");
     for (int i = 0; i < cinemaManager.getTimes().length; i++) {
       System.out.println(
           (i + 1) + ". " + cinemaManager.getTimes()[i].format(cinemaManager.getTimeFormatter()));
     }
-    int selectedTimeIndex = scanner.nextInt();
-    hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
-    System.out.println("Введите номер ряда от 1 до 5:");
-    int selectedRow = scanner.nextInt();
-    System.out.println("Введите места (через пробел):");
-    System.out.println("Введите количество мест:");
-    int numberOfSeats = scanner.nextInt();
+
+    return readBuyingInput(scanner, 0, "Пожалуйста, введите номер времени сеанса (или введите 0 для выхода в главное меню): ", 1, cinemaManager.getTimes().length);
+  }
+
+  private static int selectRow(Scanner scanner) {
+    return readBuyingInput(scanner, 0, "Пожалуйста, введите номер ряда (или введите 0 для выхода в главное меню): ", 1, 5);
+  }
+
+  private static int selectNumberOfSeats(Scanner scanner) {
+    return readBuyingInput(scanner, 0, "Пожалуйста, выберите количество билетов (или введите 0 для выхода в главное меню): ", 1, 90);
+  }
+
+  private static int[] selectSeats(Scanner scanner, int numberOfSeats) {
     int[] selectedSeats = new int[numberOfSeats];
-    System.out.println("Введите номера мест (разделяя пробелом):");
+    System.out.println("Пожалуйста, введите номера мест: ");
     for (int i = 0; i < numberOfSeats; i++) {
-      selectedSeats[i] = scanner.nextInt();
-    }
-    hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, selectedSeats);
-    int ticketPrice = selectedSeats.length * 20;
-    System.out.println("Стоимость билета: " + ticketPrice + " евро");
-    System.out.println("Ваша покупка: " + ticketPrice + " евро");
-    System.out.println("Номер чека: " + cinemaManager.getChequeNumber());
-  }
-
-  private static int readIntInput(Scanner scanner, String prompt, int min, int max) {
-    int input;
-    do {
-      System.out.print(prompt);
-      input = scanner.nextInt();
-      if (input < min || input > max) {
-        System.out.println(
-            "Неверный ввод. Пожалуйста, введите число от " + min + " до " + max + ".");
+      while (true) {
+        if (scanner.hasNextInt()) {
+          selectedSeats[i] = scanner.nextInt();
+          break;
+        } else {
+          System.out.print("\u001B[31mНе указаны номера мест. Введите, пожалуйста, цифры:\u001B[0m ");
+          scanner.next();
+        }
       }
-    } while (input < min || input > max);
-    return input;
+    }
+    return selectedSeats;
   }
 
+  private static int readBuyingInput(Scanner scanner, int cancelValue, String textForUser, int min, int max) {
+    System.out.println(textForUser);
+
+    while (true) {
+      String inputStr = scanner.nextLine();
+
+      if (inputStr.matches("\\d+")) {
+        int input = Integer.parseInt(inputStr);
+        if (input == cancelValue || (input >= min && input <= max)) {
+          return input;
+        } else {
+          System.out.println("\u001B[31mЧто-то пошло не так. Введите число от " + min + " до " + max + " (или " + cancelValue + " для отмены): \u001B[0m");
+        }
+      } else {
+        if (!inputStr.isEmpty() && !inputStr.equals("0")) {
+          System.out.println("\u001B[31mНе получилось. Можно ввести только цифры:\u001B[0m");
+        }
+      }
+    }
+  }
 
   public static void ticketsExchangeOrReturn(Scanner scanner, CinemaManager cinemaManager) {
     // функционал обмена/возврата билетов
