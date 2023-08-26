@@ -149,13 +149,16 @@ public class HallMap {
     }
   }
 
-  public void buyTickets(int date, int time, int raw, int[] places) {
+  public void buyTickets(int date, int time, int row, int[] places) {
     int index = sessionsIndexGenerator(date, time);
     Character[] seats = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
     for (int i : places) {
       seats[i - 1] = 'X';
     }
-    this.sessions.get(index).put(raw, seats);
+    String chequeDate = cinemaManager.getDates()[date - 1].toString();
+    String chequeTime = cinemaManager.getTimes()[time - 1].toString();
+    cinemaManager.writeCheque(places, row, chequeDate, chequeTime, "paypal");
+    this.sessions.get(index).put(row, seats);
     writeAll();
   }
 

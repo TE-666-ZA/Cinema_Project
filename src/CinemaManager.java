@@ -212,7 +212,7 @@ public class CinemaManager {
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + rowNumber
             + EnumFileTools.CHEQUE_SEPARATOR.getTool() + Arrays.toString(selectedSeats) +
             sum + EnumFileTools.CHEQUE_SEPARATOR.getTool() + paymentMethod};
-    fileEditor.writeData(data.toString(), EnumFileTools.CHEQUE_INDEX.getTool());
+    fileEditor.writeData(Arrays.toString(data), EnumFileTools.CHEQUE_INDEX.getTool());
   }
 
   public Map<Integer, String> getMoviesForDate(LocalDate date) {

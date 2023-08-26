@@ -20,6 +20,7 @@ public class FileEditor {
     public FileEditor() {
         this.fileAllData = "res/InfoFull.txt";
         this.fileCheque = "res/Check.txt";
+        chequeNumberAmount = 1;
         this.lines = 0;
         this.halMapReaderCounter = 0;
     }
