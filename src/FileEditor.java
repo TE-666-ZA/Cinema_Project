@@ -14,13 +14,14 @@ public class FileEditor {
     private String fileAllData;
     private String fileCheque;
     private int lines; // считает кол-во строк в FullInfo
-    private int chequeNumberAmount; // считывает кол-во чеков в файле при первом чтении CHeck
-
+    private int chequeNumberAmount;// считывает кол-во чеков в файле при первом чтении CHeck
+    private int halMapReaderCounter;
 
     public FileEditor() {
         this.fileAllData = "res/InfoFull.txt";
         this.fileCheque = "res/Check.txt";
         this.lines = 0;
+        this.halMapReaderCounter = 0;
     }
 
     // В ЭТОМ КЛАССЕ НИ В КОЕМ СЛУЧАЕ НЕЧЕГО НИКОГДА НЕ ЗА ЧТО НЕ МЕНЯТЬ НЕЧЕГО ЛИШНЕГО СЮДА НЕ ПЕРЕДАВАТЬ ! ОСТАВИТЬ В ПОКОЕ И ЗАБЫТЬ ПОЛЬЗУЙТЕСЬ hallmap И Session
@@ -28,6 +29,7 @@ public class FileEditor {
     private String read(String prefix, String splitter) { // эту функцию не трогать не для ваших грязныйх ручишек !!!
         boolean isCheque = true;
         StringBuilder result = new StringBuilder();
+        int mapCounter = 0;
         String input;
         try {
             if (prefix != EnumFileTools.CHEQUE_INDEX.getTool()) {
@@ -47,32 +49,46 @@ public class FileEditor {
                     result.append(input.substring(REMOVE_FIRST_INDEX));
                     reader.close();
                     return result.toString();
-
                 }
             }
             reader.close();
             in.close();
             return result.toString();
         } catch (IOException | NullPointerException e) {
-            System.out.println("файл для чтения  не найден! обратитесь к сервисному руководству ");
+            System.err.println("файл для чтения  не найден! обратитесь к сервисному руководству ");
         }
         return null;
     }
 
     public Map<Integer, Character[]> readMap(Map<Integer, Character[]> thisMap) { // эта функция читает и заполняет мапу предназначен для использования в классе HALLMAP
-        String[] temp = read(EnumFileTools.MAP_PREFIX.getTool(),
-                EnumFileTools.MAP_CHEQUE_SPLITTER.getTool()).split(EnumFileTools.
-                MAP_KEY_VALUE_SPLITTER.getTool());
-        int key = Integer.parseInt(temp[KEY]);
-        char[] charArray = temp[VALUE].toCharArray();
-
-        Character[] value = new Character[9];
-        for (int i = 0; i < 9; i++) {
-            value[i] = charArray[i];
+        try {
+            if (halMapReaderCounter == 0) {
+                this.in = new FileReader(fileAllData);
+                this.reader = new BufferedReader(in);
+            }
+            String input;
+            while ((input = reader.readLine()) != null) {
+                if (input.startsWith(EnumFileTools.MAP_PREFIX.getTool())) {
+                    String[] temp = input.substring(REMOVE_FIRST_INDEX).split(EnumFileTools.MAP_KEY_VALUE_SPLITTER.getTool());
+                    int key = Integer.parseInt(temp[KEY]);
+                    char[] charArray = temp[VALUE].toCharArray();
+                    Character[] value = new Character[temp[VALUE].length()];
+                    halMapReaderCounter++;
+                    for (int i = 0; i < 9; i++) {
+                        value[i] = charArray[i];
+                    }
+                    if (halMapReaderCounter == HallMap.getSessionsLength()) {
+                        reader.close();
+                        in.close();
+                    }
+                    thisMap.put(key, value);
+                    return thisMap;
+                }
+            }
+        } catch (IOException | NullPointerException e) {
+            System.err.println("файл для чтения  не найден! обратитесь к сервисному руководству ");
         }
-
-        thisMap.put(key, value);
-        return thisMap;
+        return null;
     }
 
 

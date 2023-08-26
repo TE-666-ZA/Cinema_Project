@@ -2,7 +2,7 @@ import java.util.*;
 
 public class HallMap {
 
-  private List<Map<Integer, Character[]>> sessions;
+  private static List<Map<Integer, Character[]>> sessions;
 
   private FileEditor fileEditor; // для чтения и записи данных
 
@@ -19,10 +19,7 @@ public class HallMap {
   // вызываем метод для записи данных
   // делаем это в следующе методе:
   private void writeAll() {
-    cinemaManager.writeDate(cinemaManager.getDates());
-    cinemaManager.writeTime(cinemaManager.getTimes());
-    cinemaManager.writeTitle(cinemaManager.getTitles());
-    cinemaManager.writeBonus(cinemaManager.getBonus());
+    cinemaManager.writeAll();
     for (int i = 0; i < 9; i++) {
       fileEditor.writeMap(sessions.get(i));
     }
@@ -160,5 +157,9 @@ public class HallMap {
     }
     this.sessions.get(index).put(raw, seats);
     writeAll();
+  }
+
+  public static int getSessionsLength() {
+    return sessions.size();
   }
 }
