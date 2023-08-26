@@ -280,4 +280,19 @@ public class CinemaManager {
     return bonus;
   }
 
+  public void setDate(LocalDate date, int index) {
+    this.dates[index - 1] = date;
+  }
+
+  public void setTime(LocalTime times, int index) {
+    this.times[index - 1] = times;
+  }
+
+  public void setTitle(String title, int index) {
+    this.titles[index - 1] = title;
+  }
+
+  public void setBonus(String bonus, int index) {
+    this.bonus[index - 1] = bonus;
+  }
 }
