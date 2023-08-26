@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -8,7 +7,7 @@ public class CinemaMenu2 {
   CinemaManager cinemaManager = new CinemaManager();
   static final int TICKET_PRICE = 2;
 
-  public CinemaMenu2() throws IOException {
+  public CinemaMenu2() {
   }
 
   public enum EnumMainMenu {
@@ -102,8 +101,7 @@ public class CinemaMenu2 {
 
   }
 
-  static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap)
-      throws IOException {
+  static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap) {
     cinemaManager.showSchedule();
 
     int selectedDateIndex = selectDate(scanner, cinemaManager);

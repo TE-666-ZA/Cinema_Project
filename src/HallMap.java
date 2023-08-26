@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.*;
 
 public class HallMap {
@@ -9,7 +8,8 @@ public class HallMap {
 
   // тут создаём лист с местами, его можно забрать в FileEditor
   private CinemaManager cinemaManager;
-  public HallMap() throws IOException {
+
+  public HallMap() {
     sessions = new ArrayList<>(9);
     this.fileEditor = new FileEditor();
     cinemaManager = new CinemaManager();
@@ -18,7 +18,7 @@ public class HallMap {
 
   // вызываем метод для записи данных
   // делаем это в следующе методе:
-  private void writeAll() throws IOException {
+  private void writeAll() {
     cinemaManager.writeDate(cinemaManager.getDates());
     cinemaManager.writeTime(cinemaManager.getTimes());
     cinemaManager.writeTitle(cinemaManager.getTitles());
@@ -30,16 +30,16 @@ public class HallMap {
 
   // при выходе из проги нужен метод, в который записывается вся инфа о местах
   // сначала заполняем мапу, потом всё остальное
-  public void saveSeatsToFile() throws IOException {
+  public void saveSeatsToFile() {
     writeAll();
   }
 
   /**
    * теперь вызываем метод для чтения каждой мапы делаем это в методе:
    *
-   * @throws IOException
+   * @
    */
-  private void readAllSeats() throws IOException {
+  private void readAllSeats() {
     for (int i = 0; i < 9; i++) {
       Map<Integer, Character[]> sessionMap = new HashMap<>();
       for (int j = 1; j <= 5; j++) {
@@ -152,7 +152,7 @@ public class HallMap {
     }
   }
 
-  public void buyTickets(int date, int time, int raw, int[] places) throws IOException {
+  public void buyTickets(int date, int time, int raw, int[] places) {
     int index = sessionsIndexGenerator(date, time);
     Character[] seats = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
     for (int i : places) {

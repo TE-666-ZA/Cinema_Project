@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +30,7 @@ public class CinemaManager {
   private Map<LocalDate, Map<String, LocalTime>> schedule; //TODO что тут хранится????
   private String[] chequeData;
 
-  public CinemaManager() throws IOException {
+  public CinemaManager() {
     this.fileEditor = new FileEditor();
     this.schedule = new HashMap<>();
     this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -42,7 +41,7 @@ public class CinemaManager {
     readBonus();
   }
 
-  public void readDate() throws IOException {
+  public void readDate() {
     String[] temp = fileEditor.readData(EnumFileTools.DATE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
     this.dates = new LocalDate[temp.length];
     for (int i = 0; i < temp.length; i++) {
@@ -50,7 +49,7 @@ public class CinemaManager {
     }
   }
 
-  public void writeDate(LocalDate[] dates) throws IOException {
+  public void writeDate(LocalDate[] dates) {
     StringBuilder result = new StringBuilder();
 
     for (int i = 0; i < dates.length; i++) {
@@ -59,7 +58,7 @@ public class CinemaManager {
     fileEditor.writeData(result.toString(), EnumFileTools.DATE_INDEX.getTool());
   }
 
-  public void readTime() throws IOException {
+  public void readTime() {
     String[] temp = fileEditor.readData(EnumFileTools.TIME_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
     this.times = new LocalTime[temp.length];
     for (int i = 0; i < temp.length; i++) {
@@ -67,7 +66,7 @@ public class CinemaManager {
     }
   }
 
-  public void writeTime(LocalTime[] times) throws IOException {
+  public void writeTime(LocalTime[] times) {
     StringBuilder result = new StringBuilder();
     for (int i = 0; i < times.length; i++) {
       result.append(times[i].format(timeFormatter)).append(EnumFileTools.SPLITTER.getTool());
@@ -138,11 +137,11 @@ public class CinemaManager {
   }
 
 
-  public void readTitles() throws IOException {
+  public void readTitles() {
     this.titles = fileEditor.readData(EnumFileTools.TITLE_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
   }
 
-  public void writeTitle(String[] data) throws IOException {
+  public void writeTitle(String[] data) {
     StringBuilder resul = new StringBuilder();
     for (String s : data) {
       resul.append(s).append(EnumFileTools.SPLITTER.getTool());
@@ -150,11 +149,11 @@ public class CinemaManager {
     fileEditor.writeData(resul.toString(), EnumFileTools.TITLE_INDEX.getTool());
   }
 
-  public void readBonus() throws IOException {
+  public void readBonus() {
     this.bonus = fileEditor.readData(EnumFileTools.BONUS_INDEX.getTool(), EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
   }
 
-  public void writeBonus(String[] data) throws IOException { // этот метод записывает бонус в Fullinfo
+  public void writeBonus(String[] data) { // этот метод записывает бонус в Fullinfo
     StringBuilder result = new StringBuilder();
     for (String s : data) {
       result.append(s).append(EnumFileTools.SPLITTER.getTool());
@@ -162,7 +161,7 @@ public class CinemaManager {
     fileEditor.writeData(result.toString(), EnumFileTools.BONUS_INDEX.getTool());
   }
 
-  public void readCheque(int chequeNumber) throws IOException { // этот метод считывает из файла CHECK всю информацию по номеру чека
+  public void readCheque(int chequeNumber) { // этот метод считывает из файла CHECK всю информацию по номеру чека
     String data = fileEditor.readCheque(chequeNumber);
     this.chequeData = data.split(EnumFileTools.CHEQUE_SEPARATOR.getTool());
   }
@@ -206,7 +205,7 @@ public class CinemaManager {
   }
 
   // этот метод записывает чек в файл check
-  public void writeCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime, String paymentMethod) throws IOException {
+  public void writeCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime, String paymentMethod) {
     int sum = PRICE * rowNumber;
     String[] data = {fileEditor.getChequeNumberAmount() + selectedDate +
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + selectedTime +
@@ -227,6 +226,13 @@ public class CinemaManager {
       }
     }
     return movieMap;
+  }
+
+  public void writeAll() {
+    writeDate(dates);
+    writeTime(times);
+    writeTitle(titles);
+    writeBonus(bonus);
   }
 
   public void selectMovie(LocalDate date, String selectedMovieTitle) {
