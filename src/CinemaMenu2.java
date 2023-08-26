@@ -129,7 +129,7 @@ public class CinemaMenu2 {
     }
 
     int[] selectedSeats = selectSeats(scanner, numberOfSeats);
-    hallMap.buyTickets(selectedDateIndex - 1, selectedTimeIndex - 1, selectedRow, selectedSeats);
+    hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, selectedSeats);
 
     int price = selectedSeats.length * TICKET_PRICE;
     System.out.println("Стоимость одного билета: " + TICKET_PRICE + " евро");
