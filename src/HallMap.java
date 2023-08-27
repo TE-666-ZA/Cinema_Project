@@ -6,13 +6,10 @@ public class HallMap {
 
   private FileEditor fileEditor; // для чтения и записи данных
 
-  // тут создаём лист с местами, его можно забрать в FileEditor
-  private CinemaManager cinemaManager;
 
   public HallMap() {
     sessions = new ArrayList<>(9);
     this.fileEditor = new FileEditor();
-    cinemaManager = new CinemaManager();
     readAllSeats();
   }
 
@@ -155,11 +152,8 @@ public class HallMap {
       seats[i - 1] = 'X';
     }
 
-    String chequeDate = cinemaManager.getDates()[date - 1].toString();
-    String chequeTime = cinemaManager.getTimes()[time - 1].toString();
-    cinemaManager.writeCheque(places, row, chequeDate, chequeTime, "paypal");
     this.sessions.get(index).put(row, seats);
-    cinemaManager.writeAll();
+
   }
 
   public Character[] getSessionPlacesByDateANdTime(int date, int time, int row) {

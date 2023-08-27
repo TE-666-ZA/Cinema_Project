@@ -30,9 +30,9 @@ public class CinemaManager {
   public CinemaManager() {
     this.fileEditor = new FileEditor();
     this.schedule = new HashMap<>();
+    hallMap = new HallMap();
     this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    this.hallMap = new HallMap();
     readDate();
     readTime();
     readTitles();
@@ -255,17 +255,21 @@ public class CinemaManager {
 
   public void setDate(LocalDate date, int index) {
     this.dates[index - 1] = date;
+    writeAll();
   }
 
   public void setTime(LocalTime times, int index) {
     this.times[index - 1] = times;
+    writeAll();
   }
 
   public void setTitle(String title, int index) {
     this.titles[index - 1] = title;
+    writeAll();
   }
 
   public void setBonus(String bonus, int index) {
     this.bonus[index - 1] = bonus;
+    writeAll();
   }
 }
