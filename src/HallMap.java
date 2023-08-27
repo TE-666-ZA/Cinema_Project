@@ -159,7 +159,7 @@ public class HallMap {
     String chequeTime = cinemaManager.getTimes()[time - 1].toString();
     cinemaManager.writeCheque(places, row, chequeDate, chequeTime, "paypal");
     this.sessions.get(index).put(row, seats);
-    writeAllMaps();
+    cinemaManager.writeAll();
   }
 
   public Character[] getSessionPlacesByDateANdTime(int date, int time, int row) {
