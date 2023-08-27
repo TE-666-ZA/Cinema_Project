@@ -3,7 +3,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CinemaManager {
@@ -16,11 +15,9 @@ public class CinemaManager {
   private final int CHEQUE_SEATS_NUMBERS = 5;
   private final int CHEQUE_SUM = 6;
   private final int PAYMENT_METHOD = 7;
-  private String prefix;
-  private String splitter;
 
   private FileEditor fileEditor;
-  private CinemaManager hallMap;
+  private HallMap hallMap;
   private DateTimeFormatter timeFormatter;
   private DateTimeFormatter dateFormatter;
   private LocalDate[] dates;
@@ -35,6 +32,7 @@ public class CinemaManager {
     this.schedule = new HashMap<>();
     this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    this.hallMap = new HallMap();
     readDate();
     readTime();
     readTitles();
@@ -104,23 +102,7 @@ public class CinemaManager {
     return false;
   }
 
-  /**
-   * @param date
-   * @return
-   */
-  public Map<Integer, Map<Integer, Character[]>> getHallMapsForDate(LocalDate date) {
-    Map<Integer, Map<Integer, Character[]>> hallMaps = new LinkedHashMap<>();
-    for (int i = 0; i < dates.length; i++) {
-      if (dates[i].equals(date)) {
-        hallMaps.put(i + 1, hallMap.getSessionMap(i + 1));
-      }
-    }
-    return hallMaps;
-  }
 
-  /**
-   *
-   */
   public void showSchedule() {
     System.out.println("Расписание сеансов: ");
     for (int i = 0; i < dates.length; i++) {
@@ -132,9 +114,6 @@ public class CinemaManager {
     }
   }
 
-  public Map<Integer, Character[]> getSessionMap(int sessionKey) {
-    return hallMap.getSessionMap(sessionKey);
-  }
 
 
   public void readTitles() {
@@ -233,6 +212,7 @@ public class CinemaManager {
     writeTime(times);
     writeTitle(titles);
     writeBonus(bonus);
+    hallMap.writeAllMaps();
   }
 
   public void selectMovie(LocalDate date, String selectedMovieTitle) {
@@ -243,13 +223,6 @@ public class CinemaManager {
     } else {
       System.out.println("Выбранный фильм не доступен.");
     }
-  }
-
-  public void addSession(LocalDate date, LocalTime time, String title) {
-    if (!schedule.containsKey(date)) {
-      schedule.put(date, new HashMap<>());
-    }
-    schedule.get(date).put(title, time);
   }
 
   public Map<LocalDate, Map<String, LocalTime>> getSchedule() {

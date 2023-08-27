@@ -18,8 +18,7 @@ public class HallMap {
 
   // вызываем метод для записи данных
   // делаем это в следующе методе:
-  private void writeAll() {
-    cinemaManager.writeAll();
+  public void writeAllMaps() {
     for (int i = 0; i < 9; i++) {
       fileEditor.writeMap(sessions.get(i));
     }
@@ -28,7 +27,7 @@ public class HallMap {
   // при выходе из проги нужен метод, в который записывается вся инфа о местах
   // сначала заполняем мапу, потом всё остальное
   public void saveSeatsToFile() {
-    writeAll();
+    writeAllMaps();
   }
 
   /**
@@ -160,7 +159,7 @@ public class HallMap {
     String chequeTime = cinemaManager.getTimes()[time - 1].toString();
     cinemaManager.writeCheque(places, row, chequeDate, chequeTime, "paypal");
     this.sessions.get(index).put(row, seats);
-    writeAll();
+    writeAllMaps();
   }
 
   public Character[] getSessionPlacesByDateANdTime(int date, int time, int row) {
