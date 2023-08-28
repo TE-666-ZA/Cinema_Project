@@ -125,24 +125,24 @@ public class CinemaMenu2 {
 
     int selectedDateIndex = selectDate(scanner, cinemaManager);
     if (selectedDateIndex == 0) {
-      return; // Вернуться в главное меню
+      return;
     }
 
     int selectedTimeIndex = selectTime(scanner, cinemaManager);
     if (selectedTimeIndex == 0) {
-      return; // Вернуться в главное меню
+      return;
     }
 
     hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
 
     int selectedRow = selectRow(scanner);
     if (selectedRow == 0) {
-      return; // Вернуться в главное меню
+      return;
     }
 
     int numberOfSeats = selectNumberOfSeats(scanner);
     if (numberOfSeats == 0) {
-      return; // Вернуться в главное меню
+      return;
     }
 
     int[] selectedSeats = selectSeats(scanner, numberOfSeats);
@@ -151,16 +151,26 @@ public class CinemaMenu2 {
     for (int i = 0; i < selectedSeats.length; i++) {
       while (checkedFreeSeats[selectedSeats[i] - 1].equals('X')) {
         System.out.println(
-            "Это(-и) место(-а) " + selectedSeats[i] + " уже куплено(-ы), выберите другое(-ие)");
+            "\u001B[31mЭто(-и) место(-а) уже куплено(-ы), выберите другое(-ие)\u001B[0m");
         selectedSeats = selectSeats(scanner, numberOfSeats);
       }
       checkedFreeSeats[selectedSeats[i] - 1] = 'X';
     }
-    for (String payment : cinemaManager.getPaymentMethods()) {
-      System.out.println(); // выбор способов
+    System.out.println("\u001B[35mКак можно оплатить покупку:\u001B[0m");
+    for (int i = 0; i < cinemaManager.getPaymentMethods().length; i++) {
+      System.out.println((i + 1) + ". " + cinemaManager.getPaymentMethods()[i]);
     }
-    int paymentPoint = scanner.nextInt(); // считываем номер выбора
-    cinemaManager.writeCheque(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats, paymentPoint);
+    System.out.println();
+    int paymentMethodChoice = readBuyingInput(scanner, 0,
+        "Введите номер метода оплаты (или введите 0 для отмены): ", 1,
+        cinemaManager.getPaymentMethods().length);
+    if (paymentMethodChoice == 0) {
+      System.out.println("Возвращаемся в главное меню...");
+      return;
+    }
+    String selectedPaymentMethod = cinemaManager.getPaymentMethods()[paymentMethodChoice - 1];
+    cinemaManager.writeCheque(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats,
+        paymentMethodChoice, selectedPaymentMethod);
     hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats);
     cinemaManager.writeAll();
 
@@ -217,7 +227,7 @@ public class CinemaMenu2 {
           break;
         } else {
           System.out.print(
-              "\u001B[31mНе указаны номера мест. Введите, пожалуйста, цифры:\u001B[0m ");
+              "\u001B[31mНе указаны номера мест. Введите, пожалуйста, положительные цифры:\u001B[0m ");
           scanner.next();
         }
       }
@@ -243,7 +253,8 @@ public class CinemaMenu2 {
         }
       } else {
         if (!inputStr.isEmpty() && !inputStr.equals("0")) {
-          System.out.println("\u001B[31mНе получилось. Можно ввести только цифры:\u001B[0m");
+          System.out.println(
+              "\u001B[31mНе получилось. Можно ввести только положительные цифры:\u001B[0m");
         }
       }
     }
@@ -253,25 +264,26 @@ public class CinemaMenu2 {
     // функционал обмена/возврата билетов
   }
 
-
-  public static void printExit() {
-    System.out.println(
-        "\u001B[32m\t\t\t\tБЛАГОДАРИМ, ЧТО ВОСПОЛЬЗОВАЛИСЬ НАШИМ СЕРВИСОМ! \u001B[0m");
-    System.out.println(
-        "\u001B[32m\t\t\t\t\t\t\t\t\t\t\t\tДО НОВЫХ ВСТРЕЧ! \u001B[0m");
-  }
-
-  static void adminMenu(Scanner scanner, CinemaManager cinemaManager) {
+  static boolean checkLogAndPass(Scanner scanner) {
     System.out.print("Логин: ");
+    scanner.nextLine();
     String username = scanner.nextLine();
     if (!username.equals(ADMIN_USERNAME)) {
-      System.out.println("Неверный логин. Сейчас вы вернетесь в главное меню");
-      return;
+      System.out.println("\u001B[31mНеверный логин, доступа к меню администратора нет\u001B[0m");
+      return false;
     }
     System.out.print("Пароль: ");
     String password = scanner.nextLine();
     if (!password.equals(ADMIN_PASSWORD)) {
-      System.out.println("Неверный пароль. Сейчас вы вернетесь в главное меню");
+      System.out.println("\u001B[31mНеверный пароль, доступа к меню администратора нет\u001B[0m");
+      return false;
+    }
+    System.out.println("\u001B[32mОтлично, вы прошли авторизацию!\u001B[0m");
+    return true;
+  }
+
+  static void adminMenu(Scanner scanner, CinemaManager cinemaManager) {
+    if (!checkLogAndPass(scanner)) {
       return;
     }
     System.out.println("\u001B[32mМеню администратора:\u001B[0m");
@@ -279,11 +291,9 @@ public class CinemaMenu2 {
       EnumAdminMenu menuItem = EnumAdminMenu.values()[i];
       System.out.println((i + 1) + ". " + menuItem.getAdminMenuText());
     }
-
     System.out.print("\nВыберите пункт меню: ");
     int choice = readAdminMenuChoice(scanner);
     EnumAdminMenu selectedMenuItem = EnumAdminMenu.values()[choice - 1];
-
     switch (selectedMenuItem) {
       case CHANGE_DATE:
         changeSessionDate(scanner, cinemaManager);
@@ -319,7 +329,8 @@ public class CinemaMenu2 {
         }
       } else {
         if (!inputStr.isEmpty()) {
-          System.out.println("\u001B[31mНе получилось. Можно ввести только цифры:\u001B[0m");
+          System.out.println(
+              "\u001B[31mНе получилось. Можно ввести только положительные цифры:\u001B[0m");
         }
       }
     }
@@ -339,5 +350,12 @@ public class CinemaMenu2 {
 
   private static void setNewBonus(Scanner scanner, CinemaManager cinemaManager) {
 
+  }
+
+  public static void printExit() {
+    System.out.println(
+        "\u001B[32m\t\t\t\tБЛАГОДАРИМ, ЧТО ВОСПОЛЬЗОВАЛИСЬ НАШИМ СЕРВИСОМ! \u001B[0m");
+    System.out.println(
+        "\u001B[32m\t\t\t\t\t\t\t\t\t\t\t\tДО НОВЫХ ВСТРЕЧ! \u001B[0m");
   }
 }
