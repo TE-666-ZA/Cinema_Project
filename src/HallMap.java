@@ -5,6 +5,7 @@ public class HallMap {
   private static List<Map<Integer, Character[]>> sessions;
 
   private FileEditor fileEditor; // для чтения и записи данных
+  private CinemaManager cinemaManager;
 
 
   public HallMap() {
