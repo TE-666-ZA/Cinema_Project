@@ -187,7 +187,8 @@ public class CinemaManager {
   }
 
   // этот метод записывает чек в файл check
-  public void writeCheque(int dateIndex, int timeIndex, int row, Character[] seats, int paymentMethodIndex) {
+  public void writeCheque(int dateIndex, int timeIndex, int row, Character[] seats, int paymentMethodIndex,
+      String selectedPaymentMethod) {
     int sum = PRICE * row;
     paymentMethodIndex = paymentMethodIndex - 1;
     chequeNumber++;
