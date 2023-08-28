@@ -27,6 +27,23 @@ public class CinemaMenu2 {
     }
   }
 
+  public enum EnumAdminMenu {
+    CHANGE_DATE("Изменить дату сеанса"),
+    CHANGE_TIME("Изменить время сеанса"),
+    CHANGE_TITLE("Изменить название фильма"),
+    SET_BONUS("Назначить новый бонус"),
+    BACK("Вернуться в главное меню");
+    private final String adminMenuText;
+
+    EnumAdminMenu(String menuText) {
+      this.adminMenuText = menuText;
+    }
+
+    public String getAdminMenuText() {
+      return adminMenuText;
+    }
+  }
+
   public static void printSeparator() {
     System.out.println("============================================================");
   }
@@ -127,6 +144,16 @@ public class CinemaMenu2 {
     }
 
     int[] selectedSeats = selectSeats(scanner, numberOfSeats);
+    Character[] checkFreeSpaces = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex,selectedTimeIndex,selectedRow);
+    for(int i : selectedSeats){
+      if(checkFreeSpaces[selectedSeats[i]].equals('X')) {
+        while (true) {
+          System.out.println(
+              "Это(-и) место(-а) " + selectedSeats[i] + " уже куплено(-ы), выберите другое(-ие)");
+          selectedSeats = selectSeats(scanner, numberOfSeats);
+        }
+      }
+    }
     hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, selectedSeats);
     cinemaManager.writeAll();
 
@@ -145,7 +172,9 @@ public class CinemaMenu2 {
           (i + 1) + ". " + cinemaManager.getDates()[i].format(cinemaManager.getDateFormatter()));
     }
 
-    return readBuyingInput(scanner, 0, "Пожалуйста, выберите дату сеанса (или введите 0 для выхода в главное меню):", 1, datesLength);
+    return readBuyingInput(scanner, 0,
+        "Пожалуйста, выберите дату сеанса (или введите 0 для выхода в главное меню):", 1,
+        datesLength);
   }
 
   private static int selectTime(Scanner scanner, CinemaManager cinemaManager) {
@@ -155,15 +184,20 @@ public class CinemaMenu2 {
           (i + 1) + ". " + cinemaManager.getTimes()[i].format(cinemaManager.getTimeFormatter()));
     }
 
-    return readBuyingInput(scanner, 0, "Пожалуйста, введите номер времени сеанса (или введите 0 для выхода в главное меню): ", 1, cinemaManager.getTimes().length);
+    return readBuyingInput(scanner, 0,
+        "Пожалуйста, введите номер времени сеанса (или введите 0 для выхода в главное меню): ", 1,
+        cinemaManager.getTimes().length);
   }
 
   private static int selectRow(Scanner scanner) {
-    return readBuyingInput(scanner, 0, "Пожалуйста, введите номер ряда (или введите 0 для выхода в главное меню): ", 1, 5);
+    return readBuyingInput(scanner, 0,
+        "Пожалуйста, введите номер ряда (или введите 0 для выхода в главное меню): ", 1, 5);
   }
 
   private static int selectNumberOfSeats(Scanner scanner) {
-    return readBuyingInput(scanner, 0, "Пожалуйста, выберите количество билетов (или введите 0 для выхода в главное меню): ", 1, 90);
+    return readBuyingInput(scanner, 0,
+        "Пожалуйста, выберите количество билетов (или введите 0 для выхода в главное меню): ", 1,
+        90);
   }
 
   private static int[] selectSeats(Scanner scanner, int numberOfSeats) {
@@ -175,7 +209,8 @@ public class CinemaMenu2 {
           selectedSeats[i] = scanner.nextInt();
           break;
         } else {
-          System.out.print("\u001B[31mНе указаны номера мест. Введите, пожалуйста, цифры:\u001B[0m ");
+          System.out.print(
+              "\u001B[31mНе указаны номера мест. Введите, пожалуйста, цифры:\u001B[0m ");
           scanner.next();
         }
       }
@@ -183,7 +218,8 @@ public class CinemaMenu2 {
     return selectedSeats;
   }
 
-  private static int readBuyingInput(Scanner scanner, int cancelValue, String textForUser, int min, int max) {
+  private static int readBuyingInput(Scanner scanner, int cancelValue, String textForUser, int min,
+      int max) {
     System.out.println(textForUser);
 
     while (true) {
@@ -194,7 +230,9 @@ public class CinemaMenu2 {
         if (input == cancelValue || (input >= min && input <= max)) {
           return input;
         } else {
-          System.out.println("\u001B[31mЧто-то пошло не так. Введите число от " + min + " до " + max + " (или " + cancelValue + " для отмены): \u001B[0m");
+          System.out.println(
+              "\u001B[31mЧто-то пошло не так. Введите число от " + min + " до " + max + " (или "
+                  + cancelValue + " для отмены): \u001B[0m");
         }
       } else {
         if (!inputStr.isEmpty() && !inputStr.equals("0")) {
@@ -216,9 +254,72 @@ public class CinemaMenu2 {
         "\u001B[32m\t\t\t\t\t\t\t\t\t\t\t\tДО НОВЫХ ВСТРЕЧ! \u001B[0m");
   }
 
-  public static void printMapWithSelectedSeats(Map<Integer, Character[]> sessionMap,
-      int selectedRow,
-      int[] selectedSeats) {
-    // метод для вывода карты с выбранными местами
+  static void adminMenu(Scanner scanner, CinemaManager cinemaManager) {
+    System.out.println("\u001B[32mМеню администратора:\u001B[0m");
+
+    for (int i = 0; i < EnumAdminMenu.values().length; i++) {
+      EnumAdminMenu menuItem = EnumAdminMenu.values()[i];
+      System.out.println((i + 1) + ". " + menuItem.getAdminMenuText());
+    }
+
+    System.out.print("\nВыберите пункт меню: ");
+    int choice = readAdminMenuChoice(scanner);
+    EnumAdminMenu selectedMenuItem = EnumAdminMenu.values()[choice - 1];
+
+    switch (selectedMenuItem) {
+      case CHANGE_DATE:
+        changeSessionDate(scanner, cinemaManager);
+        break;
+      case CHANGE_TIME:
+        changeSessionTime(scanner, cinemaManager);
+        break;
+      case CHANGE_TITLE:
+        changeMovieTitle(scanner, cinemaManager);
+        break;
+      case SET_BONUS:
+        setNewBonus(scanner, cinemaManager);
+        break;
+      case BACK:
+        System.out.println("Возвращаемся в главное меню...");
+        break;
+    }
+  }
+
+  private static int readAdminMenuChoice(Scanner scanner) {
+    int maxChoice = EnumAdminMenu.values().length;
+
+    while (true) {
+      System.out.print("Выберите пункт меню: ");
+      String inputStr = scanner.nextLine();
+
+      if (inputStr.matches("\\d+")) {
+        int input = Integer.parseInt(inputStr);
+        if (input >= 1 && input <= maxChoice) {
+          return input;
+        } else {
+          System.out.println("\u001B[31mЧто-то пошло не так. Введите число от 1 до " + maxChoice + ":\u001B[0m");
+        }
+      } else {
+        if (!inputStr.isEmpty()) {
+          System.out.println("\u001B[31mНе получилось. Можно ввести только цифры:\u001B[0m");
+        }
+      }
+    }
+  }
+
+  private static void changeSessionDate(Scanner scanner, CinemaManager cinemaManager) {
+    
+  }
+
+  private static void changeSessionTime(Scanner scanner, CinemaManager cinemaManager) {
+   
+  }
+
+  private static void changeMovieTitle(Scanner scanner, CinemaManager cinemaManager) {
+    
+  }
+
+  private static void setNewBonus(Scanner scanner, CinemaManager cinemaManager) {
+    
   }
 }

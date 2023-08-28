@@ -41,14 +41,7 @@ public class Main {
           break;
         //4.  МЕНЮ АДМИНИСТРАТОРА
         case ADMINISTRATOR:
-          CinemaMenu2.printSeparator();
-          System.out.println(menuText);
-          CinemaMenu2.printSeparator(); // вывод разделительной линии
-          boolean password = CinemaMenu2.inputPass(scanner); // Метод ввода пароля Администратора
-          if (!password) {
-            break;
-          }  // если пароль не совпадает, возвразаемся в главное меню
-          CinemaMenu2.administrator(scanner, cinemaManager);
+          CinemaMenu2.adminMenu(scanner, cinemaManager);
           break;
         //5.  Выход
         case EXIT:
