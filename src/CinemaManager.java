@@ -190,13 +190,12 @@ public class CinemaManager {
   public void writeCheque(int dateIndex, int timeIndex, int row, Character[] seats, int paymentMethodIndex,
       String selectedPaymentMethod) {
     int sum = PRICE * row;
-    paymentMethodIndex = paymentMethodIndex - 1;
     chequeNumber++;
     String[] data = {chequeNumber + dates[dateIndex - 1].toString() +
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + times[timeIndex - 1].toString() +
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + row
             + EnumFileTools.CHEQUE_SEPARATOR.getTool() + Arrays.toString(seats) +
-            sum + EnumFileTools.CHEQUE_SEPARATOR.getTool() + paymentMethods[paymentMethodIndex]};
+            sum + EnumFileTools.CHEQUE_SEPARATOR.getTool() + paymentMethods[paymentMethodIndex - 1]};
     fileEditor.writeData(Arrays.toString(data), EnumFileTools.CHEQUE_INDEX.getTool());
   }
 
@@ -263,13 +262,13 @@ public class CinemaManager {
     return paymentMethods;
   }
 
-  public void setDate(LocalDate date, int index) {
-    this.dates[index - 1] = date;
+  public void setDate(String date, int index) {
+    this.dates[index - 1] = LocalDate.parse(date);
     writeAll();
   }
 
-  public void setTime(LocalTime times, int index) {
-    this.times[index - 1] = times;
+  public void setTime(String time, int index) {
+    this.times[index - 1] = LocalTime.parse(time);
     writeAll();
   }
 
