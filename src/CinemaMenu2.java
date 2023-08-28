@@ -159,6 +159,7 @@ public class CinemaMenu2 {
     hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats);
 
     cinemaManager.writeAll();
+    cinemaManager.writeCheque(selectedDateIndex, selectedTimeIndex, selectedRow, checkFreeSpaces, "giroPay");
 
     int price = selectedSeats.length * TICKET_PRICE;
     System.out.println("Стоимость одного билета: " + TICKET_PRICE + " евро");
