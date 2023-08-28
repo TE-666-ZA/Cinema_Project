@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -315,7 +318,6 @@ public class CinemaMenu2 {
 
   private static int readAdminMenuChoice(Scanner scanner) {
     int maxChoice = EnumAdminMenu.values().length;
-
     while (true) {
       String inputStr = scanner.nextLine();
 
@@ -337,19 +339,168 @@ public class CinemaMenu2 {
   }
 
   private static void changeSessionDate(Scanner scanner, CinemaManager cinemaManager) {
-
+    cinemaManager.showSchedule();
+    System.out.println("Выберите дату сеанса, чтобы изменить:");
+    LocalDate[] sessionDates = cinemaManager.getDates();
+    for (int i = 0; i < sessionDates.length; i++) {
+      System.out.println((i + 1) + ". " + sessionDates[i].format(cinemaManager.getDateFormatter()));
+    }
+    int dateChoice = readBuyingInput(scanner, 0,
+        "Введите номер даты (или введите 0 для отмены): ",
+        1, sessionDates.length);
+    if (dateChoice == 0) {
+      System.out.println("Отмена изменения даты сеанса");
+      return;
+    }
+    LocalDate selectedDate = sessionDates[dateChoice - 1];
+    System.out.print("Введите новую дату сеанса в формате дд-мм-гггг: ");
+    String newDateStr = scanner.nextLine();
+    LocalDate newDate = LocalDate.parse(newDateStr, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    if (!cinemaManager.isDateCorrect(LocalDate.parse(newDateStr, DateTimeFormatter.ofPattern("dd-MM-yyyy")))) {
+      System.out.println("\u001B[31mВведена некорректная дата\u001B[0m");
+      return;
+    }
+    cinemaManager.setDate(newDate.toString(), dateChoice - 1);
+    System.out.println("\u001B[32mДата успешно изменена.\u001B[0m");
   }
 
   private static void changeSessionTime(Scanner scanner, CinemaManager cinemaManager) {
+    cinemaManager.showSchedule();
+    System.out.println("Выберите время сеанса, чтобы изменить:");
+    LocalTime[] sessionTimes = cinemaManager.getTimes();
+    for (int i = 0; i < sessionTimes.length; i++) {
+      System.out.println((i + 1) + ". " + sessionTimes[i].format(cinemaManager.getTimeFormatter()));
+    }
+    int timeChoice = readBuyingInput(scanner, 0,
+        "Введите номер времени (или введите 0 для отмены): ",
+        1, sessionTimes.length);
+    if (timeChoice == 0) {
+      System.out.println("Отмена изменения времени сеанса.");
+      return;
+    }
+    LocalTime selectedTime = sessionTimes[timeChoice - 1];
+    System.out.print("Введите новое время сеанса в формате чч:мм: ");
+    String newTimeStr = scanner.nextLine();
+    LocalTime newTime = LocalTime.parse(newTimeStr, DateTimeFormatter.ofPattern("HH:mm"));
+    if (!cinemaManager.isTimeCorrect(newTime)) {
+      System.out.println("\u001B[31mВведено некорректное время\u001B[0m");
+      return;
+    }
+    cinemaManager.setTime(newTime.toString(), timeChoice - 1);
+    System.out.println("\u001B[32mВремя успешно изменено.\u001B[0m");
+  }
 
+
+  private static int readChoice(Scanner scanner, int maxChoice, String prompt) {
+    int choice;
+    do {
+      System.out.println(prompt);
+      while (!scanner.hasNextInt()) {
+        System.out.print("\u001B[31mИзвините, эти символы не подходят. Пожалуйста, введите число: \u001B[0m");
+        scanner.next();
+      }
+      choice = scanner.nextInt();
+      if (choice < 1 || choice > maxChoice) {
+        System.out.print("\u001B[31mНеверно. Пожалуйста, введите число от 1 до " + maxChoice + ": \u001B[0m");
+      }
+    } while (choice < 1 || choice > maxChoice);
+    return choice;
   }
 
   private static void changeMovieTitle(Scanner scanner, CinemaManager cinemaManager) {
+    cinemaManager.showSchedule();
+    System.out.println("Выберите день и время сеанса:");
+    LocalDate[] sessionDates = cinemaManager.getDates();
+    LocalTime[] sessionTimes = cinemaManager.getTimes();
+    for (int i = 0; i < sessionDates.length; i++) {
+      System.out.println((i + 1) + ". " + sessionDates[i].format(cinemaManager.getDateFormatter()));
+    }
+    int dateChoice = readBuyingInput(scanner, 0,
+        "Введите номер даты (или введите 0 для отмены): ",
+        1, sessionDates.length);
+    if (dateChoice == 0) {
+      System.out.println("Отмена изменения названия фильма.");
+      return;
+    }
+    for (int i = 0; i < sessionTimes.length; i++) {
+      System.out.println((i + 1) + ". " + sessionTimes[i].format(cinemaManager.getTimeFormatter()));
+    }
+    int timeChoice = readBuyingInput(scanner, 0,
+        "Введите номер времени (или введите 0 для отмены): ",
+        1, sessionTimes.length);
+    LocalDate selectedDate = sessionDates[dateChoice - 1];
+    LocalTime selectedTime = sessionTimes[timeChoice - 1];
 
+    if (!cinemaManager.isDateCorrect(selectedDate)) {
+      System.out.println("\u001B[31mВведена некорректная дата\u001B[0m");
+      return;
+    }
+    int dateIndex = getDateIndex(cinemaManager, selectedDate);
+    Map<Integer, String> moviesForDate = cinemaManager.getMoviesForDate(selectedDate);
+    if (moviesForDate.isEmpty()) {
+      System.out.println("\u001B[31mНа выбранный день нет доступных фильмов.\u001B[0m");
+      return;
+    }
+    System.out.println("Выберите фильм для изменения названия:");
+    for (Map.Entry<Integer, String> entry : moviesForDate.entrySet()) {
+      System.out.println(entry.getKey() + ". " + entry.getValue());
+    }
+    int movieChoice = readBuyingInput(scanner, 0,
+        "Введите номер фильма (или введите 0 для отмены): ",
+        1, moviesForDate.size());
+    if (movieChoice == 0) {
+      System.out.println("Отмена изменения названия фильма");
+      return;
+    }
+    System.out.print("Введите новое название фильма: ");
+    String newTitle = scanner.nextLine();
+    System.out.println("Выберите жанр фильма (введите номер из списка):");
+    String[] genres = {"боевик", "детектив", "драма", "исторический фильм",
+        "комедия", "мелодрама", "трагедия", "трагикомедия"};
+    for (int i = 0; i < genres.length; i++) {
+      System.out.println((i + 1) + ". " + genres[i]);
+    }
+    int genreChoice = readBuyingInput(scanner, 0,
+        "Введите номер жанра (или введите 0 для отмены): ", 1, genres.length);
+    System.out.println("Выберите рейтинг фильма (введите номер из списка):");
+    String[] ratings = {"G", "PG", "PG-13", "R", "NC-17"};
+    for (int i = 0; i < ratings.length; i++) {
+      System.out.println((i + 1) + ". " + ratings[i]);
+    }
+    int ratingChoice = readBuyingInput(scanner, 0,
+        "Введите номер рейтинга (или введите 0 для отмены): ", 1, ratings.length);
+    String newMovieInfo = newTitle + " (" + genres[genreChoice - 1] + ", " + ratings[ratingChoice - 1] + ")";
+    cinemaManager.setTitle(newMovieInfo, movieChoice);
+    System.out.println("\u001B[32mНазвание фильма успешно изменено.\u001B[0m");
   }
 
   private static void setNewBonus(Scanner scanner, CinemaManager cinemaManager) {
+    // getDateIndex(cinemaManager, select);
+    System.out.print("Введите новый бонус для фильмов: ");
+    String newBonus = scanner.nextLine();
 
+    // cinemaManager.setBonus(newBonus, getDateIndex(cinemaManager, selectDate(scanner, cinemaManager)));
+    System.out.println("\u001B[32mБонус для фильмов успешно изменен.\u001B[0m");
+  }
+
+  private static int getDateIndex(CinemaManager cinemaManager, LocalDate selectedDate) {
+    LocalDate[] sessionDates = cinemaManager.getDates();
+    for (int i = 0; i < sessionDates.length; i++) {
+      if (sessionDates[i].equals(selectedDate)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  private static int getTimeIndex(CinemaManager cinemaManager, LocalTime selectedTime) {
+    LocalTime[] sessionTimes = cinemaManager.getTimes();
+    for (int i = 0; i < sessionTimes.length; i++) {
+      if (sessionTimes[i].equals(selectedTime)) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   public static void printExit() {
