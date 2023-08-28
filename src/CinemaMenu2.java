@@ -6,6 +6,8 @@ public class CinemaMenu2 {
   HallMap hallMap = new HallMap();
   CinemaManager cinemaManager = new CinemaManager();
   static final int TICKET_PRICE = 2;
+  private static final String ADMIN_USERNAME = "admin1";
+  private static final String ADMIN_PASSWORD = "cinema";
 
   public CinemaMenu2() {
   }
@@ -144,16 +146,18 @@ public class CinemaMenu2 {
     }
 
     int[] selectedSeats = selectSeats(scanner, numberOfSeats);
-    Character[] checkFreeSpaces = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex,
+    Character[] checkedFreeSeats = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex,
         selectedTimeIndex, selectedRow);
-    for(int i = 0; i < selectedSeats.length; i ++){
-      while (checkFreeSpaces[selectedSeats[i] - 1].equals('X')) {
+    for (int i = 0; i < selectedSeats.length; i++) {
+      while (checkedFreeSeats[selectedSeats[i] - 1].equals('X')) {
         System.out.println(
             "Это(-и) место(-а) " + selectedSeats[i] + " уже куплено(-ы), выберите другое(-ие)");
         selectedSeats = selectSeats(scanner, numberOfSeats);
       }
+      checkedFreeSeats[selectedSeats[i] - 1] = 'X';
     }
-    hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkFreeSpaces);
+    hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats);
+
     cinemaManager.writeAll();
 
     int price = selectedSeats.length * TICKET_PRICE;
@@ -254,8 +258,19 @@ public class CinemaMenu2 {
   }
 
   static void adminMenu(Scanner scanner, CinemaManager cinemaManager) {
+    System.out.print("Логин: ");
+    String username = scanner.nextLine();
+    if (!username.equals(ADMIN_USERNAME)) {
+      System.out.println("Неверный логин. Сейчас вы вернетесь в главное меню");
+      return;
+    }
+    System.out.print("Пароль: ");
+    String password = scanner.nextLine();
+    if (!password.equals(ADMIN_PASSWORD)) {
+      System.out.println("Неверный пароль. Сейчас вы вернетесь в главное меню");
+      return;
+    }
     System.out.println("\u001B[32mМеню администратора:\u001B[0m");
-
     for (int i = 0; i < EnumAdminMenu.values().length; i++) {
       EnumAdminMenu menuItem = EnumAdminMenu.values()[i];
       System.out.println((i + 1) + ". " + menuItem.getAdminMenuText());
@@ -288,7 +303,6 @@ public class CinemaMenu2 {
     int maxChoice = EnumAdminMenu.values().length;
 
     while (true) {
-      System.out.print("Выберите пункт меню: ");
       String inputStr = scanner.nextLine();
 
       if (inputStr.matches("\\d+")) {
