@@ -153,7 +153,7 @@ public class CinemaMenu2 {
         selectedSeats = selectSeats(scanner, numberOfSeats);
       }
     }
-    hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, selectedSeats);
+    hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkFreeSpaces);
     cinemaManager.writeAll();
 
     int price = selectedSeats.length * TICKET_PRICE;

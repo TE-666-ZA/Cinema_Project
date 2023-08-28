@@ -118,7 +118,7 @@ public class HallMap {
     return sessionKeys;
   }
 
-  private int sessionsIndexGenerator(int date, int time) {
+  public int sessionsIndexGeneratorFromDateAndTime(int date, int time) {
     time = time - 1;
     if (date < 2) {
       date = 0;
@@ -131,7 +131,7 @@ public class HallMap {
   }
 
   public void showPlacesByDateTime(int date, int time) {
-    int index = sessionsIndexGenerator(date, time);
+    int index = sessionsIndexGeneratorFromDateAndTime(date, time);
 
     for (Map.Entry<Integer, Character[]> entry : sessions.get(index).entrySet()) {
       Integer key = entry.getKey();
@@ -145,20 +145,14 @@ public class HallMap {
     }
   }
 
-  public void buyTickets(int date, int time, int row, int[] places) {
-    int index = sessionsIndexGenerator(date, time);
-    Character[] seats = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    for (int i : places) {
-      seats[i - 1] = 'X';
-    }
-
-    this.sessions.get(index).put(row, seats);
-
+  public Character[] getSessionPlacesByDateANdTime(int date, int time, int row) {
+    int index = sessionsIndexGeneratorFromDateAndTime(date, time);
+    return this.sessions.get(index).get(row);
   }
 
-  public Character[] getSessionPlacesByDateANdTime(int date, int time, int row) {
-    int index = sessionsIndexGenerator(date, time);
-    return this.sessions.get(index).get(row);
+  public void buyTickets(int date, int time, int row, Character[] seats) {
+    int index = sessionsIndexGeneratorFromDateAndTime(date, time);
+    this.sessions.get(index).put(row, seats);
   }
 
   public static int getSessionsLength() {
