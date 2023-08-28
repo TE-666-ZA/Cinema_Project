@@ -3,6 +3,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * !!!
+ * Комментарии и некоторые тесты к коду будут готовы к утру 29.08
+ */
 public class Main {
 
   public static void main(String[] args) {
