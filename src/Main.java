@@ -1,12 +1,11 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-  public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+  public static void main(String[] args) {
     CinemaManager cinemaManager = new CinemaManager();
     HallMap hallMap = new HallMap();
     Scanner scanner = new Scanner(System.in);
@@ -22,7 +21,6 @@ public class Main {
       CinemaMenu2.EnumMainMenu selectedMenu = CinemaMenu2.EnumMainMenu.values()[command];
       String menuText = selectedMenu.getMenuText();
       switch (selectedMenu) {
-
         //1.  РАСПИСАНИЕ
         case TIMETABLES:
           CinemaMenu2.printSeparator();
@@ -37,7 +35,11 @@ public class Main {
         case SEE_BUSY_ROWS:
           CinemaMenu2.seeBusyRows(scanner, cinemaManager, hallMap);
           break;
-        //3.  Выход
+        // 4. ВОЗВРАТ БИЛЕТОВ
+        case RETURN_TICKETS:
+          CinemaMenu2.returnTickets(scanner, cinemaManager, hallMap);
+          break;
+        //5. ВЫХОД
         case EXIT:
           System.out.println(menuText);
           CinemaMenu2.printExit();

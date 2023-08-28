@@ -8,7 +8,6 @@ import java.util.Scanner;
 public class CinemaMenu2 {
 
   private static int selectedDateIndex;
-  private static int selectedTimeIndex;
   HallMap hallMap = new HallMap();
   CinemaManager cinemaManager = new CinemaManager();
   static final int TICKET_PRICE = 2;
@@ -22,6 +21,7 @@ public class CinemaMenu2 {
     TIMETABLES("Расписание"),
     BUYING_TICKETS("Покупка билетов"),
     SEE_BUSY_ROWS("Просмотр свободных рядов"),
+    RETURN_TICKETS("Возврат билетов"),
     EXIT("Выход");
     private final String menuText;
 
@@ -62,29 +62,23 @@ public class CinemaMenu2 {
 
   static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap) {
     cinemaManager.showSchedule();
-
     int selectedDateIndex = selectDate(scanner, cinemaManager);
     if (selectedDateIndex == 0) {
       return;
     }
-
     int selectedTimeIndex = selectTime(scanner, cinemaManager);
     if (selectedTimeIndex == 0) {
       return;
     }
-
     hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
-
     int selectedRow = selectRow(scanner);
     if (selectedRow == 0) {
       return;
     }
-
     int numberOfSeats = selectNumberOfSeats(scanner);
     if (numberOfSeats == 0) {
       return;
     }
-
     int[] selectedSeats = selectSeats(scanner, numberOfSeats);
     Character[] checkedFreeSeats = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex,
         selectedTimeIndex, selectedRow);
@@ -113,7 +107,6 @@ public class CinemaMenu2 {
         paymentMethodChoice, selectedPaymentMethod);
     hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats);
     cinemaManager.writeAll();
-
     int price = selectedSeats.length * TICKET_PRICE;
     System.out.println("Стоимость одного билета: " + TICKET_PRICE + " евро");
     System.out.println("Ваша покупка: " + price + " евро");
@@ -122,25 +115,21 @@ public class CinemaMenu2 {
 
   private static int selectDate(Scanner scanner, CinemaManager cinemaManager) {
     System.out.println("\u001B[32mВыберите дату и время сеанса:\u001B[0m");
-
     int datesLength = cinemaManager.getDates().length;
     for (int i = 0; i < datesLength; i++) {
       System.out.println(
           (i + 1) + ". " + cinemaManager.getDates()[i].format(cinemaManager.getDateFormatter()));
     }
-
     return readBuyingInput(scanner, 0,
         "Пожалуйста, выберите дату сеанса (или введите 0 для выхода в главное меню):", 1,
         datesLength);
   }
-
   private static int selectTime(Scanner scanner, CinemaManager cinemaManager) {
     System.out.println("Выберите время сеанса:");
     for (int i = 0; i < cinemaManager.getTimes().length; i++) {
       System.out.println(
           (i + 1) + ". " + cinemaManager.getTimes()[i].format(cinemaManager.getTimeFormatter()));
     }
-
     return readBuyingInput(scanner, 0,
         "Пожалуйста, введите номер времени сеанса (или введите 0 для выхода в главное меню): ", 1,
         cinemaManager.getTimes().length);
@@ -178,10 +167,8 @@ public class CinemaMenu2 {
   private static int readBuyingInput(Scanner scanner, int cancelValue, String textForUser, int min,
       int max) {
     System.out.println(textForUser);
-
     while (true) {
       String inputStr = scanner.nextLine();
-
       if (inputStr.matches("\\d+")) {
         int input = Integer.parseInt(inputStr);
         if (input == cancelValue || (input >= min && input <= max)) {
@@ -213,21 +200,23 @@ public class CinemaMenu2 {
     }
     List<RowInfo> rowsInfo = new ArrayList<>();
     for (Integer rowNumber : rowNumbers) {
-      Character[] rowSeats = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex, selectedTimeIndex, rowNumber);
+      Character[] rowSeats = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex,
+          selectedTimeIndex, rowNumber);
       int occupiedSeats = rowSeats.length - countFreeSeats(rowSeats);
       rowsInfo.add(new RowInfo(rowNumber, rowSeats, occupiedSeats));
     }
     RowComparator rowComparator = new RowComparator();
-    rowsInfo.sort(Comparator.comparingInt(rowInfo -> rowComparator.countFreeSeats(rowInfo.getRowSeats())));
-
+    rowsInfo.sort(
+        Comparator.comparingInt(rowInfo -> rowComparator.countFreeSeats(rowInfo.getRowSeats())));
     System.out.println("\u001B[35mВыше - самые свободные ряды. Ниже - самые загруженные:\u001B[0m");
     for (RowInfo rowInfo : rowsInfo) {
       Character[] rowSeats = rowInfo.getRowSeats();
       int occupiedSeats = rowInfo.getOccupiedSeats();
-      System.out.println("Ряд " + rowInfo.getRowNumber() + " Места: " + Arrays.toString(rowSeats) + " Свободно: " + occupiedSeats + " мест(а)");
+      System.out.println(
+          "Ряд " + rowInfo.getRowNumber() + " Места: " + Arrays.toString(rowSeats) + " Свободно: "
+              + occupiedSeats + " мест(а)");
     }
   }
-
 
   private static int countFreeSeats(Character[] row) {
     int count = 0;
@@ -237,6 +226,73 @@ public class CinemaMenu2 {
       }
     }
     return count;
+  }
+
+  static void returnTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap) {
+    cinemaManager.showSchedule();
+    int selectedDateIndex = selectDate(scanner, cinemaManager);
+    if (selectedDateIndex == 0) {
+      return;
+    }
+    int selectedTimeIndex = selectTime(scanner, cinemaManager);
+    if (selectedTimeIndex == 0) {
+      return;
+    }
+    hallMap.showPlacesByDateTime(selectedDateIndex, selectedTimeIndex);
+    int selectedRow = selectRow(scanner);
+    if (selectedRow == 0) {
+      return;
+    }
+    Character[] checkedFreeSeats = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex,
+        selectedTimeIndex, selectedRow);
+    List<Integer> occupiedSeatIndices = new ArrayList<>();
+    for (int i = 0; i < checkedFreeSeats.length; i++) {
+      if (checkedFreeSeats[i] == 'X') {
+        occupiedSeatIndices.add(i);
+      }
+    }
+    int[] selectedSeats = selectReturnedSeats(scanner, occupiedSeatIndices);
+    for (int seatIndex : selectedSeats) {
+      checkedFreeSeats[seatIndex] = Character.forDigit(seatIndex + 1, 10);
+    }
+    hallMap.returnTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats);
+    cinemaManager.writeAll();
+  }
+
+  private static int[] selectReturnedSeats(Scanner scanner, List<Integer> occupiedSeatIndices) {
+    System.out.println("Выберите места для возврата:");
+    for (int i = 0; i < occupiedSeatIndices.size(); i++) {
+      System.out.println((i + 1) + ". Место " + (occupiedSeatIndices.get(i) + 1));
+    }
+
+    return readReturningInput(scanner, "Введите номера мест для возврата (через пробел): ",
+        occupiedSeatIndices.size());
+  }
+
+  private static int[] readReturningInput(Scanner scanner, String textForUser, int max) {
+    System.out.println(textForUser);
+    while (true) {
+      String inputStr = scanner.nextLine();
+      String[] seatNumbers = inputStr.split(" ");
+      int[] selectedSeats = new int[seatNumbers.length];
+      boolean isValid = true;
+      for (int i = 0; i < seatNumbers.length; i++) {
+        if (!seatNumbers[i].matches("\\d+")) {
+          isValid = false;
+          break;
+        }
+        selectedSeats[i] = Integer.parseInt(seatNumbers[i]) - 1; // Adjust to 0-based index
+        if (selectedSeats[i] < 0 || selectedSeats[i] >= max) {
+          isValid = false;
+          break;
+        }
+      }
+      if (isValid) {
+        return selectedSeats;
+      } else {
+        System.out.println("\u001B[31mНеверно. Введите допустимые номера мест: \u001B[0m");
+      }
+    }
   }
 
   public static void printExit() {

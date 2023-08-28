@@ -12,7 +12,6 @@ public enum EnumFileTools {
 
     private final String messageEnumFileTools;
 
-    // Корректный конструктор enum
     EnumFileTools(String messageEnumFileTools) {
         this.messageEnumFileTools = messageEnumFileTools;
     }

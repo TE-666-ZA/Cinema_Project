@@ -45,11 +45,9 @@ public class HallMap {
 
   public void showPlacesByDateTime(int date, int time) {
     int index = sessionsIndexGeneratorFromDateAndTime(date, time);
-
     for (Map.Entry<Integer, Character[]> entry : sessions.get(index).entrySet()) {
       Integer key = entry.getKey();
       Character[] values = entry.getValue();
-
       System.out.print("Ряд: " + key + "  Места: ");
       for (Character value : values) {
         System.out.print(value + " ");
@@ -76,5 +74,23 @@ public class HallMap {
       System.out.println("Указанный ряд не найден.");
       return new Character[0];
     }
+  }
+
+  public void returnTickets(int selectedDateIndex, int selectedTimeIndex, int selectedRow, Character[] updatedSeats) {
+    int sessionIndex = sessionsIndexGeneratorFromDateAndTime(selectedDateIndex, selectedTimeIndex);
+    Map<Integer, Character[]> sessionMap = sessions.get(sessionIndex);
+    if (sessionMap != null && sessionMap.containsKey(selectedRow)) {
+      Character[] originalSeats = sessionMap.get(selectedRow);
+      for (int i = 0; i < originalSeats.length; i++) {
+        if (originalSeats[i] == 'X') {
+          originalSeats[i] = (char) ('0' + (i + 1));
+        }
+      }
+      sessionMap.put(selectedRow, updatedSeats);
+      System.out.println("\u001B[32mБилеты успешно возвращены!\u001B[0m");
+    } else {
+      System.out.println("\u001B[31mОшибка при возврате билетов: указанный сеанс или ряд не найдены\u001B[0m");
+    }
+
   }
 }

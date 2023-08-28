@@ -85,7 +85,7 @@ public class FileEditor {
         }
       }
     } catch (IOException | NullPointerException e) {
-      System.err.println("файл для чтения  не найден! обратитесь к сервисному руководству ");
+      System.err.println("Файл для чтения  не найден! Обратитесь к сервисному руководству ");
     }
     return null;
   }
@@ -164,7 +164,7 @@ public class FileEditor {
       writer.close();
       out.close();
     } catch (IOException e) {
-
+      System.out.println("Ошибка!");
     }
   }
 }

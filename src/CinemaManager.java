@@ -83,7 +83,6 @@ public class CinemaManager {
     }
   }
 
-
   public void readTitles() {
     this.titles = fileEditor.readData(EnumFileTools.TITLE_INDEX.getTool(),
         EnumFileTools.SPLITTER.getTool()).split(EnumFileTools.SPLITTER.getTool());
@@ -111,7 +110,6 @@ public class CinemaManager {
   }
 
   public int getChequeNumber() { // этот метод вазвращает номер считанного из файла CHECK с помощью метода public void readCheque(int chequeNumber) по переданному номеру чека
-
     return chequeNumber;
   }
 
