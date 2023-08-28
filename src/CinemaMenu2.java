@@ -156,10 +156,13 @@ public class CinemaMenu2 {
       }
       checkedFreeSeats[selectedSeats[i] - 1] = 'X';
     }
+    for (String payment : cinemaManager.getPaymentMethods()) {
+      System.out.println(); // выбор способов
+    }
+    int paymentPoint = scanner.nextInt(); // считываем номер выбора
+    cinemaManager.writeCheque(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats, paymentPoint);
     hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats);
-
     cinemaManager.writeAll();
-    cinemaManager.writeCheque(selectedDateIndex, selectedTimeIndex, selectedRow, checkFreeSpaces, "giroPay");
 
     int price = selectedSeats.length * TICKET_PRICE;
     System.out.println("Стоимость одного билета: " + TICKET_PRICE + " евро");
