@@ -144,14 +144,13 @@ public class CinemaMenu2 {
     }
 
     int[] selectedSeats = selectSeats(scanner, numberOfSeats);
-    Character[] checkFreeSpaces = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex,selectedTimeIndex,selectedRow);
-    for(int i : selectedSeats){
-      if(checkFreeSpaces[selectedSeats[i]].equals('X')) {
-        while (true) {
-          System.out.println(
-              "Это(-и) место(-а) " + selectedSeats[i] + " уже куплено(-ы), выберите другое(-ие)");
-          selectedSeats = selectSeats(scanner, numberOfSeats);
-        }
+    Character[] checkFreeSpaces = hallMap.getSessionPlacesByDateANdTime(selectedDateIndex,
+        selectedTimeIndex, selectedRow);
+    for(int i = 0; i < selectedSeats.length; i ++){
+      while (checkFreeSpaces[selectedSeats[i] - 1].equals('X')) {
+        System.out.println(
+            "Это(-и) место(-а) " + selectedSeats[i] + " уже куплено(-ы), выберите другое(-ие)");
+        selectedSeats = selectSeats(scanner, numberOfSeats);
       }
     }
     hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, selectedSeats);
@@ -297,7 +296,8 @@ public class CinemaMenu2 {
         if (input >= 1 && input <= maxChoice) {
           return input;
         } else {
-          System.out.println("\u001B[31mЧто-то пошло не так. Введите число от 1 до " + maxChoice + ":\u001B[0m");
+          System.out.println(
+              "\u001B[31mЧто-то пошло не так. Введите число от 1 до " + maxChoice + ":\u001B[0m");
         }
       } else {
         if (!inputStr.isEmpty()) {
@@ -308,18 +308,18 @@ public class CinemaMenu2 {
   }
 
   private static void changeSessionDate(Scanner scanner, CinemaManager cinemaManager) {
-    
+
   }
 
   private static void changeSessionTime(Scanner scanner, CinemaManager cinemaManager) {
-   
+
   }
 
   private static void changeMovieTitle(Scanner scanner, CinemaManager cinemaManager) {
-    
+
   }
 
   private static void setNewBonus(Scanner scanner, CinemaManager cinemaManager) {
-    
+
   }
 }
