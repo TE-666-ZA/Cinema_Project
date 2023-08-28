@@ -186,11 +186,11 @@ public class CinemaManager {
   }
 
   // этот метод записывает чек в файл check
-  public void writeCheque(int date, int time, int row, Character[] seats, String paymentMethod) {
+  public void writeCheque(int dateIndex, int timeIndex, int row, Character[] seats, String paymentMethod) {
     int sum = PRICE * row;
     chequeNumber++;
-    String[] data = {chequeNumber + date +
-            EnumFileTools.CHEQUE_SEPARATOR.getTool() + time +
+    String[] data = {chequeNumber + dates[dateIndex - 1].toString() +
+            EnumFileTools.CHEQUE_SEPARATOR.getTool() + times[timeIndex - 1].toString() +
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + row
             + EnumFileTools.CHEQUE_SEPARATOR.getTool() + Arrays.toString(seats) +
             sum + EnumFileTools.CHEQUE_SEPARATOR.getTool() + paymentMethod};
