@@ -26,6 +26,7 @@ public class CinemaManager {
   private String[] bonus;
   private Map<LocalDate, Map<String, LocalTime>> schedule; //TODO что тут хранится????
   private String[] chequeData;
+  private int chequeNumber;
 
   public CinemaManager() {
     this.fileEditor = new FileEditor();
@@ -33,6 +34,7 @@ public class CinemaManager {
     hallMap = new HallMap();
     this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    this.chequeNumber = 0;
     readDate();
     readTime();
     readTitles();
@@ -147,7 +149,7 @@ public class CinemaManager {
 
   public int getChequeNumber() { // этот метод вазвращает номер считанного из файла CHECK с помощью метода public void readCheque(int chequeNumber) по переданному номеру чека
 
-    return fileEditor.getChequeNumberAmount();
+    return chequeNumber;
   }
 
   public LocalDate getChequeDate() { // этот метод вазвращает дату считанного из файла CHECK с помощью метода public void readCheque(int chequeNumber)по переданному номеру чека
@@ -186,7 +188,8 @@ public class CinemaManager {
   // этот метод записывает чек в файл check
   public void writeCheque(int[] selectedSeats, int rowNumber, String selectedDate, String selectedTime, String paymentMethod) {
     int sum = PRICE * rowNumber;
-    String[] data = {fileEditor.getChequeNumberAmount() + selectedDate +
+    chequeNumber++;
+    String[] data = {chequeNumber + selectedDate +
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + selectedTime +
             EnumFileTools.CHEQUE_SEPARATOR.getTool() + rowNumber
             + EnumFileTools.CHEQUE_SEPARATOR.getTool() + Arrays.toString(selectedSeats) +

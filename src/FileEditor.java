@@ -14,13 +14,11 @@ public class FileEditor {
     private String fileAllData;
     private String fileCheque;
     private int lines; // считает кол-во строк в FullInfo
-    private int chequeNumberAmount;// считывает кол-во чеков в файле при первом чтении CHeck
     private int halMapReaderCounter;
 
     public FileEditor() {
         this.fileAllData = "res/InfoFull.txt";
         this.fileCheque = "res/Check.txt";
-        chequeNumberAmount = 1;
         this.lines = 0;
         this.halMapReaderCounter = 0;
     }
@@ -46,7 +44,6 @@ public class FileEditor {
                     reader.close();
                     return result.toString();
                 } else if (isCheque) {
-                    chequeNumberAmount++;
                     result.append(input.substring(REMOVE_FIRST_INDEX));
                     reader.close();
                     return result.toString();
@@ -171,14 +168,5 @@ public class FileEditor {
         } catch (IOException e) {
 
         }
-    }
-
-    /**
-     * Возвращает метод общее Количество чеков в файле
-     *
-     * @return
-     */
-    public int getChequeNumberAmount() {
-        return chequeNumberAmount;
     }
 }
