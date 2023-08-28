@@ -16,33 +16,33 @@ public class Main {
     int command;
     while (run) {
       // Вывод главного меню
-      CinemaMenu2.printSeparator();
-      command = CinemaMenu2.readCommandMainMenu(scanner);
-      CinemaMenu2.EnumMainMenu selectedMenu = CinemaMenu2.EnumMainMenu.values()[command];
+      CinemaMenu.printSeparator();
+      command = CinemaMenu.readCommandMainMenu(scanner);
+      CinemaMenu.EnumMainMenu selectedMenu = CinemaMenu.EnumMainMenu.values()[command];
       String menuText = selectedMenu.getMenuText();
       switch (selectedMenu) {
         //1.  РАСПИСАНИЕ
         case TIMETABLES:
-          CinemaMenu2.printSeparator();
+          CinemaMenu.printSeparator();
           cinemaManager.showSchedule();
           break;
         //2.  ПОКУПКА БИЛЕТОВ
         case BUYING_TICKETS:
-          CinemaMenu2.printSeparator();
-          CinemaMenu2.buyTickets(scanner, cinemaManager, hallMap);
+          CinemaMenu.printSeparator();
+          CinemaMenu.buyTickets(scanner, cinemaManager, hallMap);
           break;
         // 3. ПРОСМОТР СВОБОДНЫХ РЯДОВ
         case SEE_BUSY_ROWS:
-          CinemaMenu2.seeBusyRows(scanner, cinemaManager, hallMap);
+          CinemaMenu.seeBusyRows(scanner, cinemaManager, hallMap);
           break;
         // 4. ВОЗВРАТ БИЛЕТОВ
         case RETURN_TICKETS:
-          CinemaMenu2.returnTickets(scanner, cinemaManager, hallMap);
+          CinemaMenu.returnTickets(scanner, cinemaManager, hallMap);
           break;
         //5. ВЫХОД
         case EXIT:
           System.out.println(menuText);
-          CinemaMenu2.printExit();
+          CinemaMenu.printExit();
           run = false;
           break;
         default:

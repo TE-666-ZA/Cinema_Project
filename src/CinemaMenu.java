@@ -1,18 +1,17 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class CinemaMenu2 {
+public class CinemaMenu {
 
   private static int selectedDateIndex;
   HallMap hallMap = new HallMap();
   CinemaManager cinemaManager = new CinemaManager();
   static final int TICKET_PRICE = 2;
 
-  public CinemaMenu2(HallMap hallMap, CinemaManager cinemaManager) {
+  public CinemaMenu(HallMap hallMap, CinemaManager cinemaManager) {
     this.hallMap = hallMap;
     this.cinemaManager = cinemaManager;
   }
