@@ -1,15 +1,16 @@
-//import CinemaMenu.EnumMainMenu;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-  //
-  public static void main(String[] args) {
-    int numberCheck;
+  public static void main(String[] args) throws InstantiationException, IllegalAccessException {
     CinemaManager cinemaManager = new CinemaManager();
     HallMap hallMap = new HallMap();
     Scanner scanner = new Scanner(System.in);
+    List<Integer> rowNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
     System.out.println("\u001B[32m\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'\u001B[0m");
     boolean run = true;
@@ -30,20 +31,13 @@ public class Main {
         //2.  ПОКУПКА БИЛЕТОВ
         case BUYING_TICKETS:
           CinemaMenu2.printSeparator();
-          CinemaMenu2.buyingTickets(scanner, cinemaManager, hallMap);
           CinemaMenu2.buyTickets(scanner, cinemaManager, hallMap);
           break;
-        //3.  ОБМЕН/ВОЗВРАТ БИЛЕТОВ
-        case TICKETS_EXCHANGE_OR_RETURN:
-          CinemaMenu2.printSeparator();// 4
-          System.out.println(menuText);
-          CinemaMenu2.ticketsExchangeOrReturn(scanner, cinemaManager);
+        // 3. ПРОСМОТР СВОБОДНЫХ РЯДОВ
+        case SEE_BUSY_ROWS:
+          CinemaMenu2.seeBusyRows(scanner, cinemaManager, hallMap);
           break;
-        //4.  МЕНЮ АДМИНИСТРАТОРА
-        case ADMINISTRATOR:
-          CinemaMenu2.adminMenu(scanner, cinemaManager);
-          break;
-        //5.  Выход
+        //3.  Выход
         case EXIT:
           System.out.println(menuText);
           CinemaMenu2.printExit();

@@ -8,9 +8,6 @@ public enum EnumFileTools {
     MAP_PREFIX("|"),
     MAP_CHEQUE_SPLITTER(""),
     MAP_KEY_VALUE_SPLITTER(">"),
-    DATE_SEPARATOR_MINUS("-"),
-    DATE_SEPARATOR_DOT("."),
-    DATE_SEPARATOR_SPACE(" "),
     SPLITTER(",");
 
     private final String messageEnumFileTools;

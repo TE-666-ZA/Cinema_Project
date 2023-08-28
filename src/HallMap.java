@@ -5,8 +5,6 @@ public class HallMap {
   private static List<Map<Integer, Character[]>> sessions;
 
   private FileEditor fileEditor; // для чтения и записи данных
-  private CinemaManager cinemaManager;
-
 
   public HallMap() {
     sessions = new ArrayList<>(9);
@@ -22,17 +20,6 @@ public class HallMap {
     }
   }
 
-  // при выходе из проги нужен метод, в который записывается вся инфа о местах
-  // сначала заполняем мапу, потом всё остальное
-  public void saveSeatsToFile() {
-    writeAllMaps();
-  }
-
-  /**
-   * теперь вызываем метод для чтения каждой мапы делаем это в методе:
-   *
-   * @
-   */
   private void readAllSeats() {
     for (int i = 0; i < 9; i++) {
       Map<Integer, Character[]> sessionMap = new HashMap<>();
@@ -42,81 +29,6 @@ public class HallMap {
       }
       sessions.add(sessionMap);
     }
-  }
-
-  // метод для того, чтобы купить/вернуть купленное место
-  public void manageSeat(int sessionKey, int row, int seatNumber, boolean chooseSeat) {
-    Map<Integer, Character[]> sessionMap = getSessionMap(sessionKey);
-    if (sessionMap == null) {
-      System.out.println("Такого сеанса нет");
-      return;
-    }
-    Character[] rowArray = sessionMap.get(row);
-    if (rowArray == null || seatNumber < 1 || seatNumber >= rowArray.length) {
-      System.out.println("Что-то пошло не так при выборе ряда или места");
-      return;
-    }
-
-    if (rowArray[seatNumber] == 'X' && chooseSeat) {
-      System.out.println("Это место уже занято");
-    } else if (rowArray[seatNumber] != 'X' && chooseSeat) {
-      rowArray[seatNumber] = 'X';
-      System.out.println("Вы выбрали место №" + seatNumber + ", ряд " + row);
-    } else if (rowArray[seatNumber] == 'X' && !chooseSeat) {
-      // тут преобразуем номер в символ и прибавляем его к 0, так будет корректно
-      rowArray[seatNumber] = (char) (seatNumber + '0');
-      System.out.println("Вы успешно вернули билет за место №" + seatNumber);
-    } else {
-      System.out.println("Место №" + seatNumber + " уже свободно");
-    }
-  }
-
-  // метод для демонстрации карты мест
-  protected static void showSessionMap(Map<Integer, Character[]> sessionMap) {
-    int seatsInRow = 10; // номер ряда + 9 мест
-    for (var rowNumber : sessionMap.keySet()) {
-      Character[] rowArray = sessionMap.get(rowNumber);
-      System.out.printf("Ряд %d: ", rowNumber);
-      for (int seat = 0; seat < rowArray.length; ++seat) {
-        System.out.print(rowArray[seat] + " ");
-        if ((seat + 1) % seatsInRow == 0) {
-          System.out.println();
-        }
-      }
-      System.out.println();
-    }
-    System.out.println();
-  }
-
-  public static void showRowMap(int rowNumber, int sessionKey, HallMap hallMap) {
-    Map<Integer, Character[]> sessionMap = hallMap.getSessionMap(sessionKey);
-
-    if (sessionMap != null) {
-      Character[] seats = sessionMap.get(rowNumber);
-      if (seats != null) {
-        System.out.print("Ряд " + rowNumber + ": ");
-        for (Character seat : seats) {
-          System.out.print(seat + " ");
-        }
-        System.out.println();
-      } else {
-        System.out.println("Ряд " + rowNumber + " не найден");
-      }
-    } else {
-      System.out.println("Сеанс " + sessionKey + " не найден");
-    }
-  }
-
-  protected Map<Integer, Character[]> getSessionMap(int sessionKey) {
-    return sessions.get(sessionKey - 1);
-  }
-
-  public Set<Integer> getAllSessionKeys() {
-    Set<Integer> sessionKeys = new HashSet<>();
-    for (int i = 0; i < sessions.size(); i++) {
-      sessionKeys.add(i + 1);
-    }
-    return sessionKeys;
   }
 
   public int sessionsIndexGeneratorFromDateAndTime(int date, int time) {
@@ -146,11 +58,6 @@ public class HallMap {
     }
   }
 
-  public Character[] getSessionPlacesByDateANdTime(int date, int time, int row) {
-    int index = sessionsIndexGeneratorFromDateAndTime(date, time);
-    return this.sessions.get(index).get(row);
-  }
-
   public void buyTickets(int date, int time, int row, Character[] seats) {
     int index = sessionsIndexGeneratorFromDateAndTime(date, time);
     this.sessions.get(index).put(row, seats);
@@ -158,5 +65,16 @@ public class HallMap {
 
   public static int getSessionsLength() {
     return sessions.size();
+  }
+
+  public Character[] getSessionPlacesByDateANdTime(int selectedDateIndex, int selectedTimeIndex, int selectedRow) {
+    int index = sessionsIndexGeneratorFromDateAndTime(selectedDateIndex, selectedTimeIndex);
+    Map<Integer, Character[]> sessionMap = sessions.get(index);
+    if (sessionMap.containsKey(selectedRow)) {
+      return sessionMap.get(selectedRow);
+    } else {
+      System.out.println("Указанный ряд не найден.");
+      return new Character[0];
+    }
   }
 }
