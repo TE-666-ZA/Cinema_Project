@@ -261,13 +261,13 @@ public class CinemaManager {
     return paymentMethods;
   }
 
-  public void setDate(LocalDate date, int index) {
-    this.dates[index - 1] = date;
+  public void setDate(String date, int index) {
+    this.dates[index - 1] = LocalDate.parse(date);
     writeAll();
   }
 
-  public void setTime(LocalTime times, int index) {
-    this.times[index - 1] = times;
+  public void setTime(String time, int index) {
+    this.times[index - 1] = LocalTime.parse(time);
     writeAll();
   }
 
