@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class CinemaManager {
   private final int PRICE = 20;
-  private final int CHEQUE_NUMBER = 0;
   private final int CHEQUE_DATE = 1;
   private final int CHEQUE_TIME = 2;
   private final int CHEQUE_TITLE = 3;
@@ -26,6 +25,7 @@ public class CinemaManager {
   private String[] bonus;
   private Map<LocalDate, Map<String, LocalTime>> schedule; //TODO что тут хранится????
   private String[] chequeData;
+  String[] paymentMethods;
   private int chequeNumber;
 
   public CinemaManager() {
@@ -34,6 +34,7 @@ public class CinemaManager {
     hallMap = new HallMap();
     this.timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     this.dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    this.paymentMethods = new String[]{"PayPal", "GiroPay", "MasterCard", "Visa", "Bitcoin", "Cash", "AmericanExpress", "Apple Pay", "Google Pay"};
     this.chequeNumber = 0;
     readDate();
     readTime();
@@ -181,7 +182,7 @@ public class CinemaManager {
     return result;
   }
 
-  public String getPaymentMethod() {
+  public String getPaymentMethodFromCheque() {
     return chequeData[PAYMENT_METHOD];
   }
 
@@ -254,6 +255,10 @@ public class CinemaManager {
 
   public String[] getBonus() {
     return bonus;
+  }
+
+  public String[] getPaymentMethods() {
+    return paymentMethods;
   }
 
   public void setDate(LocalDate date, int index) {
