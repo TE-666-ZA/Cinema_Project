@@ -4,18 +4,31 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Класс, предоставляющий интерфейс для управления меню кинотеатра
+ */
 public class CinemaMenu {
-
-  private static int selectedDateIndex;
+  // Поля для хранения экземпляров HallMap и CinemaManager
   HallMap hallMap = new HallMap();
   CinemaManager cinemaManager = new CinemaManager();
+  // Константа для стоимости билета
   static final int TICKET_PRICE = 2;
 
+  /**
+   * Конструктор класса CinemaMenu
+   *
+   * @param hallMap объект HallMap для работы с данными о залах
+   * @param cinemaManager объект CinemaManager для управления сеансами
+   */
   public CinemaMenu(HallMap hallMap, CinemaManager cinemaManager) {
     this.hallMap = hallMap;
     this.cinemaManager = cinemaManager;
   }
 
+  /**
+   * Enum для хранения констант с названиями пунктов меню
+   * Содержит также конструктор, константу для хранения текста для вывода в консоль и геттер
+   */
   public enum EnumMainMenu {
     TIMETABLES("Расписание"),
     BUYING_TICKETS("Покупка билетов"),
@@ -33,10 +46,19 @@ public class CinemaMenu {
     }
   }
 
+  /**
+   * Метод для отображения разделительной линии в консоли
+   */
   public static void printSeparator() {
     System.out.println("============================================================");
   }
 
+  /**
+   * Метод для считывания команд из меню
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @return индекс выбранного пункта меню
+   */
   public static int readCommandMainMenu(Scanner scanner) {
     int menuLength = EnumMainMenu.values().length;
     for (int i = 0; i < menuLength; i++) {
@@ -55,10 +77,16 @@ public class CinemaMenu {
             "\u001B[31mНеверно. Пожалуйста, введите число от 1 до " + menuLength + ": \u001B[0m");
       }
     } while (input < 1 || input > menuLength);
-
     return input - 1;
   }
 
+  /**
+   * Метод для осуществления покупки билетов на сеанс
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param cinemaManager объект CinemaManager для управления сеансами
+   * @param hallMap объект HallMap для работы с данными о залах
+   */
   static void buyTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap) {
     cinemaManager.showSchedule();
     int selectedDateIndex = selectDate(scanner, cinemaManager);
@@ -98,7 +126,7 @@ public class CinemaMenu {
         "Введите номер метода оплаты (или введите 0 для отмены): ", 1,
         cinemaManager.getPaymentMethods().length);
     if (paymentMethodChoice == 0) {
-      System.out.println("Возвращаемся в главное меню...");
+      System.out.println("\u001B[35mВозвращаемся в главное меню...\u001B[0m");
       return;
     }
     String selectedPaymentMethod = cinemaManager.getPaymentMethods()[paymentMethodChoice - 1];
@@ -112,6 +140,13 @@ public class CinemaMenu {
     System.out.println("Номер чека: " + cinemaManager.getChequeNumber());
   }
 
+  /**
+   * Метод для выбора даты сеанса
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param cinemaManager объект CinemaManager для управления сеансами
+   * @return индекс выбранной даты
+   */
   private static int selectDate(Scanner scanner, CinemaManager cinemaManager) {
     System.out.println("\u001B[32mВыберите дату и время сеанса:\u001B[0m");
     int datesLength = cinemaManager.getDates().length;
@@ -123,6 +158,14 @@ public class CinemaMenu {
         "Пожалуйста, выберите дату сеанса (или введите 0 для выхода в главное меню):", 1,
         datesLength);
   }
+
+  /**
+   * Метод для выбора времени сеанса
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param cinemaManager объект CinemaManager для управления сеансами
+   * @return индекс выбранного времени
+   */
   private static int selectTime(Scanner scanner, CinemaManager cinemaManager) {
     System.out.println("Выберите время сеанса:");
     for (int i = 0; i < cinemaManager.getTimes().length; i++) {
@@ -134,17 +177,36 @@ public class CinemaMenu {
         cinemaManager.getTimes().length);
   }
 
+  /**
+   * Метод для выбора ряда мест в зале
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @return номер выбранного ряда
+   */
   private static int selectRow(Scanner scanner) {
     return readBuyingInput(scanner, 0,
         "Пожалуйста, введите номер ряда (или введите 0 для выхода в главное меню): ", 1, 5);
   }
 
+  /**
+   * Метод для выбора количества билетов
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @return выбранное количество билетов
+   */
   private static int selectNumberOfSeats(Scanner scanner) {
     return readBuyingInput(scanner, 0,
         "Пожалуйста, выберите количество билетов (или введите 0 для выхода в главное меню): ", 1,
         90);
   }
 
+  /**
+   * Метод для выбора мест на сеансе
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param numberOfSeats количество выбираемых мест
+   * @return массив выбранных мест
+   */
   private static int[] selectSeats(Scanner scanner, int numberOfSeats) {
     int[] selectedSeats = new int[numberOfSeats];
     System.out.println("Пожалуйста, введите номера мест: ");
@@ -163,6 +225,16 @@ public class CinemaMenu {
     return selectedSeats;
   }
 
+  /**
+   * Метод для считывания и обработки ввода пользователя для выбора опций покупки билетов
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param cancelValue значение, которое указывает на отмену операции
+   * @param textForUser текстовое сообщение для пользователя, указывающее на необходимость ввода
+   * @param min минимальное допустимое значение для ввода
+   * @param max максимальное допустимое значение для ввода
+   * @return выбранное пользователем значение
+   */
   private static int readBuyingInput(Scanner scanner, int cancelValue, String textForUser, int min,
       int max) {
     System.out.println(textForUser);
@@ -186,6 +258,13 @@ public class CinemaMenu {
     }
   }
 
+  /**
+   * Метод для просмотра свободных и занятых рядов на определённом сеансе
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param cinemaManager объект CinemaManager для управления сеансами
+   * @param hallMap объект HallMap для работы с данными о залах
+   */
   public static void seeBusyRows(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap) {
     System.out.println("\u001B[35mВы можете посмотреть загруженность зала\u001B[0m");
     List<Integer> rowNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
@@ -217,6 +296,12 @@ public class CinemaMenu {
     }
   }
 
+  /**
+   * Метод для подсчёта свободных мест в выбранном ряду
+   *
+   * @param row массив мест в ряду
+   * @return количество свободных мест в ряду
+   */
   private static int countFreeSeats(Character[] row) {
     int count = 0;
     for (Character seat : row) {
@@ -227,6 +312,13 @@ public class CinemaMenu {
     return count;
   }
 
+  /**
+   * Метод для возврата билетов
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param cinemaManager объект CinemaManager для управления сеансами
+   * @param hallMap объект HallMap для работы с данными о залах
+   */
   static void returnTickets(Scanner scanner, CinemaManager cinemaManager, HallMap hallMap) {
     cinemaManager.showSchedule();
     int selectedDateIndex = selectDate(scanner, cinemaManager);
@@ -258,16 +350,31 @@ public class CinemaMenu {
     cinemaManager.writeAll();
   }
 
+  /**
+   * Метод, с помощью которого пользователь совершает ввод мест для возврата
+   *
+   * @param scanner объект Scanner для считывания номеров мест для возврата
+   * @param occupiedSeatIndices список занятых мест
+   * @return метод <code>readReturningInput</code>, передающий пользовательский ввод,
+   * текст для пользователя и размер списка занятых мест
+   */
   private static int[] selectReturnedSeats(Scanner scanner, List<Integer> occupiedSeatIndices) {
     System.out.println("Выберите места для возврата:");
     for (int i = 0; i < occupiedSeatIndices.size(); i++) {
       System.out.println((i + 1) + ". Место " + (occupiedSeatIndices.get(i) + 1));
     }
-
     return readReturningInput(scanner, "Введите номера мест для возврата (через пробел): ",
         occupiedSeatIndices.size());
   }
 
+  /**
+   * Метод для считывания и обработки ввода пользователя при возврате билета(-ов)
+   *
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param textForUser текстовое сообщение для пользователя перед вводом
+   * @param max максимальное значение для ввода
+   * @return массив индексов выбранных мест для возврата
+   */
   private static int[] readReturningInput(Scanner scanner, String textForUser, int max) {
     System.out.println(textForUser);
     while (true) {
@@ -280,7 +387,7 @@ public class CinemaMenu {
           isValid = false;
           break;
         }
-        selectedSeats[i] = Integer.parseInt(seatNumbers[i]) - 1; // Adjust to 0-based index
+        selectedSeats[i] = Integer.parseInt(seatNumbers[i]) - 1;
         if (selectedSeats[i] < 0 || selectedSeats[i] >= max) {
           isValid = false;
           break;
@@ -294,6 +401,9 @@ public class CinemaMenu {
     }
   }
 
+  /**
+   * Метод для вывода сообщения о завершении работы программы
+   */
   public static void printExit() {
     System.out.println(
         "\u001B[32m\t\t\t\tБЛАГОДАРИМ, ЧТО ВОСПОЛЬЗОВАЛИСЬ НАШИМ СЕРВИСОМ! \u001B[0m");

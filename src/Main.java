@@ -4,17 +4,20 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * !!!
- * Комментарии и некоторые тесты к коду будут готовы к утру 29.08
+ * Главный класс программы, представляющий управление кинотеатром
  */
 public class Main {
 
+  /**
+   * Главный метод программы
+   *
+   * @param args аргументы командной строки (не используются)
+   */
   public static void main(String[] args) {
     CinemaManager cinemaManager = new CinemaManager();
     HallMap hallMap = new HallMap();
     Scanner scanner = new Scanner(System.in);
     List<Integer> rowNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
-
     System.out.println("\u001B[32m\t\t\t\tДобро пожаловать в Кинотеатр 'CINEMA'\u001B[0m");
     boolean run = true;
     int command;
