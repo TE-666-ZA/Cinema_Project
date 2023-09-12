@@ -135,9 +135,9 @@ public class CinemaMenu {
     hallMap.buyTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats);
     cinemaManager.writeAll();
     int price = selectedSeats.length * TICKET_PRICE;
-    System.out.println("Стоимость одного билета: " + TICKET_PRICE + " евро");
-    System.out.println("Ваша покупка: " + price + " евро");
-    System.out.println("Номер чека: " + cinemaManager.getChequeNumber());
+    System.out.println("\u001B[32mСтоимость одного билета: " + TICKET_PRICE + " евро\u001B[0m");
+    System.out.println("\u001B[32mВаша покупка: " + price + " евро\u001B[0m");
+    System.out.println("\u001B[32mНомер чека: " + cinemaManager.getChequeNumber() + "\u001B[0m");
   }
 
   /**
@@ -342,8 +342,8 @@ public class CinemaMenu {
         occupiedSeatIndices.add(i);
       }
     }
-    int[] selectedSeats = selectReturnedSeats(scanner, occupiedSeatIndices);
-    for (int seatIndex : selectedSeats) {
+    List<Integer> selectedSeatIndices = selectReturnedSeats(scanner, occupiedSeatIndices);
+    for (int seatIndex : selectedSeatIndices) {
       checkedFreeSeats[seatIndex] = Character.forDigit(seatIndex + 1, 10);
     }
     hallMap.returnTickets(selectedDateIndex, selectedTimeIndex, selectedRow, checkedFreeSeats);
@@ -351,20 +351,25 @@ public class CinemaMenu {
   }
 
   /**
-   * Метод, с помощью которого пользователь совершает ввод мест для возврата
+   * Метод для выбора мест, которые пользователь хочет вернуть
    *
-   * @param scanner объект Scanner для считывания номеров мест для возврата
-   * @param occupiedSeatIndices список занятых мест
-   * @return метод <code>readReturningInput</code>, передающий пользовательский ввод,
-   * текст для пользователя и размер списка занятых мест
+   * @param scanner объект Scanner для считывания ввода пользователя
+   * @param occupiedSeatIndices список индексов занятых мест
+   * @return список индексов выбранных мест для возврата
    */
-  private static int[] selectReturnedSeats(Scanner scanner, List<Integer> occupiedSeatIndices) {
+  private static List<Integer> selectReturnedSeats(Scanner scanner, List<Integer> occupiedSeatIndices) {
     System.out.println("Выберите места для возврата:");
     for (int i = 0; i < occupiedSeatIndices.size(); i++) {
-      System.out.println((i + 1) + ". Место " + (occupiedSeatIndices.get(i) + 1));
+      int seatIndex = occupiedSeatIndices.get(i);
+      System.out.println((i + 1) + ". Место " + (seatIndex + 1));
     }
-    return readReturningInput(scanner, "Введите номера мест для возврата (через пробел): ",
-        occupiedSeatIndices.size());
+    int[] selectedSeatIndices = readReturningInput(scanner, "Введите номера мест для возврата:", occupiedSeatIndices.size());
+
+    List<Integer> selectedSeats = new ArrayList<>();
+    for (int seatIndex : selectedSeatIndices) {
+      selectedSeats.add(occupiedSeatIndices.get(seatIndex));
+    }
+    return selectedSeats;
   }
 
   /**
@@ -379,6 +384,9 @@ public class CinemaMenu {
     System.out.println(textForUser);
     while (true) {
       String inputStr = scanner.nextLine();
+      if (inputStr.equals("0")) {
+        return new int[0];
+      }
       String[] seatNumbers = inputStr.split(" ");
       int[] selectedSeats = new int[seatNumbers.length];
       boolean isValid = true;
@@ -396,7 +404,7 @@ public class CinemaMenu {
       if (isValid) {
         return selectedSeats;
       } else {
-        System.out.println("\u001B[31mНеверно. Введите допустимые номера мест: \u001B[0m");
+        System.out.println("\u001B[31mНеверно. Введите допустимые номера мест (или 0 для выхода в предыдщее меню): \u001B[0m");
       }
     }
   }
