@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Главный класс программы, представляющий управление кинотеатром
+ * Главный класс программы, который представляет собой управление кинотеатром
  */
 public class Main {
 
@@ -40,14 +40,17 @@ public class Main {
           break;
         // 3. ПРОСМОТР СВОБОДНЫХ РЯДОВ
         case SEE_BUSY_ROWS:
+          CinemaMenu.printSeparator();
           CinemaMenu.seeBusyRows(scanner, cinemaManager, hallMap);
           break;
         // 4. ВОЗВРАТ БИЛЕТОВ
         case RETURN_TICKETS:
+          CinemaMenu.printSeparator();
           CinemaMenu.returnTickets(scanner, cinemaManager, hallMap);
           break;
         //5. ВЫХОД
         case EXIT:
+          CinemaMenu.printSeparator();
           System.out.println(menuText);
           CinemaMenu.printExit();
           run = false;
