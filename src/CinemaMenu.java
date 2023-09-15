@@ -147,7 +147,7 @@ public class CinemaMenu {
    * @param cinemaManager объект CinemaManager для управления сеансами
    * @return индекс выбранной даты
    */
-  private static int selectDate(Scanner scanner, CinemaManager cinemaManager) {
+  static int selectDate(Scanner scanner, CinemaManager cinemaManager) {
     System.out.println("\u001B[32mВыберите дату и время сеанса:\u001B[0m");
     int datesLength = cinemaManager.getDates().length;
     for (int i = 0; i < datesLength; i++) {
