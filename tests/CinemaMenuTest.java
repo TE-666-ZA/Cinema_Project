@@ -175,4 +175,30 @@ public class CinemaMenuTest {
 
     assertEquals(2, selectedDateIndex);
   }
+
+  /**
+   * Проверка метода selectTime при попытке вернуться в главное меню
+   */
+  @Test
+  public void testSelectTimeExitToMainMenu() {
+    String input = "0\n";
+    Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+    CinemaManager cinemaManager = new CinemaManager();
+    int selectedTimeIndex = CinemaMenu.selectTime(scanner, cinemaManager);
+
+    assertEquals(0, selectedTimeIndex);
+  }
+
+  /**
+   * Проверка метода selectTime при корректном вводе пользователя
+   */
+  @Test
+  public void testSelectTimeValidInput() {
+    String input = "2\n";
+    Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+    CinemaManager cinemaManager = new CinemaManager();
+    int selectedTimeIndex = CinemaMenu.selectTime(scanner, cinemaManager);
+
+    assertEquals(2, selectedTimeIndex);
+  }
 }
