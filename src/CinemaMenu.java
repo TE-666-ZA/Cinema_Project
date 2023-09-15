@@ -166,7 +166,7 @@ public class CinemaMenu {
    * @param cinemaManager объект CinemaManager для управления сеансами
    * @return индекс выбранного времени
    */
-  private static int selectTime(Scanner scanner, CinemaManager cinemaManager) {
+  static int selectTime(Scanner scanner, CinemaManager cinemaManager) {
     System.out.println("Выберите время сеанса:");
     for (int i = 0; i < cinemaManager.getTimes().length; i++) {
       System.out.println(
